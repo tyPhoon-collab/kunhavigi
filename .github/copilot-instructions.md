@@ -11,7 +11,7 @@
 ### Design
 
 - `withOpacity`は使用せず、`withValues`で指定すること（`withOpacity(0.8)` -> `withValues(alpha: 0.8)`）
-- `colorScheme`や`textTheme`を使用すること
+- `colorScheme`や`textTheme`を使用し、テーマに沿った色やフォントを使用すること
     - `build`メソッドの先頭で`final colorScheme = Theme.of(context).colorScheme;`のように定義する
     - BuildContextがあれば取得できるため、Widgetのコンストラクタで受け取る必要はない
 
@@ -36,6 +36,10 @@
 ### Flutter/Dart Specific
 
 - `riverpod_generator + flutter_hooks`を採用すること
+
+#### Widget
+
+- モダンな`Row`や`Column`の`spacing`プロパティを活用すること
 
 #### Switch
 

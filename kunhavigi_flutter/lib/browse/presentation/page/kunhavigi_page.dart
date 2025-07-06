@@ -3,26 +3,162 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/common/presentation/messages.dart';
 
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final currentPath = ref.watch(pathProvider);
+
     return Scaffold(
-      body: Center(
-        child: EntriesListView(
-          onFileTap: (entry) {
-            showModalBottomSheet<void>(
-              context: context,
-              builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: _Preview(path: entry.absolutePath),
-                );
-              },
-            );
-          },
+      appBar: AppBar(
+        title: const Text('Kunhavigi'),
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: _PathBreadcrumb(path: currentPath),
         ),
+      ),
+      body: EntriesListView(
+        onFileTap: (entry) {
+          _showPreviewModal(context, entry);
+        },
+      ),
+    );
+  }
+
+  void _showPreviewModal(BuildContext context, Entry entry) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _PreviewModal(entry: entry),
+    );
+  }
+}
+
+class _PathBreadcrumb extends ConsumerWidget {
+  const _PathBreadcrumb({required this.path});
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Text(
+        path.isEmpty ? 'Root Directory' : path,
+        style: textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onSurface.withValues(alpha: 0.8),
+        ),
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+}
+
+class _PreviewModal extends StatelessWidget {
+  const _PreviewModal({required this.entry});
+
+  final Entry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      maxChildSize: 0.9,
+      minChildSize: 0.3,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            children: [
+              _PreviewHeader(entry: entry),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: _Preview(path: entry.absolutePath),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PreviewHeader extends StatelessWidget {
+  const _PreviewHeader({required this.entry});
+
+  final Entry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            switch (entry) {
+              final FileEntry _ => Icons.insert_drive_file,
+              final DirectoryEntry _ => Icons.folder,
+              final UnknownEntry _ => Icons.question_mark,
+            },
+            color: colorScheme.primary,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  entry.name,
+                  style: textTheme.titleMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  entry.absolutePath,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close),
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
+        ],
       ),
     );
   }
@@ -35,22 +171,66 @@ class _Preview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     final preview = ref.watch(entryPreviewProvider(path));
+
     return preview.when(
-      data: (data) => switch (data) {
-        final TextEntryPreview text => Text(
-            text.text,
-            style: const TextStyle(fontFamily: 'monospace'),
+      data: (data) => _PreviewContent(data: data),
+      loading: () => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: CircularProgressIndicator(
+            color: colorScheme.primary,
           ),
-        final ImageEntryPreview image => Image.memory(
-            image.base64,
-            fit: BoxFit.cover,
-          ),
-        final UnknownEntryPreview _ =>
-          const Text('No preview available for this entry.'),
-      },
-      loading: () => const CircularProgressIndicator(),
-      error: (error, stack) => Text('Error: $error'),
+        ),
+      ),
+      error: (error, stack) => ErrorMessage(error: error),
     );
+  }
+}
+
+class _PreviewContent extends StatelessWidget {
+  const _PreviewContent({required this.data});
+
+  final EntryPreview data;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return switch (data) {
+      final TextEntryPreview text => Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: colorScheme.outline.withValues(alpha: 0.3),
+            ),
+          ),
+          child: SelectableText(
+            text.text,
+            style: textTheme.bodyMedium?.copyWith(
+              fontFamily: 'monospace',
+              color: colorScheme.onSurface,
+            ),
+          ),
+        ),
+      final ImageEntryPreview image => ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.memory(
+            image.base64,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => const ErrorMessage(
+              error: 'Failed to load image',
+            ),
+          ),
+        ),
+      final UnknownEntryPreview _ => const InfoMessage(
+          message: 'No preview available for this entry.',
+        ),
+    };
   }
 }
