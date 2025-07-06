@@ -10,8 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'package:kunhavigi_shared/src/entry.dart' as _i2;
-import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i3;
+import 'features/browse/path_outside_exception.dart' as _i2;
+import 'features/browse/not_exist_exception.dart' as _i3;
+import 'package:kunhavigi_shared/src/entry.dart' as _i4;
+import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i5;
+export 'features/browse/path_outside_exception.dart';
+export 'features/browse/not_exist_exception.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -27,14 +31,27 @@ class Protocol extends _i1.SerializationManager {
     Type? t,
   ]) {
     t ??= T;
-    if (t == List<_i2.Entry>) {
-      return (data as List).map((e) => deserialize<_i2.Entry>(e)).toList() as T;
+    if (t == _i2.PathOutsideException) {
+      return _i2.PathOutsideException.fromJson(data) as T;
     }
-    if (t == _i3.Entry) {
-      return _i3.Entry.fromJson(data) as T;
+    if (t == _i3.NotExistException) {
+      return _i3.NotExistException.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i3.Entry?>()) {
-      return (data != null ? _i3.Entry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i2.PathOutsideException?>()) {
+      return (data != null ? _i2.PathOutsideException.fromJson(data) : null)
+          as T;
+    }
+    if (t == _i1.getType<_i3.NotExistException?>()) {
+      return (data != null ? _i3.NotExistException.fromJson(data) : null) as T;
+    }
+    if (t == List<_i4.Entry>) {
+      return (data as List).map((e) => deserialize<_i4.Entry>(e)).toList() as T;
+    }
+    if (t == _i5.Entry) {
+      return _i5.Entry.fromJson(data) as T;
+    }
+    if (t == _i1.getType<_i5.Entry?>()) {
+      return (data != null ? _i5.Entry.fromJson(data) : null) as T;
     }
     return super.deserialize<T>(data, t);
   }
@@ -43,8 +60,14 @@ class Protocol extends _i1.SerializationManager {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i3.Entry) {
+    if (data is _i5.Entry) {
       return 'Entry';
+    }
+    if (data is _i2.PathOutsideException) {
+      return 'PathOutsideException';
+    }
+    if (data is _i3.NotExistException) {
+      return 'NotExistException';
     }
     return null;
   }
@@ -56,7 +79,13 @@ class Protocol extends _i1.SerializationManager {
       return super.deserializeByClassName(data);
     }
     if (dataClassName == 'Entry') {
-      return deserialize<_i3.Entry>(data['data']);
+      return deserialize<_i5.Entry>(data['data']);
+    }
+    if (dataClassName == 'PathOutsideException') {
+      return deserialize<_i2.PathOutsideException>(data['data']);
+    }
+    if (dataClassName == 'NotExistException') {
+      return deserialize<_i3.NotExistException>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

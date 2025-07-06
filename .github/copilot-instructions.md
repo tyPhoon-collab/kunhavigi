@@ -27,10 +27,27 @@
 
 ### Code Comment
 
-- コメントは最小限にすること
-- コメントは処理の内容ではなく、なぜそのように実装したのかを記述すること
+- コメントは基本的に禁止
+    - ただし、以下のような場合は許可する
+        - `TODO`や`FIXME`などのコメント
+        - 複雑な処理や意図が明確でない場合の説明
+        - 特定の実装方法を選んだ理由
 
 ### Flutter/Dart Specific
 
 - `riverpod_generator + flutter_hooks`を採用すること
 
+#### Switch
+
+`case`句は使用しない。以下のようなモダンな書き方をすること。
+
+```dart
+final result = switch (some) {
+    A => a,
+    B => b,
+    C => c,
+}
+
+#### Warning
+
+一切許容しない

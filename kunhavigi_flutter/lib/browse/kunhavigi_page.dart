@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
@@ -23,7 +21,7 @@ class KunhavigiPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final entries = ref.watch(entriesProvider('/'));
+    final entries = ref.watch(entriesProvider(''));
 
     return Scaffold(
       body: Center(
@@ -41,9 +39,14 @@ class KunhavigiPage extends ConsumerWidget {
             );
           },
           error: (error, stackTrace) {
-            log('Error fetching entries', error: error, stackTrace: stackTrace);
             return Text(
-              'Error fetching entries: $error',
+              switch (error) {
+                final NotExistException e =>
+                  'Directory does not exist: ${e.path}',
+                final PathOutsideException e =>
+                  'Path is outside the allowed directory: ${e.path}',
+                _ => 'An unexpected error occurred: $error',
+              },
               style: TextStyle(color: colorScheme.error),
             );
           },
