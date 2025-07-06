@@ -14,7 +14,8 @@ import 'dart:async' as _i2;
 import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.dart'
     as _i3;
 import 'package:kunhavigi_shared/src/entry_preview.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'dart:typed_data' as _i5;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -23,7 +24,8 @@ class EndpointBrowse extends _i1.EndpointRef {
   @override
   String get name => 'browse';
 
-  /// 相対パスと絶対パスを許容する
+  /// Get the list of entries (files and directories) in a given path.
+  /// path is relative or absolute, but must be within the data directory.
   _i2.Future<_i3.EntriesResponse> getEntries(String path) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
@@ -31,11 +33,27 @@ class EndpointBrowse extends _i1.EndpointRef {
         {'path': path},
       );
 
-  /// プレビュー
+  /// Peek at the content of a file to generate a preview.
   _i2.Future<_i4.EntryPreview> peekEntry(String path) =>
       caller.callServerEndpoint<_i4.EntryPreview>(
         'browse',
         'peekEntry',
+        {'path': path},
+      );
+}
+
+/// {@category Endpoint}
+class EndpointTransfer extends _i1.EndpointRef {
+  EndpointTransfer(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'transfer';
+
+  /// Download a file from the server
+  _i2.Future<_i5.ByteData> downloadFile(String path) =>
+      caller.callServerEndpoint<_i5.ByteData>(
+        'transfer',
+        'downloadFile',
         {'path': path},
       );
 }
@@ -56,7 +74,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i5.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -67,12 +85,18 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     browse = EndpointBrowse(this);
+    transfer = EndpointTransfer(this);
   }
 
   late final EndpointBrowse browse;
 
+  late final EndpointTransfer transfer;
+
   @override
-  Map<String, _i1.EndpointRef> get endpointRefLookup => {'browse': browse};
+  Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'browse': browse,
+        'transfer': transfer,
+      };
 
   @override
   Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};

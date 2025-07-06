@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/client.dart';
@@ -66,6 +68,23 @@ Future<EntryPreview> entryPreview(
     return result;
   } catch (error, stackTrace) {
     logError('Failed to fetch preview for path: $path', error, stackTrace);
+    rethrow;
+  }
+}
+
+@riverpod
+Future<ByteData> file(
+  Ref ref,
+  String path,
+) async {
+  logInfo('Downloading file from path: $path');
+  try {
+    final client = ref.watch(clientProvider);
+    final result = await client.transfer.downloadFile(path);
+    logInfo('Successfully downloaded file from: $path');
+    return result;
+  } catch (error, stackTrace) {
+    logError('Failed to download file from path: $path', error, stackTrace);
     rethrow;
   }
 }

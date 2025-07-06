@@ -1,3 +1,5 @@
 browse:
   - getEntries:
   - peekEntry:
+transfer:
+  - downloadFile:

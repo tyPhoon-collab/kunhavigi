@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/common/presentation/messages.dart';
 
 typedef EntryCallback = void Function(Entry entry);
@@ -134,12 +135,16 @@ class _EntryListTile extends ConsumerWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        subtitle: Text(
-          entry.absolutePath,
-          style: textTheme.bodySmall?.copyWith(
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
-        ),
+        subtitle: switch (entry) {
+          final FileEntry fileEntry => Text(
+              '${fileEntry.size} bytes',
+              style: textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ),
+          final DirectoryEntry _ => null,
+          final UnknownEntry _ => null,
+        },
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -156,6 +161,24 @@ class _EntryListTile extends ConsumerWidget {
             size: 20,
           ),
         ),
+        trailing: switch (entry) {
+          final FileEntry fileEntry => IconButton(
+              icon: const Icon(Icons.file_download),
+              color: colorScheme.primary,
+              onPressed: () async {
+                final bytes =
+                    await ref.read(fileProvider(fileEntry.absolutePath).future);
+
+                await ref.read(saverProvider).save(
+                      bytes,
+                      name: fileEntry.name,
+                      mimeType: fileEntry.mimeType,
+                    );
+              },
+            ),
+          final DirectoryEntry _ => null,
+          final UnknownEntry _ => null,
+        },
         onTap: () {
           switch (entry) {
             case final FileEntry _:

@@ -17,6 +17,7 @@ import 'dart:async' as _i3;
 import 'package:kunhavigi_server/src/generated/features/browse/entries_response.dart'
     as _i4;
 import 'package:kunhavigi_shared/src/entry_preview.dart' as _i5;
+import 'dart:typed_data' as _i6;
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -104,6 +105,8 @@ void withServerpod(
 
 class TestEndpoints {
   late final _BrowseEndpoint browse;
+
+  late final _TransferEndpoint transfer;
 }
 
 class _InternalTestEndpoints extends TestEndpoints
@@ -114,6 +117,10 @@ class _InternalTestEndpoints extends TestEndpoints
     _i2.EndpointDispatch endpoints,
   ) {
     browse = _BrowseEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    transfer = _TransferEndpoint(
       endpoints,
       serializationManager,
     );
@@ -181,6 +188,46 @@ class _BrowseEndpoint {
           _localUniqueSession,
           _localCallContext.arguments,
         ) as _i3.Future<_i5.EntryPreview>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _TransferEndpoint {
+  _TransferEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _i2.EndpointDispatch _endpointDispatch;
+
+  final _i2.SerializationManager _serializationManager;
+
+  _i3.Future<_i6.ByteData> downloadFile(
+    _i1.TestSessionBuilder sessionBuilder,
+    String path,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'transfer',
+        method: 'downloadFile',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'downloadFile',
+          parameters: _i1.testObjectToJson({'path': path}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i6.ByteData>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

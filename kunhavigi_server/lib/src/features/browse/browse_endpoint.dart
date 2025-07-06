@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:kunhavigi_server/src/features/common/domain/path.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:mime/mime.dart';
@@ -7,28 +8,16 @@ import 'package:path/path.dart' as p;
 import 'package:serverpod/serverpod.dart';
 
 class BrowseEndpoint extends Endpoint {
-  late final String _dataDirectory = p.normalize(
-      Platform.environment['DATA_DIRECTORY'] ??
-          '/Users/hiroaki/projects/kunhavigi/data');
-
-  /// 相対パスと絶対パスを許容する
+  /// Get the list of entries (files and directories) in a given path.
+  /// path is relative or absolute, but must be within the data directory.
   Future<EntriesResponse> getEntries(Session session, String path) async {
-    final normalizedPath = _normalizePath(path);
+    final normalizedPath = validateAndNormalizePath(path);
 
-    // Ensure the resolved path is within the data directory
-    if (!normalizedPath.startsWith(p.normalize(_dataDirectory))) {
-      throw PathOutsideException(path: normalizedPath);
-    }
-
-    final dir = Directory(normalizedPath);
-
-    if (!dir.existsSync()) {
-      throw NotExistsException(path: dir.path);
-    }
+    final dir = existingDirectory(normalizedPath);
 
     final entries = dir.listSync().map((entity) {
       final absolutePath = p.normalize(entity.path);
-      final relativePath = p.relative(absolutePath, from: _dataDirectory);
+      final relativePath = p.relative(absolutePath, from: dataDirectory);
       final stat = entity.statSync();
       return switch (stat.type) {
         FileSystemEntityType.file => Entry.file(
@@ -53,24 +42,16 @@ class BrowseEndpoint extends Endpoint {
     return EntriesResponse(
       entries: entries,
       totalCount: entries.length,
-      isRootDirectory: normalizedPath == _dataDirectory,
+      isRootDirectory: normalizedPath.value == dataDirectory,
     );
   }
 
-  /// プレビュー
+  /// Peek at the content of a file to generate a preview.
   Future<EntryPreview> peekEntry(Session session, String path) async {
-    final normalizedPath = _normalizePath(path);
+    final normalizedPath = validateAndNormalizePath(path);
 
-    final file = File(normalizedPath);
-    if (!file.existsSync()) {
-      throw NotExistsException(path: normalizedPath);
-    }
-
-    if (file.statSync().type != FileSystemEntityType.file) {
-      throw NotFileException(path: normalizedPath);
-    }
-
-    final mimeType = lookupMimeType(normalizedPath);
+    final file = existingFile(normalizedPath);
+    final mimeType = lookupMimeType(normalizedPath.value);
 
     return switch (mimeType) {
       'text/plain' ||
@@ -84,11 +65,5 @@ class BrowseEndpoint extends Endpoint {
         ),
       _ => const EntryPreview.unknown(), // Unsupported file type for preview
     };
-  }
-
-  String _normalizePath(String path) {
-    return p.isAbsolute(path)
-        ? p.normalize(path)
-        : p.normalize(p.join(_dataDirectory, path));
   }
 }

@@ -11,6 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../features/browse/browse_endpoint.dart' as _i2;
+import '../features/transfer/transfer_endpoint.dart' as _i3;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -21,7 +22,13 @@ class Endpoints extends _i1.EndpointDispatch {
           server,
           'browse',
           null,
-        )
+        ),
+      'transfer': _i3.TransferEndpoint()
+        ..initialize(
+          server,
+          'transfer',
+          null,
+        ),
     };
     connectors['browse'] = _i1.EndpointConnector(
       name: 'browse',
@@ -63,6 +70,30 @@ class Endpoints extends _i1.EndpointDispatch {
             params['path'],
           ),
         ),
+      },
+    );
+    connectors['transfer'] = _i1.EndpointConnector(
+      name: 'transfer',
+      endpoint: endpoints['transfer']!,
+      methodConnectors: {
+        'downloadFile': _i1.MethodConnector(
+          name: 'downloadFile',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['transfer'] as _i3.TransferEndpoint).downloadFile(
+            session,
+            params['path'],
+          ),
+        )
       },
     );
   }

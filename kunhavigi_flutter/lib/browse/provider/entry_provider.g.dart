@@ -6,7 +6,7 @@ part of 'entry_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entriesHash() => r'4e4fccd2bc72f259fb5ebe8c43e2c4dfe8aed084';
+String _$entriesHash() => r'fab8f5c0cad8b73a2defc89576c6e7d4df2bbfeb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -156,7 +156,7 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
   String get path => (origin as EntriesProvider).path;
 }
 
-String _$entryPreviewHash() => r'dbcffab4fb23676f9b9d33bd369aaa18f8c16e4a';
+String _$entryPreviewHash() => r'656219557b1873efb63d74e6f749d7247a41ada0';
 
 /// See also [entryPreview].
 @ProviderFor(entryPreview)
@@ -286,7 +286,134 @@ class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
   String get path => (origin as EntryPreviewProvider).path;
 }
 
-String _$pathHash() => r'2448b7c8cd2d1e451a55000e0ae251c4245267ea';
+String _$fileHash() => r'd088488d7ab27a655fbc68c570f2d092337dd214';
+
+/// See also [file].
+@ProviderFor(file)
+const fileProvider = FileFamily();
+
+/// See also [file].
+class FileFamily extends Family<AsyncValue<ByteData>> {
+  /// See also [file].
+  const FileFamily();
+
+  /// See also [file].
+  FileProvider call(
+    String path,
+  ) {
+    return FileProvider(
+      path,
+    );
+  }
+
+  @override
+  FileProvider getProviderOverride(
+    covariant FileProvider provider,
+  ) {
+    return call(
+      provider.path,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fileProvider';
+}
+
+/// See also [file].
+class FileProvider extends AutoDisposeFutureProvider<ByteData> {
+  /// See also [file].
+  FileProvider(
+    String path,
+  ) : this._internal(
+          (ref) => file(
+            ref as FileRef,
+            path,
+          ),
+          from: fileProvider,
+          name: r'fileProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product') ? null : _$fileHash,
+          dependencies: FileFamily._dependencies,
+          allTransitiveDependencies: FileFamily._allTransitiveDependencies,
+          path: path,
+        );
+
+  FileProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.path,
+  }) : super.internal();
+
+  final String path;
+
+  @override
+  Override overrideWith(
+    FutureOr<ByteData> Function(FileRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FileProvider._internal(
+        (ref) => create(ref as FileRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        path: path,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<ByteData> createElement() {
+    return _FileProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FileProvider && other.path == path;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, path.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin FileRef on AutoDisposeFutureProviderRef<ByteData> {
+  /// The parameter `path` of this provider.
+  String get path;
+}
+
+class _FileProviderElement extends AutoDisposeFutureProviderElement<ByteData>
+    with FileRef {
+  _FileProviderElement(super.provider);
+
+  @override
+  String get path => (origin as FileProvider).path;
+}
+
+String _$pathHash() => r'fefb56428d1e474356f679a434e770e13cb261d2';
 
 /// See also [Path].
 @ProviderFor(Path)
