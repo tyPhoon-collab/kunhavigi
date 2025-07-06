@@ -4,5 +4,4 @@
 library;
 
 export 'src/entry.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/entry_preview.dart';

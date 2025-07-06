@@ -13,7 +13,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.dart'
     as _i3;
-import 'protocol.dart' as _i4;
+import 'package:kunhavigi_shared/src/entry_preview.dart' as _i4;
+import 'protocol.dart' as _i5;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -27,6 +28,14 @@ class EndpointBrowse extends _i1.EndpointRef {
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
         'getEntries',
+        {'path': path},
+      );
+
+  /// プレビュー
+  _i2.Future<_i4.EntryPreview> peekEntry(String path) =>
+      caller.callServerEndpoint<_i4.EntryPreview>(
+        'browse',
+        'peekEntry',
         {'path': path},
       );
 }
@@ -47,7 +56,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i5.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

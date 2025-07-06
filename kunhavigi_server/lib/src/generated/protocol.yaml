@@ -1,2 +1,3 @@
 browse:
   - getEntries:
+  - peekEntry:

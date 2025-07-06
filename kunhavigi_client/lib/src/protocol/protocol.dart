@@ -10,13 +10,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
-import 'features/browse/not_exists_exception.dart' as _i2;
-import 'features/browse/path_outside_exception.dart' as _i3;
-import 'features/browse/entries_response.dart' as _i4;
-import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i5;
-export 'features/browse/not_exists_exception.dart';
-export 'features/browse/path_outside_exception.dart';
+import 'features/browse/entries_response.dart' as _i2;
+import 'features/browse/not_exists_exception.dart' as _i3;
+import 'features/browse/not_file_exception.dart' as _i4;
+import 'features/browse/path_outside_exception.dart' as _i5;
+import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i6;
 export 'features/browse/entries_response.dart';
+export 'features/browse/not_exists_exception.dart';
+export 'features/browse/not_file_exception.dart';
+export 'features/browse/path_outside_exception.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -32,33 +34,45 @@ class Protocol extends _i1.SerializationManager {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i2.NotExistsException) {
-      return _i2.NotExistsException.fromJson(data) as T;
+    if (t == _i2.EntriesResponse) {
+      return _i2.EntriesResponse.fromJson(data) as T;
     }
-    if (t == _i3.PathOutsideException) {
-      return _i3.PathOutsideException.fromJson(data) as T;
+    if (t == _i3.NotExistsException) {
+      return _i3.NotExistsException.fromJson(data) as T;
     }
-    if (t == _i4.EntriesResponse) {
-      return _i4.EntriesResponse.fromJson(data) as T;
+    if (t == _i4.NotFileException) {
+      return _i4.NotFileException.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i2.NotExistsException?>()) {
-      return (data != null ? _i2.NotExistsException.fromJson(data) : null) as T;
+    if (t == _i5.PathOutsideException) {
+      return _i5.PathOutsideException.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i3.PathOutsideException?>()) {
-      return (data != null ? _i3.PathOutsideException.fromJson(data) : null)
+    if (t == _i1.getType<_i2.EntriesResponse?>()) {
+      return (data != null ? _i2.EntriesResponse.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i3.NotExistsException?>()) {
+      return (data != null ? _i3.NotExistsException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i4.NotFileException?>()) {
+      return (data != null ? _i4.NotFileException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i5.PathOutsideException?>()) {
+      return (data != null ? _i5.PathOutsideException.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i4.EntriesResponse?>()) {
-      return (data != null ? _i4.EntriesResponse.fromJson(data) : null) as T;
+    if (t == List<_i6.Entry>) {
+      return (data as List).map((e) => deserialize<_i6.Entry>(e)).toList() as T;
     }
-    if (t == List<_i5.Entry>) {
-      return (data as List).map((e) => deserialize<_i5.Entry>(e)).toList() as T;
+    if (t == _i6.Entry) {
+      return _i6.Entry.fromJson(data) as T;
     }
-    if (t == _i5.Entry) {
-      return _i5.Entry.fromJson(data) as T;
+    if (t == _i6.EntryPreview) {
+      return _i6.EntryPreview.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.Entry?>()) {
-      return (data != null ? _i5.Entry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.Entry?>()) {
+      return (data != null ? _i6.Entry.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i6.EntryPreview?>()) {
+      return (data != null ? _i6.EntryPreview.fromJson(data) : null) as T;
     }
     return super.deserialize<T>(data, t);
   }
@@ -67,17 +81,23 @@ class Protocol extends _i1.SerializationManager {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i5.Entry) {
+    if (data is _i6.Entry) {
       return 'Entry';
     }
-    if (data is _i2.NotExistsException) {
+    if (data is _i6.EntryPreview) {
+      return 'EntryPreview';
+    }
+    if (data is _i2.EntriesResponse) {
+      return 'EntriesResponse';
+    }
+    if (data is _i3.NotExistsException) {
       return 'NotExistsException';
     }
-    if (data is _i3.PathOutsideException) {
-      return 'PathOutsideException';
+    if (data is _i4.NotFileException) {
+      return 'NotFileException';
     }
-    if (data is _i4.EntriesResponse) {
-      return 'EntriesResponse';
+    if (data is _i5.PathOutsideException) {
+      return 'PathOutsideException';
     }
     return null;
   }
@@ -89,16 +109,22 @@ class Protocol extends _i1.SerializationManager {
       return super.deserializeByClassName(data);
     }
     if (dataClassName == 'Entry') {
-      return deserialize<_i5.Entry>(data['data']);
+      return deserialize<_i6.Entry>(data['data']);
     }
-    if (dataClassName == 'NotExistsException') {
-      return deserialize<_i2.NotExistsException>(data['data']);
-    }
-    if (dataClassName == 'PathOutsideException') {
-      return deserialize<_i3.PathOutsideException>(data['data']);
+    if (dataClassName == 'EntryPreview') {
+      return deserialize<_i6.EntryPreview>(data['data']);
     }
     if (dataClassName == 'EntriesResponse') {
-      return deserialize<_i4.EntriesResponse>(data['data']);
+      return deserialize<_i2.EntriesResponse>(data['data']);
+    }
+    if (dataClassName == 'NotExistsException') {
+      return deserialize<_i3.NotExistsException>(data['data']);
+    }
+    if (dataClassName == 'NotFileException') {
+      return deserialize<_i4.NotFileException>(data['data']);
+    }
+    if (dataClassName == 'PathOutsideException') {
+      return deserialize<_i5.PathOutsideException>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

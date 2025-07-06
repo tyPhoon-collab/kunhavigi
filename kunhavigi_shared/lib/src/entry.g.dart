@@ -11,6 +11,7 @@ FileEntry _$FileEntryFromJson(Map<String, dynamic> json) => FileEntry(
   relativePath: json['relativePath'] as String,
   size: (json['size'] as num).toInt(),
   lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
+  mimeType: json['mimeType'] as String,
   $type: json['runtimeType'] as String?,
 );
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$FileEntryToJson(FileEntry instance) => <String, dynamic>{
   'relativePath': instance.relativePath,
   'size': instance.size,
   'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
+  'mimeType': instance.mimeType,
   'runtimeType': instance.$type,
 };
 

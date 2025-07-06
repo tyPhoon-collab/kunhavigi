@@ -40,3 +40,12 @@ Future<EntriesResponse> entries(
   final client = ref.watch(clientProvider);
   return client.browse.getEntries(path);
 }
+
+@Riverpod(keepAlive: true)
+Future<EntryPreview> entryPreview(
+  Ref ref,
+  String path,
+) async {
+  final client = ref.watch(clientProvider);
+  return client.browse.peekEntry(path);
+}

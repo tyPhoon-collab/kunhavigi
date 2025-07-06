@@ -156,6 +156,136 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
   String get path => (origin as EntriesProvider).path;
 }
 
+String _$entryPreviewHash() => r'dbcffab4fb23676f9b9d33bd369aaa18f8c16e4a';
+
+/// See also [entryPreview].
+@ProviderFor(entryPreview)
+const entryPreviewProvider = EntryPreviewFamily();
+
+/// See also [entryPreview].
+class EntryPreviewFamily extends Family<AsyncValue<EntryPreview>> {
+  /// See also [entryPreview].
+  const EntryPreviewFamily();
+
+  /// See also [entryPreview].
+  EntryPreviewProvider call(
+    String path,
+  ) {
+    return EntryPreviewProvider(
+      path,
+    );
+  }
+
+  @override
+  EntryPreviewProvider getProviderOverride(
+    covariant EntryPreviewProvider provider,
+  ) {
+    return call(
+      provider.path,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'entryPreviewProvider';
+}
+
+/// See also [entryPreview].
+class EntryPreviewProvider extends FutureProvider<EntryPreview> {
+  /// See also [entryPreview].
+  EntryPreviewProvider(
+    String path,
+  ) : this._internal(
+          (ref) => entryPreview(
+            ref as EntryPreviewRef,
+            path,
+          ),
+          from: entryPreviewProvider,
+          name: r'entryPreviewProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$entryPreviewHash,
+          dependencies: EntryPreviewFamily._dependencies,
+          allTransitiveDependencies:
+              EntryPreviewFamily._allTransitiveDependencies,
+          path: path,
+        );
+
+  EntryPreviewProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.path,
+  }) : super.internal();
+
+  final String path;
+
+  @override
+  Override overrideWith(
+    FutureOr<EntryPreview> Function(EntryPreviewRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EntryPreviewProvider._internal(
+        (ref) => create(ref as EntryPreviewRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        path: path,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<EntryPreview> createElement() {
+    return _EntryPreviewProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EntryPreviewProvider && other.path == path;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, path.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin EntryPreviewRef on FutureProviderRef<EntryPreview> {
+  /// The parameter `path` of this provider.
+  String get path;
+}
+
+class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
+    with EntryPreviewRef {
+  _EntryPreviewProviderElement(super.provider);
+
+  @override
+  String get path => (origin as EntryPreviewProvider).path;
+}
+
 String _$pathHash() => r'2448b7c8cd2d1e451a55000e0ae251c4245267ea';
 
 /// See also [Path].

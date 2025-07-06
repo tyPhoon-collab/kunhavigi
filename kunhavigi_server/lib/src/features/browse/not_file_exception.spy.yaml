@@ -1,0 +1,3 @@
+exception: NotFileException
+fields:
+  path: String

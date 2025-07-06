@@ -44,7 +44,25 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['path'],
           ),
-        )
+        ),
+        'peekEntry': _i1.MethodConnector(
+          name: 'peekEntry',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<String>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['browse'] as _i2.BrowseEndpoint).peekEntry(
+            session,
+            params['path'],
+          ),
+        ),
       },
     );
   }

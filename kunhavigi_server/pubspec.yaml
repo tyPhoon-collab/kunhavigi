@@ -8,6 +8,7 @@ environment:
 dependencies:
   kunhavigi_shared:
     path: ../kunhavigi_shared
+  mime: ^2.0.0
   path: ^1.9.1
   serverpod: 2.9.1
 

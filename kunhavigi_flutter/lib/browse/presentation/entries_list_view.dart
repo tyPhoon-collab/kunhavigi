@@ -3,10 +3,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
 
+typedef EntryCallback = void Function(Entry entry);
+
 class EntriesListView extends ConsumerWidget {
   const EntriesListView({
     super.key,
+    this.onFileTap,
   });
+
+  final EntryCallback? onFileTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,17 +45,22 @@ class EntriesListView extends ConsumerWidget {
           return switch (index) {
             0 => ListTile(
                 title: const Text('Go to root directory'),
+                leading: const Icon(Icons.home),
                 onTap: () {
                   ref.read(pathProvider.notifier).setAsRoot();
                 },
               ),
             1 => ListTile(
                 title: const Text('Go to parent directory'),
+                leading: const Icon(Icons.arrow_back),
                 onTap: () {
                   ref.read(pathProvider.notifier).setAsParent();
                 },
               ),
-            _ => _EntryListTile(entry: data.entries[index - 2]),
+            _ => _EntryListTile(
+                entry: data.entries[index - 2],
+                onFileTap: onFileTap,
+              ),
           };
         },
       );
@@ -60,7 +70,10 @@ class EntriesListView extends ConsumerWidget {
       itemCount: data.totalCount,
       itemBuilder: (context, index) {
         final entry = data.entries[index];
-        return _EntryListTile(entry: entry);
+        return _EntryListTile(
+          entry: entry,
+          onFileTap: onFileTap,
+        );
       },
     );
   }
@@ -69,14 +82,14 @@ class EntriesListView extends ConsumerWidget {
 class _EntryListTile extends ConsumerWidget {
   const _EntryListTile({
     required this.entry,
+    this.onFileTap,
   });
 
+  final EntryCallback? onFileTap;
   final Entry entry;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void openPreview() {}
-
     void navigate(String path) {
       ref.read(pathProvider.notifier).setPath(path);
     }
@@ -84,10 +97,15 @@ class _EntryListTile extends ConsumerWidget {
     return ListTile(
       title: Text(entry.name),
       subtitle: Text(entry.absolutePath),
+      leading: switch (entry) {
+        final FileEntry _ => const Icon(Icons.insert_drive_file),
+        final DirectoryEntry _ => const Icon(Icons.folder),
+        final UnknownEntry _ => const Icon(Icons.question_mark),
+      },
       onTap: () {
         switch (entry) {
           case final FileEntry _:
-            openPreview();
+            onFileTap?.call(entry);
           case final DirectoryEntry _:
             navigate(entry.absolutePath);
           case final UnknownEntry _:

@@ -10,6 +10,7 @@ sealed class Entry with _$Entry {
     required String relativePath,
     required int size,
     required DateTime lastModifiedAt,
+    required String mimeType,
   }) = FileEntry;
 
   const factory Entry.directory({

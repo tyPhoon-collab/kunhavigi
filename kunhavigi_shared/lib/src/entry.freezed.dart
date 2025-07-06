@@ -184,10 +184,10 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt)?  file,TResult Function( String absolutePath,  String relativePath)?  directory,TResult Function( String absolutePath,  String relativePath)?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult Function( String absolutePath,  String relativePath)?  directory,TResult Function( String absolutePath,  String relativePath)?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt);case DirectoryEntry() when directory != null:
+return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
 return directory(_that.absolutePath,_that.relativePath);case UnknownEntry() when unknown != null:
 return unknown(_that.absolutePath,_that.relativePath);case _:
   return orElse();
@@ -207,10 +207,10 @@ return unknown(_that.absolutePath,_that.relativePath);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt)  file,required TResult Function( String absolutePath,  String relativePath)  directory,required TResult Function( String absolutePath,  String relativePath)  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)  file,required TResult Function( String absolutePath,  String relativePath)  directory,required TResult Function( String absolutePath,  String relativePath)  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry():
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt);case DirectoryEntry():
+return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry():
 return directory(_that.absolutePath,_that.relativePath);case UnknownEntry():
 return unknown(_that.absolutePath,_that.relativePath);}
 }
@@ -226,10 +226,10 @@ return unknown(_that.absolutePath,_that.relativePath);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt)?  file,TResult? Function( String absolutePath,  String relativePath)?  directory,TResult? Function( String absolutePath,  String relativePath)?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult? Function( String absolutePath,  String relativePath)?  directory,TResult? Function( String absolutePath,  String relativePath)?  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt);case DirectoryEntry() when directory != null:
+return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
 return directory(_that.absolutePath,_that.relativePath);case UnknownEntry() when unknown != null:
 return unknown(_that.absolutePath,_that.relativePath);case _:
   return null;
@@ -243,13 +243,14 @@ return unknown(_that.absolutePath,_that.relativePath);case _:
 @JsonSerializable()
 
 class FileEntry extends Entry {
-  const FileEntry({required this.absolutePath, required this.relativePath, required this.size, required this.lastModifiedAt, final  String? $type}): $type = $type ?? 'file',super._();
+  const FileEntry({required this.absolutePath, required this.relativePath, required this.size, required this.lastModifiedAt, required this.mimeType, final  String? $type}): $type = $type ?? 'file',super._();
   factory FileEntry.fromJson(Map<String, dynamic> json) => _$FileEntryFromJson(json);
 
 @override final  String absolutePath;
 @override final  String relativePath;
  final  int size;
  final  DateTime lastModifiedAt;
+ final  String mimeType;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -268,16 +269,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FileEntry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath)&&(identical(other.size, size) || other.size == size)&&(identical(other.lastModifiedAt, lastModifiedAt) || other.lastModifiedAt == lastModifiedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FileEntry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath)&&(identical(other.size, size) || other.size == size)&&(identical(other.lastModifiedAt, lastModifiedAt) || other.lastModifiedAt == lastModifiedAt)&&(identical(other.mimeType, mimeType) || other.mimeType == mimeType));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,absolutePath,relativePath,size,lastModifiedAt);
+int get hashCode => Object.hash(runtimeType,absolutePath,relativePath,size,lastModifiedAt,mimeType);
 
 @override
 String toString() {
-  return 'Entry.file(absolutePath: $absolutePath, relativePath: $relativePath, size: $size, lastModifiedAt: $lastModifiedAt)';
+  return 'Entry.file(absolutePath: $absolutePath, relativePath: $relativePath, size: $size, lastModifiedAt: $lastModifiedAt, mimeType: $mimeType)';
 }
 
 
@@ -288,7 +289,7 @@ abstract mixin class $FileEntryCopyWith<$Res> implements $EntryCopyWith<$Res> {
   factory $FileEntryCopyWith(FileEntry value, $Res Function(FileEntry) _then) = _$FileEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String absolutePath, String relativePath, int size, DateTime lastModifiedAt
+ String absolutePath, String relativePath, int size, DateTime lastModifiedAt, String mimeType
 });
 
 
@@ -305,13 +306,14 @@ class _$FileEntryCopyWithImpl<$Res>
 
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? absolutePath = null,Object? relativePath = null,Object? size = null,Object? lastModifiedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? absolutePath = null,Object? relativePath = null,Object? size = null,Object? lastModifiedAt = null,Object? mimeType = null,}) {
   return _then(FileEntry(
 absolutePath: null == absolutePath ? _self.absolutePath : absolutePath // ignore: cast_nullable_to_non_nullable
 as String,relativePath: null == relativePath ? _self.relativePath : relativePath // ignore: cast_nullable_to_non_nullable
 as String,size: null == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
 as int,lastModifiedAt: null == lastModifiedAt ? _self.lastModifiedAt : lastModifiedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,mimeType: null == mimeType ? _self.mimeType : mimeType // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
