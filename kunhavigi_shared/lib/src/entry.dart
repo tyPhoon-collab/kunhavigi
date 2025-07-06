@@ -27,4 +27,5 @@ sealed class Entry with _$Entry {
   const Entry._();
 
   String get name => absolutePath.split('/').last;
+  String get parentPath => absolutePath.split('/').sublist(0, -1).join('/');
 }

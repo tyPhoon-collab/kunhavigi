@@ -15,10 +15,25 @@ class Path extends _$Path {
   void setPath(String path) {
     state = path;
   }
+
+  void setAsRoot() {
+    state = '';
+  }
+
+  void setAsParent() {
+    if (state.isEmpty) return;
+    final segments = state.split('/');
+    if (segments.length <= 1) {
+      state = '';
+    } else {
+      segments.removeLast();
+      state = segments.join('/');
+    }
+  }
 }
 
-@riverpod
-Future<List<Entry>> entries(
+@Riverpod(keepAlive: true)
+Future<EntriesResponse> entries(
   Ref ref,
   String path,
 ) async {

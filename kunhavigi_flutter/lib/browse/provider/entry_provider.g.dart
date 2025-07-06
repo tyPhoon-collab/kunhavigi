@@ -6,7 +6,7 @@ part of 'entry_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entriesHash() => r'f5b44c836cf5c31bbb36a20fe26a9841e9b27f92';
+String _$entriesHash() => r'4e4fccd2bc72f259fb5ebe8c43e2c4dfe8aed084';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const entriesProvider = EntriesFamily();
 
 /// See also [entries].
-class EntriesFamily extends Family<AsyncValue<List<Entry>>> {
+class EntriesFamily extends Family<AsyncValue<EntriesResponse>> {
   /// See also [entries].
   const EntriesFamily();
 
@@ -72,7 +72,7 @@ class EntriesFamily extends Family<AsyncValue<List<Entry>>> {
 }
 
 /// See also [entries].
-class EntriesProvider extends AutoDisposeFutureProvider<List<Entry>> {
+class EntriesProvider extends FutureProvider<EntriesResponse> {
   /// See also [entries].
   EntriesProvider(
     String path,
@@ -106,7 +106,7 @@ class EntriesProvider extends AutoDisposeFutureProvider<List<Entry>> {
 
   @override
   Override overrideWith(
-    FutureOr<List<Entry>> Function(EntriesRef provider) create,
+    FutureOr<EntriesResponse> Function(EntriesRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -123,7 +123,7 @@ class EntriesProvider extends AutoDisposeFutureProvider<List<Entry>> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<Entry>> createElement() {
+  FutureProviderElement<EntriesResponse> createElement() {
     return _EntriesProviderElement(this);
   }
 
@@ -143,20 +143,20 @@ class EntriesProvider extends AutoDisposeFutureProvider<List<Entry>> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin EntriesRef on AutoDisposeFutureProviderRef<List<Entry>> {
+mixin EntriesRef on FutureProviderRef<EntriesResponse> {
   /// The parameter `path` of this provider.
   String get path;
 }
 
-class _EntriesProviderElement
-    extends AutoDisposeFutureProviderElement<List<Entry>> with EntriesRef {
+class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
+    with EntriesRef {
   _EntriesProviderElement(super.provider);
 
   @override
   String get path => (origin as EntriesProvider).path;
 }
 
-String _$pathHash() => r'a6ab0a56969819473572d62e1c2df2a3c505017f';
+String _$pathHash() => r'2448b7c8cd2d1e451a55000e0ae251c4245267ea';
 
 /// See also [Path].
 @ProviderFor(Path)

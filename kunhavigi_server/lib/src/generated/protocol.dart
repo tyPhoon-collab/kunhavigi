@@ -13,10 +13,11 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'features/browse/not_exists_exception.dart' as _i3;
 import 'features/browse/path_outside_exception.dart' as _i4;
-import 'package:kunhavigi_shared/src/entry.dart' as _i5;
+import 'features/browse/entries_response.dart' as _i5;
 import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i6;
 export 'features/browse/not_exists_exception.dart';
 export 'features/browse/path_outside_exception.dart';
+export 'features/browse/entries_response.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -41,6 +42,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i4.PathOutsideException) {
       return _i4.PathOutsideException.fromJson(data) as T;
     }
+    if (t == _i5.EntriesResponse) {
+      return _i5.EntriesResponse.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i3.NotExistsException?>()) {
       return (data != null ? _i3.NotExistsException.fromJson(data) : null) as T;
     }
@@ -48,8 +52,11 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data != null ? _i4.PathOutsideException.fromJson(data) : null)
           as T;
     }
-    if (t == List<_i5.Entry>) {
-      return (data as List).map((e) => deserialize<_i5.Entry>(e)).toList() as T;
+    if (t == _i1.getType<_i5.EntriesResponse?>()) {
+      return (data != null ? _i5.EntriesResponse.fromJson(data) : null) as T;
+    }
+    if (t == List<_i6.Entry>) {
+      return (data as List).map((e) => deserialize<_i6.Entry>(e)).toList() as T;
     }
     if (t == _i6.Entry) {
       return _i6.Entry.fromJson(data) as T;
@@ -76,6 +83,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i4.PathOutsideException) {
       return 'PathOutsideException';
     }
+    if (data is _i5.EntriesResponse) {
+      return 'EntriesResponse';
+    }
     className = _i2.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod.$className';
@@ -97,6 +107,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (dataClassName == 'PathOutsideException') {
       return deserialize<_i4.PathOutsideException>(data['data']);
+    }
+    if (dataClassName == 'EntriesResponse') {
+      return deserialize<_i5.EntriesResponse>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);

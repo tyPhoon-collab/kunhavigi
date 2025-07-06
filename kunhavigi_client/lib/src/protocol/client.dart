@@ -11,7 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:kunhavigi_shared/src/entry.dart' as _i3;
+import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.dart'
+    as _i3;
 import 'protocol.dart' as _i4;
 
 /// {@category Endpoint}
@@ -22,8 +23,8 @@ class EndpointBrowse extends _i1.EndpointRef {
   String get name => 'browse';
 
   /// 相対パスと絶対パスを許容する
-  _i2.Future<List<_i3.Entry>> getEntries(String path) =>
-      caller.callServerEndpoint<List<_i3.Entry>>(
+  _i2.Future<_i3.EntriesResponse> getEntries(String path) =>
+      caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
         'getEntries',
         {'path': path},

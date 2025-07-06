@@ -33,10 +33,33 @@ class EntriesListView extends ConsumerWidget {
 
     final data = entries.requireValue;
 
+    if (!data.isRootDirectory) {
+      return ListView.builder(
+        itemCount: data.totalCount + 2,
+        itemBuilder: (context, index) {
+          return switch (index) {
+            0 => ListTile(
+                title: const Text('Go to root directory'),
+                onTap: () {
+                  ref.read(pathProvider.notifier).setAsRoot();
+                },
+              ),
+            1 => ListTile(
+                title: const Text('Go to parent directory'),
+                onTap: () {
+                  ref.read(pathProvider.notifier).setAsParent();
+                },
+              ),
+            _ => _EntryListTile(entry: data.entries[index - 2]),
+          };
+        },
+      );
+    }
+
     return ListView.builder(
-      itemCount: data.length,
+      itemCount: data.totalCount,
       itemBuilder: (context, index) {
-        final entry = data[index];
+        final entry = data.entries[index];
         return _EntryListTile(entry: entry);
       },
     );
