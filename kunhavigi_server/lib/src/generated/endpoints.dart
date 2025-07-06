@@ -30,8 +30,8 @@ class Endpoints extends _i1.EndpointDispatch {
         'getEntries': _i1.MethodConnector(
           name: 'getEntries',
           params: {
-            'relativePath': _i1.ParameterDescription(
-              name: 'relativePath',
+            'path': _i1.ParameterDescription(
+              name: 'path',
               type: _i1.getType<String>(),
               nullable: false,
             )
@@ -42,7 +42,7 @@ class Endpoints extends _i1.EndpointDispatch {
           ) async =>
               (endpoints['browse'] as _i2.BrowseEndpoint).getEntries(
             session,
-            params['relativePath'],
+            params['path'],
           ),
         )
       },

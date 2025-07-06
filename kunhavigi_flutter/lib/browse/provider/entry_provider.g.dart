@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'kunhavigi_page.dart';
+part of 'entry_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -155,5 +155,20 @@ class _EntriesProviderElement
   @override
   String get path => (origin as EntriesProvider).path;
 }
+
+String _$pathHash() => r'a6ab0a56969819473572d62e1c2df2a3c505017f';
+
+/// See also [Path].
+@ProviderFor(Path)
+final pathProvider = NotifierProvider<Path, String>.internal(
+  Path.new,
+  name: r'pathProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$pathHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Path = Notifier<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

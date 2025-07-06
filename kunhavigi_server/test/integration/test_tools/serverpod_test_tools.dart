@@ -130,7 +130,7 @@ class _BrowseEndpoint {
 
   _i3.Future<List<_i4.Entry>> getEntries(
     _i1.TestSessionBuilder sessionBuilder,
-    String relativePath,
+    String path,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -143,7 +143,7 @@ class _BrowseEndpoint {
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'browse',
           methodName: 'getEntries',
-          parameters: _i1.testObjectToJson({'relativePath': relativePath}),
+          parameters: _i1.testObjectToJson({'path': path}),
           serializationManager: _serializationManager,
         );
         var _localReturnValue = await (_localCallContext.method.call(

@@ -9,9 +9,12 @@ class BrowseEndpoint extends Endpoint {
   late final String dataDirectory = Platform.environment['DATA_DIRECTORY'] ??
       '/Users/hiroaki/projects/kunhavigi/data';
 
-  Future<List<Entry>> getEntries(Session session, String relativePath) async {
-    final dirPath = p.join(dataDirectory, relativePath);
-    final normalizedPath = p.normalize(dirPath);
+  /// 相対パスと絶対パスを許容する
+  Future<List<Entry>> getEntries(Session session, String path) async {
+    // Handle both absolute and relative paths
+    final normalizedPath = p.isAbsolute(path)
+        ? p.normalize(path)
+        : p.normalize(p.join(dataDirectory, path));
 
     // Ensure the resolved path is within the data directory
     if (!normalizedPath.startsWith(p.normalize(dataDirectory))) {
@@ -25,22 +28,23 @@ class BrowseEndpoint extends Endpoint {
     }
 
     return dir.list().map((entity) {
-      final name = p.basename(entity.path);
+      final absolutePath = p.normalize(entity.path);
+      final relativePath = p.relative(absolutePath, from: dataDirectory);
       final stat = entity.statSync();
       return switch (stat.type) {
         FileSystemEntityType.file => Entry.file(
-            name: name,
-            path: entity.path,
+            absolutePath: absolutePath,
+            relativePath: relativePath,
             size: stat.size,
             lastModifiedAt: stat.modified,
           ),
         FileSystemEntityType.directory => Entry.directory(
-            name: name,
-            path: entity.path,
+            absolutePath: absolutePath,
+            relativePath: relativePath,
           ),
         _ => Entry.unknown(
-            name: name,
-            path: entity.path,
+            absolutePath: absolutePath,
+            relativePath: relativePath,
           ),
       };
     }).toList();

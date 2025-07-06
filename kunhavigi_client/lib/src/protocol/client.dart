@@ -21,11 +21,12 @@ class EndpointBrowse extends _i1.EndpointRef {
   @override
   String get name => 'browse';
 
-  _i2.Future<List<_i3.Entry>> getEntries(String relativePath) =>
+  /// 相対パスと絶対パスを許容する
+  _i2.Future<List<_i3.Entry>> getEntries(String path) =>
       caller.callServerEndpoint<List<_i3.Entry>>(
         'browse',
         'getEntries',
-        {'relativePath': relativePath},
+        {'path': path},
       );
 }
 
