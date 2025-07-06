@@ -1,0 +1,44 @@
+services:
+  # Development services
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "8090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: kunhavigi
+      POSTGRES_PASSWORD: "_ybPH7mK6d106Lt8kekp0XITHTmAexzB"
+    volumes:
+      - kunhavigi_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "8091:6379"
+    command: redis-server --requirepass "S7YruHgGeXX68lp101IeD7KzLfGtA64i"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  # Test services
+  postgres_test:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "9090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: kunhavigi_test
+      POSTGRES_PASSWORD: "2LsFxi3-pSC1_o9NiZoHR7wRkkmWppOk"
+    volumes:
+      - kunhavigi_test_data:/var/lib/postgresql/data
+
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - "9091:6379"
+    command: redis-server --requirepass "f6zc8GCLYcGuTYajbNt5kcF4CktfQXi1"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+volumes:
+  kunhavigi_data:
+  kunhavigi_test_data:
