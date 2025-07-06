@@ -1,5 +1,6 @@
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as p;
 
 abstract interface class Saver {
   Future<void> save(
@@ -45,12 +46,13 @@ class FileSaverSelectPlaceSaver implements Saver {
       return;
     }
 
+    // 一貫したシグネチャでないため、微調整
     await FileSaver.instance.saveAs(
-      name: name,
+      name: p.basenameWithoutExtension(name),
       bytes: bytes.buffer.asUint8List(),
       mimeType: MimeType.custom,
       customMimeType: mimeType,
-      ext: '',
+      ext: p.extension(name),
     );
   }
 }

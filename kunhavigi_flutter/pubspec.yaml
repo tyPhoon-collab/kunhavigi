@@ -30,6 +30,7 @@ dependencies:
   kunhavigi_client:
     path: ../kunhavigi_client
   logger: ^2.6.0
+  path: ^1.9.1
   riverpod_annotation: ^2.6.1
   serverpod_flutter: 2.9.1
 
