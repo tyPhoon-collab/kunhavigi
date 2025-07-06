@@ -1,3 +1,0 @@
-exception: NotExistException
-fields:
-  path: String

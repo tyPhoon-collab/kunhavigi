@@ -41,7 +41,7 @@ class KunhavigiPage extends ConsumerWidget {
           error: (error, stackTrace) {
             return Text(
               switch (error) {
-                final NotExistException e =>
+                final NotExistsException e =>
                   'Directory does not exist: ${e.path}',
                 final PathOutsideException e =>
                   'Path is outside the allowed directory: ${e.path}',

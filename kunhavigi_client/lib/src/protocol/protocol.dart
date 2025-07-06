@@ -11,11 +11,11 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'features/browse/path_outside_exception.dart' as _i2;
-import 'features/browse/not_exist_exception.dart' as _i3;
+import 'features/browse/not_exists_exception.dart' as _i3;
 import 'package:kunhavigi_shared/src/entry.dart' as _i4;
 import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i5;
 export 'features/browse/path_outside_exception.dart';
-export 'features/browse/not_exist_exception.dart';
+export 'features/browse/not_exists_exception.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -34,15 +34,15 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i2.PathOutsideException) {
       return _i2.PathOutsideException.fromJson(data) as T;
     }
-    if (t == _i3.NotExistException) {
-      return _i3.NotExistException.fromJson(data) as T;
+    if (t == _i3.NotExistsException) {
+      return _i3.NotExistsException.fromJson(data) as T;
     }
     if (t == _i1.getType<_i2.PathOutsideException?>()) {
       return (data != null ? _i2.PathOutsideException.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i3.NotExistException?>()) {
-      return (data != null ? _i3.NotExistException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i3.NotExistsException?>()) {
+      return (data != null ? _i3.NotExistsException.fromJson(data) : null) as T;
     }
     if (t == List<_i4.Entry>) {
       return (data as List).map((e) => deserialize<_i4.Entry>(e)).toList() as T;
@@ -66,8 +66,8 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i2.PathOutsideException) {
       return 'PathOutsideException';
     }
-    if (data is _i3.NotExistException) {
-      return 'NotExistException';
+    if (data is _i3.NotExistsException) {
+      return 'NotExistsException';
     }
     return null;
   }
@@ -84,8 +84,8 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'PathOutsideException') {
       return deserialize<_i2.PathOutsideException>(data['data']);
     }
-    if (dataClassName == 'NotExistException') {
-      return deserialize<_i3.NotExistException>(data['data']);
+    if (dataClassName == 'NotExistsException') {
+      return deserialize<_i3.NotExistsException>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

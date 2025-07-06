@@ -12,11 +12,11 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'features/browse/path_outside_exception.dart' as _i3;
-import 'features/browse/not_exist_exception.dart' as _i4;
+import 'features/browse/not_exists_exception.dart' as _i4;
 import 'package:kunhavigi_shared/src/entry.dart' as _i5;
 import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i6;
 export 'features/browse/path_outside_exception.dart';
-export 'features/browse/not_exist_exception.dart';
+export 'features/browse/not_exists_exception.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -38,15 +38,15 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i3.PathOutsideException) {
       return _i3.PathOutsideException.fromJson(data) as T;
     }
-    if (t == _i4.NotExistException) {
-      return _i4.NotExistException.fromJson(data) as T;
+    if (t == _i4.NotExistsException) {
+      return _i4.NotExistsException.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.PathOutsideException?>()) {
       return (data != null ? _i3.PathOutsideException.fromJson(data) : null)
           as T;
     }
-    if (t == _i1.getType<_i4.NotExistException?>()) {
-      return (data != null ? _i4.NotExistException.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.NotExistsException?>()) {
+      return (data != null ? _i4.NotExistsException.fromJson(data) : null) as T;
     }
     if (t == List<_i5.Entry>) {
       return (data as List).map((e) => deserialize<_i5.Entry>(e)).toList() as T;
@@ -73,8 +73,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i3.PathOutsideException) {
       return 'PathOutsideException';
     }
-    if (data is _i4.NotExistException) {
-      return 'NotExistException';
+    if (data is _i4.NotExistsException) {
+      return 'NotExistsException';
     }
     className = _i2.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -95,8 +95,8 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'PathOutsideException') {
       return deserialize<_i3.PathOutsideException>(data['data']);
     }
-    if (dataClassName == 'NotExistException') {
-      return deserialize<_i4.NotExistException>(data['data']);
+    if (dataClassName == 'NotExistsException') {
+      return deserialize<_i4.NotExistsException>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);

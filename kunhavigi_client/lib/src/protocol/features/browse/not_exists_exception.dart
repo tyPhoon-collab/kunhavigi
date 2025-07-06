@@ -11,22 +11,22 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
-abstract class NotExistException
+abstract class NotExistsException
     implements _i1.SerializableException, _i1.SerializableModel {
-  NotExistException._({required this.path});
+  NotExistsException._({required this.path});
 
-  factory NotExistException({required String path}) = _NotExistExceptionImpl;
+  factory NotExistsException({required String path}) = _NotExistsExceptionImpl;
 
-  factory NotExistException.fromJson(Map<String, dynamic> jsonSerialization) {
-    return NotExistException(path: jsonSerialization['path'] as String);
+  factory NotExistsException.fromJson(Map<String, dynamic> jsonSerialization) {
+    return NotExistsException(path: jsonSerialization['path'] as String);
   }
 
   String path;
 
-  /// Returns a shallow copy of this [NotExistException]
+  /// Returns a shallow copy of this [NotExistsException]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
-  NotExistException copyWith({String? path});
+  NotExistsException copyWith({String? path});
   @override
   Map<String, dynamic> toJson() {
     return {'path': path};
@@ -38,14 +38,14 @@ abstract class NotExistException
   }
 }
 
-class _NotExistExceptionImpl extends NotExistException {
-  _NotExistExceptionImpl({required String path}) : super._(path: path);
+class _NotExistsExceptionImpl extends NotExistsException {
+  _NotExistsExceptionImpl({required String path}) : super._(path: path);
 
-  /// Returns a shallow copy of this [NotExistException]
+  /// Returns a shallow copy of this [NotExistsException]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   @override
-  NotExistException copyWith({String? path}) {
-    return NotExistException(path: path ?? this.path);
+  NotExistsException copyWith({String? path}) {
+    return NotExistsException(path: path ?? this.path);
   }
 }

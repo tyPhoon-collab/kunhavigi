@@ -21,7 +21,7 @@ class BrowseEndpoint extends Endpoint {
     final dir = Directory(normalizedPath);
 
     if (!dir.existsSync()) {
-      throw NotExistException(path: dir.path);
+      throw NotExistsException(path: dir.path);
     }
 
     return dir.list().map((entity) {
