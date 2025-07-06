@@ -2,3 +2,6 @@ type: server
 
 client_package_path: ../kunhavigi_client
 server_test_tools_path: test/integration/test_tools
+
+extraClasses:
+  - package:kunhavigi_shared/kunhavigi_shared.dart:Entry

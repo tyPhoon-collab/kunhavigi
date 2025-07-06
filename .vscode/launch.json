@@ -1,0 +1,38 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "kunhavigi_flutter",
+            "cwd": "kunhavigi_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "kunhavigi_flutter (profile mode)",
+            "cwd": "kunhavigi_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "kunhavigi_flutter (release mode)",
+            "cwd": "kunhavigi_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "kunhavigi_server",
+            "cwd": "kunhavigi_server",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/main.dart",
+            "args": [
+                "--apply-migrations",
+            ]
+        }
+    ]
+}

@@ -23,4 +23,8 @@
     "editor.tabCompletion": "onlySnippets",
     "editor.wordBasedSuggestions": "off"
   },
+  "cSpell.words": [
+    "Kunhavigi",
+    "Serverpod"
+  ],
 }
