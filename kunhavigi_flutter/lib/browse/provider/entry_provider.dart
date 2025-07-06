@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/client.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'entry_provider.g.dart';
@@ -13,10 +14,12 @@ class Path extends _$Path {
   }
 
   void setPath(String path) {
+    logInfo('Navigating to path: $path');
     state = path;
   }
 
   void setAsRoot() {
+    logInfo('Navigating to root directory');
     state = '';
   }
 
@@ -29,6 +32,7 @@ class Path extends _$Path {
       segments.removeLast();
       state = segments.join('/');
     }
+    logInfo('Navigating to parent directory: $state');
   }
 }
 
@@ -37,8 +41,16 @@ Future<EntriesResponse> entries(
   Ref ref,
   String path,
 ) async {
-  final client = ref.watch(clientProvider);
-  return client.browse.getEntries(path);
+  logInfo('Fetching entries for path: $path');
+  try {
+    final client = ref.watch(clientProvider);
+    final result = await client.browse.getEntries(path);
+    logInfo('Successfully fetched ${result.entries.length} entries');
+    return result;
+  } catch (error, stackTrace) {
+    logError('Failed to fetch entries for path: $path', error, stackTrace);
+    rethrow;
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -46,6 +58,14 @@ Future<EntryPreview> entryPreview(
   Ref ref,
   String path,
 ) async {
-  final client = ref.watch(clientProvider);
-  return client.browse.peekEntry(path);
+  logInfo('Fetching preview for path: $path');
+  try {
+    final client = ref.watch(clientProvider);
+    final result = await client.browse.peekEntry(path);
+    logInfo('Successfully fetched preview for: $path');
+    return result;
+  } catch (error, stackTrace) {
+    logError('Failed to fetch preview for path: $path', error, stackTrace);
+    rethrow;
+  }
 }

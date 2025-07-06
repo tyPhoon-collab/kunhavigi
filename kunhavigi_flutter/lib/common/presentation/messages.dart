@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 
-class ErrorMessage extends StatelessWidget {
+class ErrorMessage extends HookWidget {
   const ErrorMessage({
     required this.error,
+    this.stackTrace,
     super.key,
   });
 
   final Object error;
+  final StackTrace? stackTrace;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    useEffect(() {
+      logError('ErrorMessage displayed', error, stackTrace);
+      return null;
+    }, [error, stackTrace]);
 
     return Container(
       padding: const EdgeInsets.all(16),

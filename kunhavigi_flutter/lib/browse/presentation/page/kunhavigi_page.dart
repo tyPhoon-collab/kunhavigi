@@ -185,7 +185,10 @@ class _Preview extends ConsumerWidget {
           ),
         ),
       ),
-      error: (error, stack) => ErrorMessage(error: error),
+      error: (error, stack) => ErrorMessage(
+        error: error,
+        stackTrace: stack,
+      ),
     );
   }
 }
@@ -223,8 +226,9 @@ class _PreviewContent extends StatelessWidget {
           child: Image.memory(
             image.base64,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => const ErrorMessage(
+            errorBuilder: (context, error, stackTrace) => ErrorMessage(
               error: 'Failed to load image',
+              stackTrace: stackTrace,
             ),
           ),
         ),

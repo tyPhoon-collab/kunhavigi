@@ -28,6 +28,7 @@ dependencies:
   hooks_riverpod: ^2.6.1
   kunhavigi_client:
     path: ../kunhavigi_client
+  logger: ^2.6.0
   riverpod_annotation: ^2.6.1
   serverpod_flutter: 2.9.1
 

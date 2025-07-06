@@ -21,30 +21,43 @@ class EntriesListView extends ConsumerWidget {
     final path = ref.watch(pathProvider);
     final entries = ref.watch(entriesProvider(path));
 
-    if (entries.isLoading) {
-      return Center(
+    return entries.when(
+      loading: () => Center(
         child: CircularProgressIndicator(
           color: colorScheme.primary,
         ),
-      );
-    }
-
-    if (entries.hasError) {
-      return Padding(
+      ),
+      error: (error, stackTrace) => Padding(
         padding: const EdgeInsets.all(16),
         child: ErrorMessage(
-          error: switch (entries.error) {
+          error: switch (error) {
             final NotExistsException e => 'Directory does not exist: ${e.path}',
             final PathOutsideException e =>
               'Path is outside the allowed directory: ${e.path}',
-            _ => 'An unexpected error occurred: ${entries.error}',
+            _ => 'An unexpected error occurred: $error',
           },
+          stackTrace: stackTrace,
         ),
-      );
-    }
+      ),
+      data: (data) => _EntriesListViewContent(
+        data: data,
+        onFileTap: onFileTap,
+      ),
+    );
+  }
+}
 
-    final data = entries.requireValue;
+class _EntriesListViewContent extends ConsumerWidget {
+  const _EntriesListViewContent({
+    required this.data,
+    required this.onFileTap,
+  });
 
+  final EntriesResponse data;
+  final EntryCallback? onFileTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     if (!data.isRootDirectory) {
       return ListView.builder(
         itemCount: data.totalCount + 2,
