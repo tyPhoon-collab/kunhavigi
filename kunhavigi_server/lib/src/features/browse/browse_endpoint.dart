@@ -32,14 +32,34 @@ class BrowseEndpoint extends Endpoint {
 
     return switch (mimeType) {
       'text/plain' ||
+      'text/markdown' ||
+      'text/html' ||
+      'text/css' ||
+      'text/javascript' ||
+      'text/xml' ||
       'application/json' ||
-      'application/x-yaml' =>
-        EntryPreview.text(
-          text: file.readAsStringSync(),
-        ),
-      'image/png' || 'image/jpeg' || 'image/gif' => EntryPreview.image(
-          base64: file.readAsBytesSync(),
-        ),
+      'application/javascript' ||
+      'application/xml' ||
+      'application/x-yaml' ||
+      'application/yaml' =>
+        () {
+          final content = file.readAsStringSync();
+          const maxLength =
+              2000; // Maximum characters to preview for reduced data usage
+          final text = content.length > maxLength
+              ? '${content.substring(0, maxLength)}\n\n... (truncated, ${content.length - maxLength} more characters)'
+              : content;
+          return EntryPreview.text(text: text);
+        }(),
+      'image/png' ||
+      'image/jpeg' ||
+      'image/jpg' ||
+      'image/gif' ||
+      'image/webp' ||
+      'image/svg+xml' ||
+      'image/bmp' ||
+      'image/tiff' =>
+        EntryPreview.image(base64: file.readAsBytesSync()),
       _ => const EntryPreview.unknown(), // Unsupported file type for preview
     };
   }
