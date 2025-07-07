@@ -22,3 +22,6 @@ To run the project, first make sure that the server is running, then do:
 
 - [file_saver | Flutter package](https://pub.dev/packages/file_saver)
   - iOSのサポート時に設定が必要
+
+- [file_picker | Flutter package](https://pub.dev/packages/file_picker)
+  - macOS以外の設定はしていない
