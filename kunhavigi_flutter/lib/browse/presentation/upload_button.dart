@@ -22,9 +22,8 @@ class UploadButton extends ConsumerWidget {
   Future<void> _pickFiles(BuildContext context, WidgetRef ref) async {
     final files = await ref.read(pickerProvider).pickFiles();
     // TODO: エラーハンドリング
-    await ref.read(pickAndUploadUseCaseProvider).upload(
-          ref.read(currentPathProvider),
-          files,
-        );
+    await ref
+        .read(pickAndUploadUseCaseProvider)
+        .upload(ref.read(currentPathProvider), files);
   }
 }

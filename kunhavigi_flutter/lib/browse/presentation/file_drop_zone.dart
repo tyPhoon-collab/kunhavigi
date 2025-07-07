@@ -56,9 +56,7 @@ class FileDropZone extends HookConsumerWidget {
 }
 
 class _FileDropArea extends ConsumerWidget {
-  const _FileDropArea({
-    required this.isVisible,
-  });
+  const _FileDropArea({required this.isVisible});
 
   final bool isVisible;
 

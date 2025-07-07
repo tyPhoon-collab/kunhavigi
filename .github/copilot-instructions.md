@@ -14,6 +14,7 @@
 - `colorScheme`や`textTheme`を使用し、テーマに沿った色やフォントを使用すること
     - `build`メソッドの先頭で`final colorScheme = Theme.of(context).colorScheme;`のように定義する
     - BuildContextがあれば取得できるため、Widgetのコンストラクタで受け取る必要はない
+- 共通の設定が何度も重複する場合は、`MaterialApp.theme`で設定し、共通化すること
 
 ### Code Style
 
