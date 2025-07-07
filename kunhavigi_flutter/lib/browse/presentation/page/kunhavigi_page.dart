@@ -20,7 +20,15 @@ class KunhavigiPage extends ConsumerWidget {
         elevation: 0,
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(48),
-          child: _PathBreadcrumb(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Expanded(child: _PathBreadcrumb()),
+                _ReloadButton(),
+              ],
+            ),
+          ),
         ),
       ),
       body: EntriesListView(
@@ -50,16 +58,32 @@ class _PathBreadcrumb extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Text(
-        currentPath.isRoot ? 'Root Directory' : currentPath.value,
-        style: textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurface.withValues(alpha: 0.8),
-        ),
-        overflow: TextOverflow.ellipsis,
+    return Text(
+      currentPath.isRoot ? 'Root Directory' : currentPath.value,
+      style: textTheme.bodyMedium?.copyWith(
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
       ),
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+class _ReloadButton extends ConsumerWidget {
+  const _ReloadButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final currentPath = ref.watch(currentPathProvider);
+
+    return IconButton(
+      icon: Icon(Icons.refresh,
+          color: colorScheme.onSurface.withValues(alpha: 0.8)),
+      onPressed: () {
+        ref.invalidate(entriesProvider(currentPath));
+      },
+      tooltip: 'Reload',
     );
   }
 }
