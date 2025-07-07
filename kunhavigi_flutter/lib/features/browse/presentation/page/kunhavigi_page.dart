@@ -1,11 +1,11 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_flutter/browse/presentation/entries_list_view.dart';
-import 'package:kunhavigi_flutter/browse/presentation/file_drop_zone.dart';
-import 'package:kunhavigi_flutter/browse/presentation/upload_button.dart';
-import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/common/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
-import 'package:kunhavigi_flutter/client.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

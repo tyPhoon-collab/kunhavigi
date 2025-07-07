@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/browse/provider/service_provider.dart';
-import 'package:kunhavigi_flutter/common/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 
 class UploadButton extends ConsumerWidget {
   const UploadButton({super.key});

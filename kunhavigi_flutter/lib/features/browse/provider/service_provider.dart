@@ -1,9 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
+import 'package:kunhavigi_flutter/features/browse/application/picker.dart';
+import 'package:kunhavigi_flutter/features/browse/application/saver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
-part 'client.g.dart';
+part 'service_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Client client(Ref ref) {
@@ -17,4 +19,14 @@ Client client(Ref ref) {
       serverUrlFromEnv.isEmpty ? 'http://$localhost:8080/' : serverUrlFromEnv;
 
   return Client(serverUrl)..connectivityMonitor = FlutterConnectivityMonitor();
+}
+
+@Riverpod(keepAlive: true)
+Saver saver(Ref ref) {
+  return const FileSaverSelectPlaceSaver();
+}
+
+@Riverpod(keepAlive: true)
+Picker picker(Ref ref) {
+  return FilePickerPicker();
 }

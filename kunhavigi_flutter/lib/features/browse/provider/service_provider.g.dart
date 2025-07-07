@@ -6,6 +6,22 @@ part of 'service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$clientHash() => r'7da216098542e0f908fc5cf789ebd4d2db737ca9';
+
+/// See also [client].
+@ProviderFor(client)
+final clientProvider = Provider<Client>.internal(
+  client,
+  name: r'clientProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$clientHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClientRef = ProviderRef<Client>;
 String _$saverHash() => r'cbe7b2a77b09a15923f7ab91be03813764fbdc84';
 
 /// See also [saver].

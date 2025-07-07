@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
-import 'package:kunhavigi_flutter/browse/presentation/dialog/delete_dialog.dart';
-import 'package:kunhavigi_flutter/browse/presentation/dialog/rename_dialog.dart';
-import 'package:kunhavigi_flutter/common/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/dialog.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 
 class FileEntryMenuButton extends StatelessWidget {
   const FileEntryMenuButton({

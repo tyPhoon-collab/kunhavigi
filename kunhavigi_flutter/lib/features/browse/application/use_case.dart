@@ -4,10 +4,9 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
-import 'package:kunhavigi_flutter/browse/application/picker.dart';
-import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/browse/provider/service_provider.dart';
-import 'package:kunhavigi_flutter/client.dart';
+import 'package:kunhavigi_flutter/features/browse/application/picker.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 
 sealed class ClientUseCase {
   const ClientUseCase(this.ref);

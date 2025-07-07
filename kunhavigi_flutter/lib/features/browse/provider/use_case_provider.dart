@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_flutter/browse/provider/service_provider.dart';
-import 'package:kunhavigi_flutter/common/application/use_case.dart';
+import 'package:kunhavigi_flutter/features/browse/application/use_case.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'use_case_provider.g.dart';
