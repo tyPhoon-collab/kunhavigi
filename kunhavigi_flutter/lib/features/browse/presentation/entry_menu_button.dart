@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/dialog.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/common/presentation/feedback.dart';
 
 class FileEntryMenuButton extends StatelessWidget {
   const FileEntryMenuButton({
@@ -87,8 +88,13 @@ class _DownloadEntryMenuItem implements _EntryMenuItem {
   @override
   MenuItemButton build(WidgetRef ref) {
     Future<void> downloadFile() async {
-      // TODO: エラーハンドリング
-      await ref.read(downloadUseCaseProvider).download(fileEntry);
+      try {
+        await ref.read(downloadUseCaseProvider).download(fileEntry);
+      } on Exception catch (e) {
+        if (ref.context.mounted) {
+          feedbackError(ref.context, e.toString());
+        }
+      }
     }
 
     return MenuItemButton(
@@ -113,8 +119,16 @@ class _RenameEntryMenuItem implements _EntryMenuItem {
       );
 
       if (result != null && result.isNotEmpty && result != entry.name) {
-        // TODO: エラーハンドリング
-        await ref.read(renameUseCaseProvider).rename(entry.path, result);
+        try {
+          await ref.read(renameUseCaseProvider).rename(entry.path, result);
+          if (ref.context.mounted) {
+            feedbackSuccess(ref.context, 'Renamed successfully');
+          }
+        } on Exception catch (e) {
+          if (ref.context.mounted) {
+            feedbackError(ref.context, e.toString());
+          }
+        }
       }
     }
 
@@ -141,8 +155,13 @@ class _DeleteEntryMenuItem implements _EntryMenuItem {
         builder: (context) => DeleteDialog(name: entry.name),
       );
       if (result ?? false) {
-        // TODO: エラーハンドリング
-        await ref.read(deleteUseCaseProvider).delete(entry.path);
+        try {
+          await ref.read(deleteUseCaseProvider).delete(entry.path);
+        } on Exception catch (e) {
+          if (ref.context.mounted) {
+            feedbackError(ref.context, e.toString());
+          }
+        }
       }
     }
 
