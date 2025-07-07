@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
+import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:serverpod/serverpod.dart';
 
 class TransferEndpoint extends Endpoint {
   /// Download a file from the server
-  Future<ByteData> downloadFile(Session session, String path) async {
+  Future<ByteData> downloadFile(Session session, RelativePath path) async {
     final normalizedPath = validateAndNormalizePath(path);
 
     final file = existingFile(normalizedPath);

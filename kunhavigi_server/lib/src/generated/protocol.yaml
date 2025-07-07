@@ -1,5 +1,7 @@
 browse:
   - getEntries:
   - peekEntry:
+  - delete:
+  - rename:
 transfer:
   - downloadFile:

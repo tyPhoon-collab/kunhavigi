@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
+import 'package:kunhavigi_flutter/browse/presentation/dialog/delete_dialog.dart';
+import 'package:kunhavigi_flutter/browse/presentation/dialog/rename_dialog.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/common/presentation/messages.dart';
+import 'package:kunhavigi_flutter/common/provider/browser_provider.dart';
 
 typedef EntryCallback = void Function(Entry entry);
 
@@ -19,7 +21,7 @@ class EntriesListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final path = ref.watch(pathProvider);
+    final path = ref.watch(currentPathProvider);
     final entries = ref.watch(entriesProvider(path));
 
     return entries.when(
@@ -68,14 +70,14 @@ class _EntriesListViewContent extends ConsumerWidget {
                 title: 'Go to root directory',
                 icon: Icons.home,
                 onTap: () {
-                  ref.read(pathProvider.notifier).setAsRoot();
+                  ref.read(currentPathProvider.notifier).setAsRoot();
                 },
               ),
             1 => _NavigationTile(
                 title: 'Go to parent directory',
                 icon: Icons.arrow_back,
                 onTap: () {
-                  ref.read(pathProvider.notifier).setAsParent();
+                  ref.read(currentPathProvider.notifier).setAsParent();
                 },
               ),
             _ => _EntryListTile(
@@ -114,8 +116,8 @@ class _EntryListTile extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    void navigate(String path) {
-      ref.read(pathProvider.notifier).setPath(path);
+    void navigate(RelativePath path) {
+      ref.read(currentPathProvider.notifier).setPath(path);
     }
 
     return Container(
@@ -162,21 +164,19 @@ class _EntryListTile extends ConsumerWidget {
           ),
         ),
         trailing: switch (entry) {
-          final FileEntry fileEntry => IconButton(
-              icon: const Icon(Icons.file_download),
-              color: colorScheme.primary,
-              onPressed: () async {
-                final bytes =
-                    await ref.read(fileProvider(fileEntry.absolutePath).future);
-
-                await ref.read(saverProvider).save(
-                      bytes,
-                      name: fileEntry.name,
-                      mimeType: fileEntry.mimeType,
-                    );
-              },
+          final FileEntry fileEntry => _EntryMenuButton(
+              menuItems: [
+                _DownloadEntryMenuItem(fileEntry),
+                _RenameEntryMenuItem(fileEntry),
+                _DeleteEntryMenuItem(fileEntry),
+              ],
             ),
-          final DirectoryEntry _ => null,
+          final DirectoryEntry directoryEntry => _EntryMenuButton(
+              menuItems: [
+                _RenameEntryMenuItem(directoryEntry),
+                _DeleteEntryMenuItem(directoryEntry),
+              ],
+            ),
           final UnknownEntry _ => null,
         },
         onTap: () {
@@ -184,7 +184,7 @@ class _EntryListTile extends ConsumerWidget {
             case final FileEntry _:
               onFileTap?.call(entry);
             case final DirectoryEntry _:
-              navigate(entry.absolutePath);
+              navigate(entry.path);
             case final UnknownEntry _:
               break;
           }
@@ -251,6 +251,123 @@ class _NavigationTile extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+      ),
+    );
+  }
+}
+
+class _EntryMenuButton extends ConsumerWidget {
+  const _EntryMenuButton({
+    required this.menuItems,
+  });
+
+  final List<_EntryMenuItem> menuItems;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return MenuAnchor(
+      builder: (context, controller, child) {
+        return IconButton(
+          icon: Icon(
+            Icons.more_vert,
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+        );
+      },
+      menuChildren: menuItems.map((item) => item.build(ref)).toList(),
+    );
+  }
+}
+
+abstract interface class _EntryMenuItem {
+  MenuItemButton build(WidgetRef ref);
+}
+
+class _DownloadEntryMenuItem implements _EntryMenuItem {
+  const _DownloadEntryMenuItem(this.fileEntry);
+
+  final FileEntry fileEntry;
+
+  @override
+  MenuItemButton build(WidgetRef ref) {
+    Future<void> downloadFile() async {
+      // TODO: エラーハンドリング
+      await ref.read(browserProvider).download(fileEntry);
+    }
+
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.file_download),
+      onPressed: () async => downloadFile(),
+      child: const Text('Download'),
+    );
+  }
+}
+
+class _RenameEntryMenuItem implements _EntryMenuItem {
+  const _RenameEntryMenuItem(this.entry);
+
+  final Entry entry;
+
+  @override
+  MenuItemButton build(WidgetRef ref) {
+    Future<void> showRenameDialog() async {
+      final result = await showDialog<String>(
+        context: ref.context,
+        builder: (context) => RenameDialog(initialName: entry.name),
+      );
+
+      if (result != null && result.isNotEmpty && result != entry.name) {
+        // TODO: エラーハンドリング
+        await ref.read(browserProvider).rename(entry.path, result);
+      }
+    }
+
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.edit),
+      onPressed: () async => showRenameDialog(),
+      child: const Text('Rename'),
+    );
+  }
+}
+
+class _DeleteEntryMenuItem implements _EntryMenuItem {
+  const _DeleteEntryMenuItem(this.entry);
+
+  final Entry entry;
+
+  @override
+  MenuItemButton build(WidgetRef ref) {
+    final colorScheme = Theme.of(ref.context).colorScheme;
+
+    Future<void> showDeleteDialog() async {
+      final result = await showDialog<bool>(
+        context: ref.context,
+        builder: (context) => DeleteDialog(name: entry.name),
+      );
+      if (result ?? false) {
+        // TODO: エラーハンドリング
+        await ref.read(browserProvider).delete(entry.path);
+      }
+    }
+
+    return MenuItemButton(
+      leadingIcon: Icon(
+        Icons.delete,
+        color: colorScheme.error,
+      ),
+      onPressed: () async => showDeleteDialog(),
+      child: Text(
+        'Delete',
+        style: TextStyle(color: colorScheme.error),
       ),
     );
   }

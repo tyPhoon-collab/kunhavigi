@@ -13,9 +13,10 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.dart'
     as _i3;
-import 'package:kunhavigi_shared/src/entry_preview.dart' as _i4;
-import 'dart:typed_data' as _i5;
-import 'protocol.dart' as _i6;
+import 'package:kunhavigi_shared/src/entry.dart' as _i4;
+import 'package:kunhavigi_shared/src/entry_preview.dart' as _i5;
+import 'dart:typed_data' as _i6;
+import 'protocol.dart' as _i7;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -26,7 +27,7 @@ class EndpointBrowse extends _i1.EndpointRef {
 
   /// Get the list of entries (files and directories) in a given path.
   /// path is relative or absolute, but must be within the data directory.
-  _i2.Future<_i3.EntriesResponse> getEntries(String path) =>
+  _i2.Future<_i3.EntriesResponse> getEntries(_i4.RelativePath path) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
         'getEntries',
@@ -34,11 +35,33 @@ class EndpointBrowse extends _i1.EndpointRef {
       );
 
   /// Peek at the content of a file to generate a preview.
-  _i2.Future<_i4.EntryPreview> peekEntry(String path) =>
-      caller.callServerEndpoint<_i4.EntryPreview>(
+  _i2.Future<_i5.EntryPreview> peekEntry(_i4.RelativePath path) =>
+      caller.callServerEndpoint<_i5.EntryPreview>(
         'browse',
         'peekEntry',
         {'path': path},
+      );
+
+  /// Delete a file from the server
+  _i2.Future<bool> delete(_i4.RelativePath path) =>
+      caller.callServerEndpoint<bool>(
+        'browse',
+        'delete',
+        {'path': path},
+      );
+
+  /// Rename a file or directory on the server
+  _i2.Future<_i4.Entry> rename({
+    required _i4.RelativePath path,
+    required String newName,
+  }) =>
+      caller.callServerEndpoint<_i4.Entry>(
+        'browse',
+        'rename',
+        {
+          'path': path,
+          'newName': newName,
+        },
       );
 }
 
@@ -50,8 +73,8 @@ class EndpointTransfer extends _i1.EndpointRef {
   String get name => 'transfer';
 
   /// Download a file from the server
-  _i2.Future<_i5.ByteData> downloadFile(String path) =>
-      caller.callServerEndpoint<_i5.ByteData>(
+  _i2.Future<_i6.ByteData> downloadFile(_i4.RelativePath path) =>
+      caller.callServerEndpoint<_i6.ByteData>(
         'transfer',
         'downloadFile',
         {'path': path},
@@ -74,7 +97,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i6.Protocol(),
+          _i7.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

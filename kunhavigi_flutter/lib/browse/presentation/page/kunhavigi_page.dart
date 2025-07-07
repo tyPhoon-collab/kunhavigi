@@ -11,7 +11,6 @@ class KunhavigiPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
-    final currentPath = ref.watch(pathProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -19,9 +18,9 @@ class KunhavigiPage extends ConsumerWidget {
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: _PathBreadcrumb(path: currentPath),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(48),
+          child: _PathBreadcrumb(),
         ),
       ),
       body: EntriesListView(
@@ -43,12 +42,11 @@ class KunhavigiPage extends ConsumerWidget {
 }
 
 class _PathBreadcrumb extends ConsumerWidget {
-  const _PathBreadcrumb({required this.path});
-
-  final String path;
+  const _PathBreadcrumb();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentPath = ref.watch(currentPathProvider);
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -56,7 +54,7 @@ class _PathBreadcrumb extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
-        path.isEmpty ? 'Root Directory' : path,
+        currentPath.isRoot ? 'Root Directory' : currentPath.value,
         style: textTheme.bodyMedium?.copyWith(
           color: colorScheme.onSurface.withValues(alpha: 0.8),
         ),
@@ -93,7 +91,7 @@ class _PreviewModal extends StatelessWidget {
                   controller: scrollController,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: _Preview(path: entry.absolutePath),
+                    child: _Preview(path: entry.path),
                   ),
                 ),
               ),
@@ -144,7 +142,7 @@ class _PreviewHeader extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  entry.absolutePath,
+                  entry.path.value,
                   style: textTheme.bodySmall?.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -167,7 +165,7 @@ class _PreviewHeader extends StatelessWidget {
 class _Preview extends ConsumerWidget {
   const _Preview({required this.path});
 
-  final String path;
+  final RelativePath path;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

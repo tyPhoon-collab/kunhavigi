@@ -12,6 +12,7 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../features/browse/browse_endpoint.dart' as _i2;
 import '../features/transfer/transfer_endpoint.dart' as _i3;
+import 'package:kunhavigi_shared/src/entry.dart' as _i4;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -39,7 +40,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -57,7 +58,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -68,6 +69,48 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['browse'] as _i2.BrowseEndpoint).peekEntry(
             session,
             params['path'],
+          ),
+        ),
+        'delete': _i1.MethodConnector(
+          name: 'delete',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['browse'] as _i2.BrowseEndpoint).delete(
+            session,
+            params['path'],
+          ),
+        ),
+        'rename': _i1.MethodConnector(
+          name: 'rename',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath>(),
+              nullable: false,
+            ),
+            'newName': _i1.ParameterDescription(
+              name: 'newName',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['browse'] as _i2.BrowseEndpoint).rename(
+            session,
+            path: params['path'],
+            newName: params['newName'],
           ),
         ),
       },
@@ -81,7 +124,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },

@@ -6,7 +6,7 @@ part of 'entry_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entriesHash() => r'fab8f5c0cad8b73a2defc89576c6e7d4df2bbfeb';
+String _$entriesHash() => r'4fe782a6a0efb9485b0fe5e03faf9759668e4930';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class EntriesFamily extends Family<AsyncValue<EntriesResponse>> {
 
   /// See also [entries].
   EntriesProvider call(
-    String path,
+    RelativePath path,
   ) {
     return EntriesProvider(
       path,
@@ -75,7 +75,7 @@ class EntriesFamily extends Family<AsyncValue<EntriesResponse>> {
 class EntriesProvider extends FutureProvider<EntriesResponse> {
   /// See also [entries].
   EntriesProvider(
-    String path,
+    RelativePath path,
   ) : this._internal(
           (ref) => entries(
             ref as EntriesRef,
@@ -102,7 +102,7 @@ class EntriesProvider extends FutureProvider<EntriesResponse> {
     required this.path,
   }) : super.internal();
 
-  final String path;
+  final RelativePath path;
 
   @override
   Override overrideWith(
@@ -145,7 +145,7 @@ class EntriesProvider extends FutureProvider<EntriesResponse> {
 // ignore: unused_element
 mixin EntriesRef on FutureProviderRef<EntriesResponse> {
   /// The parameter `path` of this provider.
-  String get path;
+  RelativePath get path;
 }
 
 class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
@@ -153,10 +153,10 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
   _EntriesProviderElement(super.provider);
 
   @override
-  String get path => (origin as EntriesProvider).path;
+  RelativePath get path => (origin as EntriesProvider).path;
 }
 
-String _$entryPreviewHash() => r'656219557b1873efb63d74e6f749d7247a41ada0';
+String _$entryPreviewHash() => r'7a4800cf343ee473f81b924f7198bff546ddc83d';
 
 /// See also [entryPreview].
 @ProviderFor(entryPreview)
@@ -169,7 +169,7 @@ class EntryPreviewFamily extends Family<AsyncValue<EntryPreview>> {
 
   /// See also [entryPreview].
   EntryPreviewProvider call(
-    String path,
+    RelativePath path,
   ) {
     return EntryPreviewProvider(
       path,
@@ -204,7 +204,7 @@ class EntryPreviewFamily extends Family<AsyncValue<EntryPreview>> {
 class EntryPreviewProvider extends FutureProvider<EntryPreview> {
   /// See also [entryPreview].
   EntryPreviewProvider(
-    String path,
+    RelativePath path,
   ) : this._internal(
           (ref) => entryPreview(
             ref as EntryPreviewRef,
@@ -232,7 +232,7 @@ class EntryPreviewProvider extends FutureProvider<EntryPreview> {
     required this.path,
   }) : super.internal();
 
-  final String path;
+  final RelativePath path;
 
   @override
   Override overrideWith(
@@ -275,7 +275,7 @@ class EntryPreviewProvider extends FutureProvider<EntryPreview> {
 // ignore: unused_element
 mixin EntryPreviewRef on FutureProviderRef<EntryPreview> {
   /// The parameter `path` of this provider.
-  String get path;
+  RelativePath get path;
 }
 
 class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
@@ -283,149 +283,23 @@ class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
   _EntryPreviewProviderElement(super.provider);
 
   @override
-  String get path => (origin as EntryPreviewProvider).path;
+  RelativePath get path => (origin as EntryPreviewProvider).path;
 }
 
-String _$fileHash() => r'd088488d7ab27a655fbc68c570f2d092337dd214';
+String _$currentPathHash() => r'21cb30eb4ea1dd9b0c083752b7212994b2aff6cc';
 
-/// See also [file].
-@ProviderFor(file)
-const fileProvider = FileFamily();
-
-/// See also [file].
-class FileFamily extends Family<AsyncValue<ByteData>> {
-  /// See also [file].
-  const FileFamily();
-
-  /// See also [file].
-  FileProvider call(
-    String path,
-  ) {
-    return FileProvider(
-      path,
-    );
-  }
-
-  @override
-  FileProvider getProviderOverride(
-    covariant FileProvider provider,
-  ) {
-    return call(
-      provider.path,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fileProvider';
-}
-
-/// See also [file].
-class FileProvider extends AutoDisposeFutureProvider<ByteData> {
-  /// See also [file].
-  FileProvider(
-    String path,
-  ) : this._internal(
-          (ref) => file(
-            ref as FileRef,
-            path,
-          ),
-          from: fileProvider,
-          name: r'fileProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$fileHash,
-          dependencies: FileFamily._dependencies,
-          allTransitiveDependencies: FileFamily._allTransitiveDependencies,
-          path: path,
-        );
-
-  FileProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.path,
-  }) : super.internal();
-
-  final String path;
-
-  @override
-  Override overrideWith(
-    FutureOr<ByteData> Function(FileRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FileProvider._internal(
-        (ref) => create(ref as FileRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        path: path,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<ByteData> createElement() {
-    return _FileProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FileProvider && other.path == path;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, path.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FileRef on AutoDisposeFutureProviderRef<ByteData> {
-  /// The parameter `path` of this provider.
-  String get path;
-}
-
-class _FileProviderElement extends AutoDisposeFutureProviderElement<ByteData>
-    with FileRef {
-  _FileProviderElement(super.provider);
-
-  @override
-  String get path => (origin as FileProvider).path;
-}
-
-String _$pathHash() => r'fefb56428d1e474356f679a434e770e13cb261d2';
-
-/// See also [Path].
-@ProviderFor(Path)
-final pathProvider = NotifierProvider<Path, String>.internal(
-  Path.new,
-  name: r'pathProvider',
+/// See also [CurrentPath].
+@ProviderFor(CurrentPath)
+final currentPathProvider =
+    NotifierProvider<CurrentPath, RelativePath>.internal(
+  CurrentPath.new,
+  name: r'currentPathProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$pathHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$currentPathHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Path = Notifier<String>;
+typedef _$CurrentPath = Notifier<RelativePath>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:kunhavigi_server/src/generated/protocol.dart';
+import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:path/path.dart' as p;
 
 extension type const ValidPath._(String value) {}
@@ -9,7 +10,7 @@ final String dataDirectory = p.normalize(
     Platform.environment['DATA_DIRECTORY'] ??
         '/Users/hiroaki/projects/kunhavigi/data');
 
-ValidPath validateAndNormalizePath(String path) {
+ValidPath validateAndNormalizePath(RelativePath path) {
   final normalizedPath = _normalizePath(path);
 
   // Ensure the resolved path is within the data directory
@@ -20,10 +21,8 @@ ValidPath validateAndNormalizePath(String path) {
   return ValidPath._(normalizedPath);
 }
 
-String _normalizePath(String path) {
-  return p.isAbsolute(path)
-      ? p.normalize(path)
-      : p.normalize(p.join(dataDirectory, path));
+String _normalizePath(RelativePath path) {
+  return p.normalize(p.join(dataDirectory, path.value));
 }
 
 FileSystemEntity existingEntity(ValidPath path) {

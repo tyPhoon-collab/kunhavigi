@@ -42,7 +42,7 @@ Entry _$EntryFromJson(
 /// @nodoc
 mixin _$Entry {
 
- String get absolutePath; String get relativePath;
+@_RelativePathConverter() RelativePath get path;
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -55,16 +55,16 @@ $EntryCopyWith<Entry> get copyWith => _$EntryCopyWithImpl<Entry>(this as Entry, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Entry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Entry&&(identical(other.path, path) || other.path == path));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,absolutePath,relativePath);
+int get hashCode => Object.hash(runtimeType,path);
 
 @override
 String toString() {
-  return 'Entry(absolutePath: $absolutePath, relativePath: $relativePath)';
+  return 'Entry(path: $path)';
 }
 
 
@@ -75,7 +75,7 @@ abstract mixin class $EntryCopyWith<$Res>  {
   factory $EntryCopyWith(Entry value, $Res Function(Entry) _then) = _$EntryCopyWithImpl;
 @useResult
 $Res call({
- String absolutePath, String relativePath
+@_RelativePathConverter() RelativePath path
 });
 
 
@@ -92,11 +92,10 @@ class _$EntryCopyWithImpl<$Res>
 
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? absolutePath = null,Object? relativePath = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? path = null,}) {
   return _then(_self.copyWith(
-absolutePath: null == absolutePath ? _self.absolutePath : absolutePath // ignore: cast_nullable_to_non_nullable
-as String,relativePath: null == relativePath ? _self.relativePath : relativePath // ignore: cast_nullable_to_non_nullable
-as String,
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as RelativePath,
   ));
 }
 
@@ -184,12 +183,12 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult Function( String absolutePath,  String relativePath)?  directory,TResult Function( String absolutePath,  String relativePath)?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult Function(@_RelativePathConverter()  RelativePath path)?  directory,TResult Function(@_RelativePathConverter()  RelativePath path)?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
-return directory(_that.absolutePath,_that.relativePath);case UnknownEntry() when unknown != null:
-return unknown(_that.absolutePath,_that.relativePath);case _:
+return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
+return directory(_that.path);case UnknownEntry() when unknown != null:
+return unknown(_that.path);case _:
   return orElse();
 
 }
@@ -207,12 +206,12 @@ return unknown(_that.absolutePath,_that.relativePath);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)  file,required TResult Function( String absolutePath,  String relativePath)  directory,required TResult Function( String absolutePath,  String relativePath)  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)  file,required TResult Function(@_RelativePathConverter()  RelativePath path)  directory,required TResult Function(@_RelativePathConverter()  RelativePath path)  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry():
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry():
-return directory(_that.absolutePath,_that.relativePath);case UnknownEntry():
-return unknown(_that.absolutePath,_that.relativePath);}
+return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry():
+return directory(_that.path);case UnknownEntry():
+return unknown(_that.path);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -226,12 +225,12 @@ return unknown(_that.absolutePath,_that.relativePath);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String absolutePath,  String relativePath,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult? Function( String absolutePath,  String relativePath)?  directory,TResult? Function( String absolutePath,  String relativePath)?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult? Function(@_RelativePathConverter()  RelativePath path)?  directory,TResult? Function(@_RelativePathConverter()  RelativePath path)?  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
-return file(_that.absolutePath,_that.relativePath,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
-return directory(_that.absolutePath,_that.relativePath);case UnknownEntry() when unknown != null:
-return unknown(_that.absolutePath,_that.relativePath);case _:
+return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
+return directory(_that.path);case UnknownEntry() when unknown != null:
+return unknown(_that.path);case _:
   return null;
 
 }
@@ -240,14 +239,13 @@ return unknown(_that.absolutePath,_that.relativePath);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(explicitToJson: true)
 class FileEntry extends Entry {
-  const FileEntry({required this.absolutePath, required this.relativePath, required this.size, required this.lastModifiedAt, required this.mimeType, final  String? $type}): $type = $type ?? 'file',super._();
+  const FileEntry({@_RelativePathConverter() required this.path, required this.size, required this.lastModifiedAt, required this.mimeType, final  String? $type}): $type = $type ?? 'file',super._();
   factory FileEntry.fromJson(Map<String, dynamic> json) => _$FileEntryFromJson(json);
 
-@override final  String absolutePath;
-@override final  String relativePath;
+@override@_RelativePathConverter() final  RelativePath path;
  final  int size;
  final  DateTime lastModifiedAt;
  final  String mimeType;
@@ -269,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FileEntry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath)&&(identical(other.size, size) || other.size == size)&&(identical(other.lastModifiedAt, lastModifiedAt) || other.lastModifiedAt == lastModifiedAt)&&(identical(other.mimeType, mimeType) || other.mimeType == mimeType));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FileEntry&&(identical(other.path, path) || other.path == path)&&(identical(other.size, size) || other.size == size)&&(identical(other.lastModifiedAt, lastModifiedAt) || other.lastModifiedAt == lastModifiedAt)&&(identical(other.mimeType, mimeType) || other.mimeType == mimeType));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,absolutePath,relativePath,size,lastModifiedAt,mimeType);
+int get hashCode => Object.hash(runtimeType,path,size,lastModifiedAt,mimeType);
 
 @override
 String toString() {
-  return 'Entry.file(absolutePath: $absolutePath, relativePath: $relativePath, size: $size, lastModifiedAt: $lastModifiedAt, mimeType: $mimeType)';
+  return 'Entry.file(path: $path, size: $size, lastModifiedAt: $lastModifiedAt, mimeType: $mimeType)';
 }
 
 
@@ -289,7 +287,7 @@ abstract mixin class $FileEntryCopyWith<$Res> implements $EntryCopyWith<$Res> {
   factory $FileEntryCopyWith(FileEntry value, $Res Function(FileEntry) _then) = _$FileEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String absolutePath, String relativePath, int size, DateTime lastModifiedAt, String mimeType
+@_RelativePathConverter() RelativePath path, int size, DateTime lastModifiedAt, String mimeType
 });
 
 
@@ -306,11 +304,10 @@ class _$FileEntryCopyWithImpl<$Res>
 
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? absolutePath = null,Object? relativePath = null,Object? size = null,Object? lastModifiedAt = null,Object? mimeType = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? path = null,Object? size = null,Object? lastModifiedAt = null,Object? mimeType = null,}) {
   return _then(FileEntry(
-absolutePath: null == absolutePath ? _self.absolutePath : absolutePath // ignore: cast_nullable_to_non_nullable
-as String,relativePath: null == relativePath ? _self.relativePath : relativePath // ignore: cast_nullable_to_non_nullable
-as String,size: null == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as RelativePath,size: null == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
 as int,lastModifiedAt: null == lastModifiedAt ? _self.lastModifiedAt : lastModifiedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,mimeType: null == mimeType ? _self.mimeType : mimeType // ignore: cast_nullable_to_non_nullable
 as String,
@@ -321,14 +318,13 @@ as String,
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(explicitToJson: true)
 class DirectoryEntry extends Entry {
-  const DirectoryEntry({required this.absolutePath, required this.relativePath, final  String? $type}): $type = $type ?? 'directory',super._();
+  const DirectoryEntry({@_RelativePathConverter() required this.path, final  String? $type}): $type = $type ?? 'directory',super._();
   factory DirectoryEntry.fromJson(Map<String, dynamic> json) => _$DirectoryEntryFromJson(json);
 
-@override final  String absolutePath;
-@override final  String relativePath;
+@override@_RelativePathConverter() final  RelativePath path;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -347,16 +343,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DirectoryEntry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DirectoryEntry&&(identical(other.path, path) || other.path == path));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,absolutePath,relativePath);
+int get hashCode => Object.hash(runtimeType,path);
 
 @override
 String toString() {
-  return 'Entry.directory(absolutePath: $absolutePath, relativePath: $relativePath)';
+  return 'Entry.directory(path: $path)';
 }
 
 
@@ -367,7 +363,7 @@ abstract mixin class $DirectoryEntryCopyWith<$Res> implements $EntryCopyWith<$Re
   factory $DirectoryEntryCopyWith(DirectoryEntry value, $Res Function(DirectoryEntry) _then) = _$DirectoryEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String absolutePath, String relativePath
+@_RelativePathConverter() RelativePath path
 });
 
 
@@ -384,11 +380,10 @@ class _$DirectoryEntryCopyWithImpl<$Res>
 
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? absolutePath = null,Object? relativePath = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? path = null,}) {
   return _then(DirectoryEntry(
-absolutePath: null == absolutePath ? _self.absolutePath : absolutePath // ignore: cast_nullable_to_non_nullable
-as String,relativePath: null == relativePath ? _self.relativePath : relativePath // ignore: cast_nullable_to_non_nullable
-as String,
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as RelativePath,
   ));
 }
 
@@ -396,14 +391,13 @@ as String,
 }
 
 /// @nodoc
-@JsonSerializable()
 
+@JsonSerializable(explicitToJson: true)
 class UnknownEntry extends Entry {
-  const UnknownEntry({required this.absolutePath, required this.relativePath, final  String? $type}): $type = $type ?? 'unknown',super._();
+  const UnknownEntry({@_RelativePathConverter() required this.path, final  String? $type}): $type = $type ?? 'unknown',super._();
   factory UnknownEntry.fromJson(Map<String, dynamic> json) => _$UnknownEntryFromJson(json);
 
-@override final  String absolutePath;
-@override final  String relativePath;
+@override@_RelativePathConverter() final  RelativePath path;
 
 @JsonKey(name: 'runtimeType')
 final String $type;
@@ -422,16 +416,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnknownEntry&&(identical(other.absolutePath, absolutePath) || other.absolutePath == absolutePath)&&(identical(other.relativePath, relativePath) || other.relativePath == relativePath));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UnknownEntry&&(identical(other.path, path) || other.path == path));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,absolutePath,relativePath);
+int get hashCode => Object.hash(runtimeType,path);
 
 @override
 String toString() {
-  return 'Entry.unknown(absolutePath: $absolutePath, relativePath: $relativePath)';
+  return 'Entry.unknown(path: $path)';
 }
 
 
@@ -442,7 +436,7 @@ abstract mixin class $UnknownEntryCopyWith<$Res> implements $EntryCopyWith<$Res>
   factory $UnknownEntryCopyWith(UnknownEntry value, $Res Function(UnknownEntry) _then) = _$UnknownEntryCopyWithImpl;
 @override @useResult
 $Res call({
- String absolutePath, String relativePath
+@_RelativePathConverter() RelativePath path
 });
 
 
@@ -459,11 +453,10 @@ class _$UnknownEntryCopyWithImpl<$Res>
 
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? absolutePath = null,Object? relativePath = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? path = null,}) {
   return _then(UnknownEntry(
-absolutePath: null == absolutePath ? _self.absolutePath : absolutePath // ignore: cast_nullable_to_non_nullable
-as String,relativePath: null == relativePath ? _self.relativePath : relativePath // ignore: cast_nullable_to_non_nullable
-as String,
+path: null == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
+as RelativePath,
   ));
 }
 

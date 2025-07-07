@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/client.dart';
@@ -9,30 +7,29 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'entry_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class Path extends _$Path {
+class CurrentPath extends _$CurrentPath {
   @override
-  String build() {
-    return '';
+  RelativePath build() {
+    return const RelativePath.root();
   }
 
-  void setPath(String path) {
+  void setPath(RelativePath path) {
     logInfo('Navigating to path: $path');
     state = path;
   }
 
   void setAsRoot() {
     logInfo('Navigating to root directory');
-    state = '';
+    state = const RelativePath.root();
   }
 
   void setAsParent() {
-    if (state.isEmpty) return;
-    final segments = state.split('/');
+    if (state.isRoot) return;
+    final segments = state.segments();
     if (segments.length <= 1) {
-      state = '';
+      state = const RelativePath.root();
     } else {
-      segments.removeLast();
-      state = segments.join('/');
+      state = state.parent;
     }
     logInfo('Navigating to parent directory: $state');
   }
@@ -41,7 +38,7 @@ class Path extends _$Path {
 @Riverpod(keepAlive: true)
 Future<EntriesResponse> entries(
   Ref ref,
-  String path,
+  RelativePath path,
 ) async {
   logInfo('Fetching entries for path: $path');
   try {
@@ -58,7 +55,7 @@ Future<EntriesResponse> entries(
 @Riverpod(keepAlive: true)
 Future<EntryPreview> entryPreview(
   Ref ref,
-  String path,
+  RelativePath path,
 ) async {
   logInfo('Fetching preview for path: $path');
   try {
@@ -68,23 +65,6 @@ Future<EntryPreview> entryPreview(
     return result;
   } catch (error, stackTrace) {
     logError('Failed to fetch preview for path: $path', error, stackTrace);
-    rethrow;
-  }
-}
-
-@riverpod
-Future<ByteData> file(
-  Ref ref,
-  String path,
-) async {
-  logInfo('Downloading file from path: $path');
-  try {
-    final client = ref.watch(clientProvider);
-    final result = await client.transfer.downloadFile(path);
-    logInfo('Successfully downloaded file from: $path');
-    return result;
-  } catch (error, stackTrace) {
-    logError('Failed to download file from path: $path', error, stackTrace);
     rethrow;
   }
 }
