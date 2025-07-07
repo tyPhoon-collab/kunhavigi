@@ -5,7 +5,7 @@ import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
 
-Entry createEntry(FileSystemEntity file) {
+Entry buildEntry(FileSystemEntity file) {
   final absolutePath = p.normalize(file.path);
   final relativePath = p.relative(absolutePath, from: dataDirectory);
   final stat = file.statSync();

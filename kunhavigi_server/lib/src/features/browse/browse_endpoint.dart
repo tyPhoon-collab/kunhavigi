@@ -14,7 +14,7 @@ class BrowseEndpoint extends Endpoint {
 
     final dir = exactDirectory(normalizedPath);
 
-    final entries = dir.listSync().map(createEntry).toList();
+    final entries = dir.listSync().map(buildEntry).toList();
 
     return EntriesResponse(
       entries: entries,
@@ -87,6 +87,6 @@ class BrowseEndpoint extends Endpoint {
     final normalizedPath = validateAndNormalizePath(path);
     final file = exactEntity(normalizedPath);
     file.renameSync(p.join(file.parent.path, newName));
-    return createEntry(file);
+    return buildEntry(file);
   }
 }

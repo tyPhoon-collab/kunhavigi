@@ -42,9 +42,9 @@ final class DownloadUseCase extends ClientUseCase {
   const DownloadUseCase(super.ref);
 
   Future<void> download(FileEntry entry) async {
-    final bytes = await _client.transfer.downloadFile(entry.path);
+    final stream = _client.transfer.downloadFile(entry.path);
     await ref.read(saverProvider).save(
-          bytes,
+          stream,
           name: entry.name,
           mimeType: entry.mimeType,
         );
@@ -54,10 +54,10 @@ final class DownloadUseCase extends ClientUseCase {
 final class UploadUseCase extends ClientUseCase {
   const UploadUseCase(super.ref);
 
-  Future<void> upload(RelativePath path, Uint8List bytes) async {
+  Future<void> upload(RelativePath path, Stream<ByteData> data) async {
     final _ = await _client.transfer.uploadFile(
       path: path,
-      data: ByteData.sublistView(bytes),
+      data: data,
     );
 
     ref.invalidate(entriesProvider(path.parent));
@@ -74,7 +74,7 @@ final class DropAndUploadUseCase {
       for (final item in items)
         uploader.upload(
           dir.append(item.name),
-          await item.readAsBytes(),
+          item.openRead().map(ByteData.sublistView),
         ),
     ]);
   }
@@ -95,7 +95,8 @@ final class PickAndUploadUseCase {
       for (final file in files)
         uploader.upload(
           dir.append(file.name),
-          file.bytes!,
+          file.readStream!
+              .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
         ),
     ]);
   }

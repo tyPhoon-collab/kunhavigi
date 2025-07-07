@@ -9,7 +9,7 @@ class FilePickerPicker implements Picker {
   Future<List<PlatformFile>> pickFiles() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      withData: true,
+      withReadStream: true,
     );
 
     if (result == null) {

@@ -73,25 +73,24 @@ class EndpointTransfer extends _i1.EndpointRef {
   String get name => 'transfer';
 
   /// Download a file from the server
-  _i2.Future<_i6.ByteData> downloadFile(_i4.RelativePath path) =>
-      caller.callServerEndpoint<_i6.ByteData>(
+  _i2.Stream<_i6.ByteData> downloadFile(_i4.RelativePath path) => caller
+          .callStreamingServerEndpoint<_i2.Stream<_i6.ByteData>, _i6.ByteData>(
         'transfer',
         'downloadFile',
         {'path': path},
+        {},
       );
 
   /// Upload a file to the server
   _i2.Future<_i4.Entry> uploadFile({
     required _i4.RelativePath path,
-    required _i6.ByteData data,
+    required _i2.Stream<_i6.ByteData> data,
   }) =>
-      caller.callServerEndpoint<_i4.Entry>(
+      caller.callStreamingServerEndpoint<_i2.Future<_i4.Entry>, _i4.Entry>(
         'transfer',
         'uploadFile',
-        {
-          'path': path,
-          'data': data,
-        },
+        {'path': path},
+        {'data': data},
       );
 }
 

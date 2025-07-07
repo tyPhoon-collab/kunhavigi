@@ -8,25 +8,37 @@ import 'package:serverpod/serverpod.dart';
 
 class TransferEndpoint extends Endpoint {
   /// Download a file from the server
-  Future<ByteData> downloadFile(Session session, RelativePath path) async {
+  Stream<ByteData> downloadFile(Session session, RelativePath path) async* {
     final normalizedPath = validateAndNormalizePath(path);
 
     final file = exactFile(normalizedPath);
 
-    final bytes = file.readAsBytesSync();
-    return ByteData.sublistView(bytes);
+    // Using default chunk size from openRead() (typically 64KB)
+    final fileStream = file.openRead();
+
+    await for (final chunk in fileStream) {
+      yield ByteData.sublistView(Uint8List.fromList(chunk));
+    }
   }
 
   /// Upload a file to the server
   Future<Entry> uploadFile(
     Session session, {
     required RelativePath path,
-    required ByteData data,
+    required Stream<ByteData> data,
   }) async {
     final normalizedPath = validateAndNormalizePath(path);
     final file = File(normalizedPath.value);
-    await file.writeAsBytes(data.buffer.asUint8List());
+    await for (final byteData in data) {
+      // Ensure the directory exists before writing
+      await file.parent.create(recursive: true);
+      // Write the incoming byte data to the file
+      await file.writeAsBytes(
+        byteData.buffer.asInt8List(),
+        mode: FileMode.append,
+      );
+    }
 
-    return createEntry(file);
+    return buildEntry(file);
   }
 }

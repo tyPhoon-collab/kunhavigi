@@ -120,7 +120,7 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'transfer',
       endpoint: endpoints['transfer']!,
       methodConnectors: {
-        'downloadFile': _i1.MethodConnector(
+        'downloadFile': _i1.MethodStreamConnector(
           name: 'downloadFile',
           params: {
             'path': _i1.ParameterDescription(
@@ -129,37 +129,43 @@ class Endpoints extends _i1.EndpointDispatch {
               nullable: false,
             )
           },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
-          ) async =>
+            Map<String, Stream> streamParams,
+          ) =>
               (endpoints['transfer'] as _i3.TransferEndpoint).downloadFile(
             session,
             params['path'],
           ),
         ),
-        'uploadFile': _i1.MethodConnector(
+        'uploadFile': _i1.MethodStreamConnector(
           name: 'uploadFile',
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
               type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
-            ),
-            'data': _i1.ParameterDescription(
-              name: 'data',
-              type: _i1.getType<_i5.ByteData>(),
-              nullable: false,
-            ),
+            )
           },
+          streamParams: {
+            'data': _i1.StreamParameterDescription<_i5.ByteData>(
+              name: 'data',
+              nullable: false,
+            )
+          },
+          returnType: _i1.MethodStreamReturnType.futureType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
-          ) async =>
+            Map<String, Stream> streamParams,
+          ) =>
               (endpoints['transfer'] as _i3.TransferEndpoint).uploadFile(
             session,
             path: params['path'],
-            data: params['data'],
+            data: streamParams['data']!.cast<_i5.ByteData>(),
           ),
         ),
       },
