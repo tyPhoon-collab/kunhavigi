@@ -12,7 +12,7 @@ class BrowseEndpoint extends Endpoint {
   Future<EntriesResponse> getEntries(Session session, RelativePath path) async {
     final normalizedPath = validateAndNormalizePath(path);
 
-    final dir = existingDirectory(normalizedPath);
+    final dir = exactDirectory(normalizedPath);
 
     final entries = dir.listSync().map(createEntry).toList();
 
@@ -27,7 +27,7 @@ class BrowseEndpoint extends Endpoint {
   Future<EntryPreview> peekEntry(Session session, RelativePath path) async {
     final normalizedPath = validateAndNormalizePath(path);
 
-    final file = existingFile(normalizedPath);
+    final file = exactFile(normalizedPath);
     final mimeType = lookupMimeType(normalizedPath.value);
 
     return switch (mimeType) {
@@ -48,7 +48,7 @@ class BrowseEndpoint extends Endpoint {
   Future<bool> delete(Session session, RelativePath path) async {
     final normalizedPath = validateAndNormalizePath(path);
 
-    final file = existingEntity(normalizedPath);
+    final file = exactEntity(normalizedPath);
 
     try {
       await file.delete();
@@ -65,7 +65,7 @@ class BrowseEndpoint extends Endpoint {
     required String newName,
   }) async {
     final normalizedPath = validateAndNormalizePath(path);
-    final file = existingEntity(normalizedPath);
+    final file = exactEntity(normalizedPath);
     file.renameSync(p.join(file.parent.path, newName));
     return createEntry(file);
   }

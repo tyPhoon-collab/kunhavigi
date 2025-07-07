@@ -1,9 +1,13 @@
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/browse/presentation/entries_list_view.dart';
+import 'package:kunhavigi_flutter/browse/presentation/file_drop_zone.dart';
+import 'package:kunhavigi_flutter/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/common/presentation/messages.dart';
+import 'package:kunhavigi_flutter/common/provider/use_case_provider.dart';
 
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});
@@ -12,29 +16,37 @@ class KunhavigiPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kunhavigi'),
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
-        elevation: 0,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(48),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(child: _PathBreadcrumb()),
-                _ReloadButton(),
-              ],
+    return FileDropZone(
+      onFilesDropped: (List<DropItemFile> files) async {
+        final currentPath = ref.read(currentPathProvider);
+        // TODO: エラーハンドリング
+        await ref.read(dropAndUploadUseCaseProvider).upload(currentPath, files);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Kunhavigi'),
+          backgroundColor: colorScheme.surface,
+          foregroundColor: colorScheme.onSurface,
+          elevation: 0,
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(48),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(child: _PathBreadcrumb()),
+                  _ReloadButton(),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      body: EntriesListView(
-        onFileTap: (entry) {
-          _showPreviewModal(context, entry);
-        },
+        body: EntriesListView(
+          onFileTap: (entry) {
+            _showPreviewModal(context, entry);
+          },
+        ),
+        floatingActionButton: const UploadButton(),
       ),
     );
   }

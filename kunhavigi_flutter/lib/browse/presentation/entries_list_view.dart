@@ -5,7 +5,7 @@ import 'package:kunhavigi_flutter/browse/presentation/dialog/delete_dialog.dart'
 import 'package:kunhavigi_flutter/browse/presentation/dialog/rename_dialog.dart';
 import 'package:kunhavigi_flutter/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/common/presentation/messages.dart';
-import 'package:kunhavigi_flutter/common/provider/browser_provider.dart';
+import 'package:kunhavigi_flutter/common/provider/use_case_provider.dart';
 
 typedef EntryCallback = void Function(Entry entry);
 
@@ -301,7 +301,7 @@ class _DownloadEntryMenuItem implements _EntryMenuItem {
   MenuItemButton build(WidgetRef ref) {
     Future<void> downloadFile() async {
       // TODO: エラーハンドリング
-      await ref.read(browserProvider).download(fileEntry);
+      await ref.read(downloadUseCaseProvider).download(fileEntry);
     }
 
     return MenuItemButton(
@@ -327,7 +327,7 @@ class _RenameEntryMenuItem implements _EntryMenuItem {
 
       if (result != null && result.isNotEmpty && result != entry.name) {
         // TODO: エラーハンドリング
-        await ref.read(browserProvider).rename(entry.path, result);
+        await ref.read(renameUseCaseProvider).rename(entry.path, result);
       }
     }
 
@@ -355,7 +355,7 @@ class _DeleteEntryMenuItem implements _EntryMenuItem {
       );
       if (result ?? false) {
         // TODO: エラーハンドリング
-        await ref.read(browserProvider).delete(entry.path);
+        await ref.read(deleteUseCaseProvider).delete(entry.path);
       }
     }
 

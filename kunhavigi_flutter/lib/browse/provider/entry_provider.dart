@@ -14,12 +14,12 @@ class CurrentPath extends _$CurrentPath {
   }
 
   void setPath(RelativePath path) {
-    logInfo('Navigating to path: $path');
+    logger.i('Navigating to path: $path');
     state = path;
   }
 
   void setAsRoot() {
-    logInfo('Navigating to root directory');
+    logger.i('Navigating to root directory');
     state = const RelativePath.root();
   }
 
@@ -31,7 +31,7 @@ class CurrentPath extends _$CurrentPath {
     } else {
       state = state.parent;
     }
-    logInfo('Navigating to parent directory: $state');
+    logger.i('Navigating to parent directory: $state');
   }
 }
 
@@ -40,14 +40,15 @@ Future<EntriesResponse> entries(
   Ref ref,
   RelativePath path,
 ) async {
-  logInfo('Fetching entries for path: $path');
+  logger.i('Fetching entries for path: $path');
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.getEntries(path);
-    logInfo('Successfully fetched ${result.entries.length} entries');
+    logger.i('Successfully fetched ${result.entries.length} entries');
     return result;
   } catch (error, stackTrace) {
-    logError('Failed to fetch entries for path: $path', error, stackTrace);
+    logger.e('Failed to fetch entries for path: $path',
+        error: error, stackTrace: stackTrace);
     rethrow;
   }
 }
@@ -57,14 +58,15 @@ Future<EntryPreview> entryPreview(
   Ref ref,
   RelativePath path,
 ) async {
-  logInfo('Fetching preview for path: $path');
+  logger.i('Fetching preview for path: $path');
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.peekEntry(path);
-    logInfo('Successfully fetched preview for: $path');
+    logger.i('Successfully fetched preview for: $path');
     return result;
   } catch (error, stackTrace) {
-    logError('Failed to fetch preview for path: $path', error, stackTrace);
+    logger.e('Failed to fetch preview for path: $path',
+        error: error, stackTrace: stackTrace);
     rethrow;
   }
 }

@@ -18,7 +18,7 @@ class ErrorMessage extends HookWidget {
     final textTheme = Theme.of(context).textTheme;
 
     useEffect(() {
-      logError('ErrorMessage displayed', error, stackTrace);
+      logger.e('ErrorMessage displayed', error: error, stackTrace: stackTrace);
       return null;
     }, [error, stackTrace]);
 

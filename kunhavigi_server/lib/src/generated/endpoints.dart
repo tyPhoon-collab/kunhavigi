@@ -13,6 +13,7 @@ import 'package:serverpod/serverpod.dart' as _i1;
 import '../features/browse/browse_endpoint.dart' as _i2;
 import '../features/transfer/transfer_endpoint.dart' as _i3;
 import 'package:kunhavigi_shared/src/entry.dart' as _i4;
+import 'dart:typed_data' as _i5;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -136,7 +137,31 @@ class Endpoints extends _i1.EndpointDispatch {
             session,
             params['path'],
           ),
-        )
+        ),
+        'uploadFile': _i1.MethodConnector(
+          name: 'uploadFile',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath>(),
+              nullable: false,
+            ),
+            'data': _i1.ParameterDescription(
+              name: 'data',
+              type: _i1.getType<_i5.ByteData>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['transfer'] as _i3.TransferEndpoint).uploadFile(
+            session,
+            path: params['path'],
+            data: params['data'],
+          ),
+        ),
       },
     );
   }

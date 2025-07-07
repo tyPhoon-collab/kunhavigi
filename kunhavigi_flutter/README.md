@@ -17,13 +17,8 @@ To run the project, first make sure that the server is running, then do:
 <!-- TODO: deal with these -->
 ## Platform Specific Setup TODO
 
-### iOS
+- [super_drag_and_drop | Flutter パッケージ](https://pub.dev/packages/super_drag_and_drop)
+  - macOS以外の設定はしていない
 
 - [file_saver | Flutter package](https://pub.dev/packages/file_saver)
-
-    ```xml
-    <key>LSSupportsOpeningDocumentsInPlace</key>
-    <true/>
-    <key>UIFileSharingEnabled</key>
-    <true/>
-    ```
+  - iOSのサポート時に設定が必要

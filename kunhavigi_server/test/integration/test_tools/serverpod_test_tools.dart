@@ -297,4 +297,37 @@ class _TransferEndpoint {
       }
     });
   }
+
+  _i3.Future<_i5.Entry> uploadFile(
+    _i1.TestSessionBuilder sessionBuilder, {
+    required _i5.RelativePath path,
+    required _i7.ByteData data,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'transfer',
+        method: 'uploadFile',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'uploadFile',
+          parameters: _i1.testObjectToJson({
+            'path': path,
+            'data': data,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.Entry>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
 }

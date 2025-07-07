@@ -25,7 +25,7 @@ String _normalizePath(RelativePath path) {
   return p.normalize(p.join(dataDirectory, path.value));
 }
 
-FileSystemEntity existingEntity(ValidPath path) {
+FileSystemEntity exactEntity(ValidPath path) {
   final type = FileSystemEntity.typeSync(path.value);
   if (type == FileSystemEntityType.notFound) {
     throw NotExistsException(path: path.value);
@@ -38,8 +38,8 @@ FileSystemEntity existingEntity(ValidPath path) {
   };
 }
 
-File existingFile(ValidPath path) {
-  final file = existingEntity(path);
+File exactFile(ValidPath path) {
+  final file = exactEntity(path);
   if (file.statSync().type != FileSystemEntityType.file) {
     throw NotFileException(path: path.value);
   }
@@ -47,8 +47,8 @@ File existingFile(ValidPath path) {
   return file as File;
 }
 
-Directory existingDirectory(ValidPath path) {
-  final dir = existingEntity(path);
+Directory exactDirectory(ValidPath path) {
+  final dir = exactEntity(path);
   if (dir.statSync().type != FileSystemEntityType.directory) {
     throw NotDirectoryException(path: path.value);
   }
