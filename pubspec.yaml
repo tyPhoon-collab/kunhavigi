@@ -1,0 +1,8 @@
+name: kunhavigi_workspace
+publish_to: none
+environment:
+  sdk: ^3.8.0
+workspace:
+  - kunhavigi_client
+  - kunhavigi_flutter
+  - kunhavigi_server
