@@ -3,6 +3,7 @@ publish_to: none
 environment:
   sdk: ^3.8.0
 workspace:
+  # - kunhavigi_flutter  # Flutter dependencies are required. So, this is commented out.
   - kunhavigi_client
-  - kunhavigi_flutter
   - kunhavigi_server
+  - kunhavigi_shared

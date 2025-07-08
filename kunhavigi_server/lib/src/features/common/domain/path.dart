@@ -6,9 +6,8 @@ import 'package:path/path.dart' as p;
 
 extension type const ValidPath._(String value) {}
 
-final String dataDirectory = p.normalize(
-    Platform.environment['DATA_DIRECTORY'] ??
-        '/Users/hiroaki/projects/kunhavigi/data');
+final String dataDirectory =
+    p.normalize(Platform.environment['DATA_DIRECTORY'] ?? '../data');
 
 ValidPath validateAndNormalizePath(RelativePath path) {
   final normalizedPath = _normalizePath(path);

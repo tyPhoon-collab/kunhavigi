@@ -2,6 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/application/picker.dart';
 import 'package:kunhavigi_flutter/features/browse/application/saver.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
@@ -17,6 +18,8 @@ Client client(Ref ref) {
   const serverUrlFromEnv = String.fromEnvironment('SERVER_URL');
   final serverUrl =
       serverUrlFromEnv.isEmpty ? 'http://$localhost:8080/' : serverUrlFromEnv;
+
+  logger.i('Connecting to server at $serverUrl');
 
   return Client(serverUrl)..connectivityMonitor = FlutterConnectivityMonitor();
 }
