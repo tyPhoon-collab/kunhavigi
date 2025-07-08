@@ -50,7 +50,7 @@ class KunhavigiPage extends ConsumerWidget {
             ),
           ),
         ),
-        body: const EntriesListView(),
+        body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
         floatingActionButton: const UploadButton(),
       ),
     );
@@ -86,11 +86,11 @@ class _ReloadButton extends ConsumerWidget {
     final currentPath = ref.watch(currentPathProvider);
 
     return IconButton(
-      icon: Icon(Icons.refresh,
-          color: colorScheme.onSurface.withValues(alpha: 0.8)),
-      onPressed: () {
-        ref.invalidate(entriesProvider(currentPath));
-      },
+      icon: Icon(
+        Icons.refresh,
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
+      ),
+      onPressed: () => ref.invalidate(entriesProvider(currentPath)),
       tooltip: 'Reload',
     );
   }

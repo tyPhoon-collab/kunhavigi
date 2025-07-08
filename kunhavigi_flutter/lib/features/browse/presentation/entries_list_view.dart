@@ -11,7 +11,10 @@ typedef EntryCallback = void Function(Entry entry);
 class EntriesListView extends ConsumerWidget {
   const EntriesListView({
     super.key,
+    this.padding,
   });
+
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,47 +35,60 @@ class EntriesListView extends ConsumerWidget {
           stackTrace: stackTrace,
         ),
       ),
-      data: (data) => _EntriesListViewContent(data: data),
+      data: (data) => data.isRootDirectory
+          ? _RootDirectoryListView(data: data, padding: padding)
+          : _SubDirectoryListView(data: data, padding: padding),
     );
   }
 }
 
-class _EntriesListViewContent extends ConsumerWidget {
-  const _EntriesListViewContent({required this.data});
+class _RootDirectoryListView extends StatelessWidget {
+  const _RootDirectoryListView({required this.data, this.padding});
 
   final EntriesResponse data;
+  final EdgeInsets? padding;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (!data.isRootDirectory) {
-      return ListView.builder(
-        itemCount: data.totalCount + 2,
-        itemBuilder: (context, index) {
-          return switch (index) {
-            0 => _NavigationTile(
-                title: 'Go to root directory',
-                icon: Icons.home,
-                onTap: () {
-                  ref.read(currentPathProvider.notifier).setAsRoot();
-                },
-              ),
-            1 => _NavigationTile(
-                title: 'Go to parent directory',
-                icon: Icons.arrow_back,
-                onTap: () {
-                  ref.read(currentPathProvider.notifier).setAsParent();
-                },
-              ),
-            _ => _EntryListTile(entry: data.entries[index - 2]),
-          };
-        },
-      );
-    }
-
+  Widget build(BuildContext context) {
     return ListView.builder(
+      padding: padding,
       itemCount: data.totalCount,
       itemBuilder: (context, index) =>
           _EntryListTile(entry: data.entries[index]),
+    );
+  }
+}
+
+class _SubDirectoryListView extends ConsumerWidget {
+  const _SubDirectoryListView({required this.data, this.padding});
+
+  final EntriesResponse data;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView.builder(
+      padding: padding,
+      itemCount: data.totalCount + 2,
+      itemBuilder: (context, index) {
+        return switch (index) {
+          0 => _NavigationTile(
+              title: 'Go to root directory',
+              icon: Icons.home,
+              onTap: () {
+                ref.read(currentPathProvider.notifier).setAsRoot();
+              },
+            ),
+          1 => _NavigationTile(
+              title: 'Go to parent directory',
+              icon: Icons.arrow_back,
+              onTap: () {
+                ref.read(currentPathProvider.notifier).setAsParent();
+              },
+            ),
+          _ => _EntryListTile(entry: data.entries[index - 2]),
+        };
+      },
     );
   }
 }
