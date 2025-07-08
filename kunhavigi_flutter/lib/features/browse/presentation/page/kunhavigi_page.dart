@@ -6,7 +6,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.da
 import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/feedback.dart';
+import 'package:kunhavigi_flutter/main.dart';
 
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});
@@ -23,11 +23,11 @@ class KunhavigiPage extends ConsumerWidget {
               .read(dropAndUploadUseCaseProvider)
               .upload(currentPath, files);
           if (context.mounted) {
-            feedbackSuccess(context, 'Files uploaded successfully');
+            teller?.success('Files uploaded successfully');
           }
         } on Exception catch (e) {
           if (context.mounted) {
-            feedbackError(context, e.toString());
+            teller?.error(e.toString());
           }
         }
       },

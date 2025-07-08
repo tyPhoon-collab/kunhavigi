@@ -13,6 +13,8 @@ extension type const RelativePath(String value) {
 
   RelativePath get parent => RelativePath(p.dirname(value));
 
+  String get name => p.basename(value);
+
   RelativePath append(String segment) {
     if (isRoot) {
       return RelativePath(segment);

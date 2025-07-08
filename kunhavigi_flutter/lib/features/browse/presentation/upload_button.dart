@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/feedback.dart';
+import 'package:kunhavigi_flutter/main.dart';
 
 class UploadButton extends ConsumerWidget {
   const UploadButton({super.key});
@@ -28,11 +28,11 @@ class UploadButton extends ConsumerWidget {
           .upload(ref.read(currentPathProvider), files);
 
       if (context.mounted) {
-        feedbackSuccess(context, 'Files uploaded successfully');
+        teller?.success('Files uploaded successfully');
       }
     } on Exception catch (e) {
       if (context.mounted) {
-        feedbackError(context, e.toString());
+        teller?.error(e.toString());
       }
     }
   }
