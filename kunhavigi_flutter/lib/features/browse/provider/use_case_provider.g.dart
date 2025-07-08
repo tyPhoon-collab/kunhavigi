@@ -75,7 +75,7 @@ final uploadUseCaseProvider = Provider<UploadUseCase>.internal(
 // ignore: unused_element
 typedef UploadUseCaseRef = ProviderRef<UploadUseCase>;
 String _$dropAndUploadUseCaseHash() =>
-    r'2996936c9bd2d89d755fd3803dd0e413c9eb9a92';
+    r'cc2e3c4a93e7bac7b02463d62a20ab636a5d2bb9';
 
 /// See also [dropAndUploadUseCase].
 @ProviderFor(dropAndUploadUseCase)
@@ -93,7 +93,7 @@ final dropAndUploadUseCaseProvider = Provider<DropAndUploadUseCase>.internal(
 // ignore: unused_element
 typedef DropAndUploadUseCaseRef = ProviderRef<DropAndUploadUseCase>;
 String _$pickAndUploadUseCaseHash() =>
-    r'2866c43875289b4c243d42a4ed1acaa8c0541f90';
+    r'dd6de6ad4ed6a0f789668b4ab058c116d8477d4b';
 
 /// See also [pickAndUploadUseCase].
 @ProviderFor(pickAndUploadUseCase)

@@ -1,4 +1,3 @@
-import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
@@ -6,6 +5,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.da
 import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
 class KunhavigiPage extends ConsumerWidget {
@@ -16,7 +16,11 @@ class KunhavigiPage extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return FileDropZone(
-      onFilesDropped: (List<DropItemFile> files) async {
+      onFilesDropped: (files) async {
+        if (files.isEmpty) {
+          logger.w('No files dropped');
+          return;
+        }
         final currentPath = ref.read(currentPathProvider);
         try {
           await ref

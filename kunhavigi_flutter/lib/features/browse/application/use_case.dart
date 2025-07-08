@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
-import 'package:kunhavigi_flutter/features/browse/application/picker.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/feedback.dart';
+import 'package:kunhavigi_flutter/features/platform/types.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
 sealed class ClientUseCase {
@@ -73,7 +73,10 @@ final class UploadUseCase extends ClientUseCase {
   const UploadUseCase(super.ref);
 
   Future<void> upload(
-      RelativePath path, Stream<ByteData> data, int size) async {
+    RelativePath path,
+    Stream<ByteData> data,
+    int size,
+  ) async {
     final stream = data.asBroadcastStream();
     var current = 0;
 
@@ -85,8 +88,6 @@ final class UploadUseCase extends ClientUseCase {
     }));
     try {
       final _ = await _client.transfer.uploadFile(path: path, data: stream);
-
-      ref.invalidate(entriesProvider(path.parent));
     } finally {
       teller?.dismiss(id!);
     }
@@ -94,32 +95,32 @@ final class UploadUseCase extends ClientUseCase {
 }
 
 final class DropAndUploadUseCase {
-  const DropAndUploadUseCase({required this.uploader});
+  const DropAndUploadUseCase(this.ref);
 
-  final UploadUseCase uploader;
+  final Ref ref;
 
-  Future<void> upload(RelativePath dir, List<DropItemFile> items) async {
+  Future<void> upload(RelativePath dir, List<FileWithSource> items) async {
+    final uploader = ref.read(uploadUseCaseProvider);
     await Future.wait([
       for (final item in items)
         uploader.upload(
           dir.append(item.name),
-          item.openRead().map(ByteData.sublistView),
-          await item.length(),
+          item.file.openRead().map(ByteData.sublistView),
+          await item.file.length(),
         ),
     ]);
+
+    ref.invalidate(entriesProvider);
   }
 }
 
 final class PickAndUploadUseCase {
-  const PickAndUploadUseCase({required this.uploader, required this.picker});
+  const PickAndUploadUseCase(this.ref);
 
-  final Picker picker;
-  final UploadUseCase uploader;
+  final Ref ref;
 
   Future<void> upload(RelativePath dir, List<PlatformFile> files) async {
-    if (files.isEmpty) {
-      return;
-    }
+    final uploader = ref.read(uploadUseCaseProvider);
 
     await Future.wait([
       for (final file in files)
@@ -130,5 +131,7 @@ final class PickAndUploadUseCase {
           file.size,
         ),
     ]);
+
+    ref.invalidate(entriesProvider);
   }
 }

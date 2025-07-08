@@ -30,6 +30,9 @@ class TransferEndpoint extends Endpoint {
     final normalizedPath = validateAndNormalizePath(path);
     final file = File(normalizedPath.value);
 
+    // Ensure the directory exists
+    await file.parent.create(recursive: true);
+
     final randomAccessFile = await file.open(mode: FileMode.write);
 
     try {

@@ -1,6 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/application/use_case.dart';
-import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'use_case_provider.g.dart';
@@ -27,15 +26,10 @@ UploadUseCase uploadUseCase(Ref ref) {
 
 @Riverpod(keepAlive: true)
 DropAndUploadUseCase dropAndUploadUseCase(Ref ref) {
-  return DropAndUploadUseCase(
-    uploader: ref.read(uploadUseCaseProvider),
-  );
+  return DropAndUploadUseCase(ref);
 }
 
 @Riverpod(keepAlive: true)
 PickAndUploadUseCase pickAndUploadUseCase(Ref ref) {
-  return PickAndUploadUseCase(
-    uploader: ref.read(uploadUseCaseProvider),
-    picker: ref.read(pickerProvider),
-  );
+  return PickAndUploadUseCase(ref);
 }

@@ -2,9 +2,10 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_flutter/logger.dart';
+import 'package:kunhavigi_flutter/features/platform/get_files.dart';
+import 'package:kunhavigi_flutter/features/platform/types.dart';
 
-typedef FileDropCallback = void Function(List<DropItemFile> files);
+typedef FileDropCallback = void Function(List<FileWithSource> files);
 
 class FileDropZone extends HookConsumerWidget {
   const FileDropZone({
@@ -23,12 +24,7 @@ class FileDropZone extends HookConsumerWidget {
     return DropTarget(
       onDragDone: (detail) {
         dragging.value = false;
-        final files = detail.files.whereType<DropItemFile>().toList();
-        if (files.isEmpty) {
-          logger.w('No valid files dropped');
-          return;
-        }
-
+        final files = detail.files.map(getFiles).expand((e) => e).toList();
         onFilesDropped(files);
       },
       onDragEntered: (detail) {
