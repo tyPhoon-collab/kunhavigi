@@ -71,7 +71,7 @@ class BrowseEndpoint extends Endpoint {
     final file = exactEntity(normalizedPath);
 
     try {
-      await file.delete();
+      await file.delete(recursive: true);
       return true;
     } on Exception {
       return false;
