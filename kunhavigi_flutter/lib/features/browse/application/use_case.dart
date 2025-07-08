@@ -84,10 +84,7 @@ final class UploadUseCase extends ClientUseCase {
       );
     }));
     try {
-      final _ = await _client.transfer.uploadFile(
-        path: path,
-        data: stream,
-      );
+      final _ = await _client.transfer.uploadFile(path: path, data: stream);
 
       ref.invalidate(entriesProvider(path.parent));
     } finally {

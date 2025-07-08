@@ -64,7 +64,7 @@ class FileSaverSelectPlaceSaver implements Saver {
       bytes: bytes,
       mimeType: MimeType.custom,
       customMimeType: mimeType,
-      ext: p.extension(name),
+      ext: p.extension(name).replaceFirst('.', ''),
     );
   }
 }

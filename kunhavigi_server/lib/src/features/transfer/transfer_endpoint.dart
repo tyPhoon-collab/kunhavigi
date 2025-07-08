@@ -29,14 +29,18 @@ class TransferEndpoint extends Endpoint {
   }) async {
     final normalizedPath = validateAndNormalizePath(path);
     final file = File(normalizedPath.value);
-    await for (final byteData in data) {
-      // Ensure the directory exists before writing
-      await file.parent.create(recursive: true);
-      // Write the incoming byte data to the file
-      await file.writeAsBytes(
-        byteData.buffer.asInt8List(),
-        mode: FileMode.append,
-      );
+
+    final randomAccessFile = await file.open(mode: FileMode.write);
+
+    try {
+      await for (final byteData in data) {
+        await randomAccessFile.writeFrom(byteData.buffer.asUint8List());
+      }
+      await randomAccessFile.flush();
+    } catch (e) {
+      throw Exception('Failed to upload file: $e');
+    } finally {
+      await randomAccessFile.close();
     }
 
     return buildEntry(file);
