@@ -101,14 +101,14 @@ final class DropAndUploadUseCase {
 
   Future<void> upload(RelativePath dir, List<FileWithSource> items) async {
     final uploader = ref.read(uploadUseCaseProvider);
-    await Future.wait([
-      for (final item in items)
-        uploader.upload(
-          dir.append(item.name),
-          item.file.openRead().map(ByteData.sublistView),
-          await item.file.length(),
-        ),
-    ]);
+
+    for (final item in items) {
+      await uploader.upload(
+        dir.append(item.name),
+        item.file.openRead().map(ByteData.sublistView),
+        await item.file.length(),
+      );
+    }
 
     ref.invalidate(entriesProvider);
   }
@@ -122,15 +122,14 @@ final class PickAndUploadUseCase {
   Future<void> upload(RelativePath dir, List<PlatformFile> files) async {
     final uploader = ref.read(uploadUseCaseProvider);
 
-    await Future.wait([
-      for (final file in files)
-        uploader.upload(
-          dir.append(file.name),
-          file.readStream!
-              .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
-          file.size,
-        ),
-    ]);
+    for (final file in files) {
+      await uploader.upload(
+        dir.append(file.name),
+        file.readStream!
+            .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
+        file.size,
+      );
+    }
 
     ref.invalidate(entriesProvider);
   }
