@@ -8,7 +8,7 @@ List<FileWithSource> getFiles(DropItem item, [String? directory]) {
   return switch (item) {
     final DropItemFile file => switch (FileSystemEntity.typeSync(file.path)) {
         FileSystemEntityType.directory => Directory(file.path)
-            .listSync(recursive: true)
+            .listSync()
             .whereType<File>()
             .map((e) => FileWithSource(
                   file: XFile(e.path),

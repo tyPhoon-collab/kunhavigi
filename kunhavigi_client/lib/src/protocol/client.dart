@@ -72,13 +72,21 @@ class EndpointTransfer extends _i1.EndpointRef {
   @override
   String get name => 'transfer';
 
-  /// Download a file from the server
+  /// Download a file or folder from the server
   _i2.Stream<_i6.ByteData> downloadFile(_i4.RelativePath path) => caller
           .callStreamingServerEndpoint<_i2.Stream<_i6.ByteData>, _i6.ByteData>(
         'transfer',
         'downloadFile',
         {'path': path},
         {},
+      );
+
+  /// Create a zip file from a directory
+  _i2.Future<_i4.FileEntry> createZip(_i4.RelativePath path) =>
+      caller.callServerEndpoint<_i4.FileEntry>(
+        'transfer',
+        'createZip',
+        {'path': path},
       );
 
   /// Upload a file to the server

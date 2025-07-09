@@ -8,6 +8,7 @@ environment:
 resolution: workspace
 
 dependencies:
+  archive: ^4.0.7
   kunhavigi_shared:
     path: ../kunhavigi_shared
   mime: ^2.0.0

@@ -5,4 +5,5 @@ browse:
   - rename:
 transfer:
   - downloadFile:
+  - createZip:
   - uploadFile:

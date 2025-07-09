@@ -304,6 +304,35 @@ class _TransferEndpoint {
     return _localTestStreamManager.outputStreamController.stream;
   }
 
+  _i3.Future<_i5.FileEntry> createZip(
+    _i1.TestSessionBuilder sessionBuilder,
+    _i5.RelativePath path,
+  ) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'transfer',
+        method: 'createZip',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'transfer',
+          methodName: 'createZip',
+          parameters: _i1.testObjectToJson({'path': path}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i5.FileEntry>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _i3.Future<_i5.Entry> uploadFile(
     _i1.TestSessionBuilder sessionBuilder, {
     required _i5.RelativePath path,

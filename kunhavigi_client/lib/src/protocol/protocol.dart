@@ -74,11 +74,17 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i7.Entry) {
       return _i7.Entry.fromJson(data) as T;
     }
+    if (t == _i7.FileEntry) {
+      return _i7.FileEntry.fromJson(data) as T;
+    }
     if (t == _i7.EntryPreview) {
       return _i7.EntryPreview.fromJson(data) as T;
     }
     if (t == _i1.getType<_i7.Entry?>()) {
       return (data != null ? _i7.Entry.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i7.FileEntry?>()) {
+      return (data != null ? _i7.FileEntry.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<_i7.EntryPreview?>()) {
       return (data != null ? _i7.EntryPreview.fromJson(data) : null) as T;
@@ -92,6 +98,9 @@ class Protocol extends _i1.SerializationManager {
     if (className != null) return className;
     if (data is _i7.Entry) {
       return 'Entry';
+    }
+    if (data is _i7.FileEntry) {
+      return 'FileEntry';
     }
     if (data is _i7.EntryPreview) {
       return 'EntryPreview';
@@ -122,6 +131,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName == 'Entry') {
       return deserialize<_i7.Entry>(data['data']);
+    }
+    if (dataClassName == 'FileEntry') {
+      return deserialize<_i7.FileEntry>(data['data']);
     }
     if (dataClassName == 'EntryPreview') {
       return deserialize<_i7.EntryPreview>(data['data']);

@@ -5,6 +5,14 @@ import 'package:kunhavigi_flutter/features/browse/presentation/dialog.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
+List<_EntryMenuItem> _commonMenuItems(Entry entry) {
+  return [
+    _DownloadEntryMenuItem(entry),
+    _RenameEntryMenuItem(entry),
+    _DeleteEntryMenuItem(entry),
+  ];
+}
+
 class FileEntryMenuButton extends StatelessWidget {
   const FileEntryMenuButton({
     required this.fileEntry,
@@ -17,9 +25,7 @@ class FileEntryMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _EntryMenuButton(
       menuItems: [
-        _DownloadEntryMenuItem(fileEntry),
-        _RenameEntryMenuItem(fileEntry),
-        _DeleteEntryMenuItem(fileEntry),
+        ..._commonMenuItems(fileEntry),
       ],
     );
   }
@@ -37,8 +43,7 @@ class DirectoryEntryMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _EntryMenuButton(
       menuItems: [
-        _RenameEntryMenuItem(directoryEntry),
-        _DeleteEntryMenuItem(directoryEntry),
+        ..._commonMenuItems(directoryEntry),
       ],
     );
   }
@@ -81,19 +86,18 @@ abstract interface class _EntryMenuItem {
 }
 
 class _DownloadEntryMenuItem implements _EntryMenuItem {
-  const _DownloadEntryMenuItem(this.fileEntry);
+  const _DownloadEntryMenuItem(this.entry);
 
-  final FileEntry fileEntry;
+  final Entry entry;
 
   @override
   MenuItemButton build(WidgetRef ref) {
     Future<void> downloadFile() async {
       try {
-        await ref.read(downloadUseCaseProvider).download(fileEntry);
+        await ref.read(downloadUseCaseProvider).download(entry);
+        teller?.success('Downloaded successfully');
       } on Exception catch (e) {
-        if (ref.context.mounted) {
-          teller?.error(e.toString());
-        }
+        teller?.error(e);
       }
     }
 
@@ -121,13 +125,9 @@ class _RenameEntryMenuItem implements _EntryMenuItem {
       if (result != null && result.isNotEmpty && result != entry.name) {
         try {
           await ref.read(renameUseCaseProvider).rename(entry.path, result);
-          if (ref.context.mounted) {
-            teller?.success('Renamed successfully');
-          }
+          teller?.success('Renamed successfully');
         } on Exception catch (e) {
-          if (ref.context.mounted) {
-            teller?.error(e.toString());
-          }
+          teller?.error(e);
         }
       }
     }
@@ -157,10 +157,9 @@ class _DeleteEntryMenuItem implements _EntryMenuItem {
       if (result ?? false) {
         try {
           await ref.read(deleteUseCaseProvider).delete(entry.path);
+          teller?.success('Deleted successfully');
         } on Exception catch (e) {
-          if (ref.context.mounted) {
-            teller?.error(e.toString());
-          }
+          teller?.error(e);
         }
       }
     }

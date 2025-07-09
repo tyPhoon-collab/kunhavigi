@@ -26,13 +26,9 @@ class KunhavigiPage extends ConsumerWidget {
           await ref
               .read(dropAndUploadUseCaseProvider)
               .upload(currentPath, files);
-          if (context.mounted) {
-            teller?.success('Files uploaded successfully');
-          }
+          teller?.success('Files uploaded successfully');
         } on Exception catch (e) {
-          if (context.mounted) {
-            teller?.error(e.toString());
-          }
+          teller?.error(e);
         }
       },
       child: Scaffold(

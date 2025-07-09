@@ -120,6 +120,24 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'transfer',
       endpoint: endpoints['transfer']!,
       methodConnectors: {
+        'createZip': _i1.MethodConnector(
+          name: 'createZip',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['transfer'] as _i3.TransferEndpoint).createZip(
+            session,
+            params['path'],
+          ),
+        ),
         'downloadFile': _i1.MethodStreamConnector(
           name: 'downloadFile',
           params: {

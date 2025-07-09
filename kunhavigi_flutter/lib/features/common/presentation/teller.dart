@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 import 'package:toastification/toastification.dart';
 
 const AlignmentDirectional _alignment = AlignmentDirectional.bottomStart;
@@ -8,10 +9,12 @@ class Teller {
 
   final BuildContext _context;
 
-  void error(String message) {
+  void error(Exception error) {
+    logger.e('Error was displayed', error: error);
+
     toastification.show(
       context: _context,
-      title: Text('Error: $message'),
+      title: Text('Error: $error'),
       type: ToastificationType.error,
       autoCloseDuration: const Duration(seconds: 7),
       alignment: _alignment,

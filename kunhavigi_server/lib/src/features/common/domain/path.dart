@@ -54,3 +54,9 @@ Directory exactDirectory(ValidPath path) {
 
   return dir as Directory;
 }
+
+Directory getTemporaryDirectory() {
+  final tempDir = Directory('$dataDirectory/.kunhavigi/tmp')
+    ..createSync(recursive: true);
+  return tempDir;
+}

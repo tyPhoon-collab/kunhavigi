@@ -6,8 +6,9 @@ import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/feedback.dart';
+import 'package:kunhavigi_flutter/features/common/presentation/teller.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
+import 'package:kunhavigi_flutter/logger.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
 sealed class ClientUseCase {
@@ -43,16 +44,32 @@ final class DeleteUseCase extends ClientUseCase {
 final class DownloadUseCase extends ClientUseCase {
   const DownloadUseCase(super.ref);
 
-  Future<void> download(FileEntry entry) async {
+  Future<void> download(Entry entry) async {
+    final FileEntry entry_;
+    var zipFileCreated = false;
+    var name = entry.name;
+
+    switch (entry) {
+      case final FileEntry file:
+        entry_ = file;
+      case final DirectoryEntry dir:
+        // Create a zip file for the directory
+        final zipFile = await _client.transfer.createZip(dir.path);
+        entry_ = zipFile;
+        zipFileCreated = true;
+        name = '$name.zip';
+      case final UnknownEntry unknown:
+        throw ArgumentError('Cannot download unknown entry: ${unknown.path}');
+    }
+
     final stream =
-        _client.transfer.downloadFile(entry.path).asBroadcastStream();
+        _client.transfer.downloadFile(entry_.path).asBroadcastStream();
 
     var current = 0;
 
-    final id =
-        teller?.progress('Downloading ${entry.name}', stream.map((event) {
+    final id = teller?.progress('Downloading $name', stream.map((event) {
       return Progress(
-        total: entry.size,
+        total: entry_.size,
         current: current += event.lengthInBytes,
       );
     }));
@@ -60,9 +77,16 @@ final class DownloadUseCase extends ClientUseCase {
     try {
       await ref.read(saverProvider).save(
             stream,
-            name: entry.name,
-            mimeType: entry.mimeType,
+            name: name,
+            mimeType: entry_.mimeType,
           );
+
+      // Cleanup zip file if it was created
+      if (zipFileCreated) {
+        await _client.browse.delete(entry_.path);
+      }
+    } on Exception catch (e) {
+      logger.e('Failed to download ${entry_.name}: $e');
     } finally {
       teller?.dismiss(id!);
     }

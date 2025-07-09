@@ -33,13 +33,9 @@ class UploadButton extends ConsumerWidget {
           .read(pickAndUploadUseCaseProvider)
           .upload(ref.read(currentPathProvider), files);
 
-      if (context.mounted) {
-        teller?.success('Files uploaded successfully');
-      }
+      teller?.success('Files uploaded successfully');
     } on Exception catch (e) {
-      if (context.mounted) {
-        teller?.error(e.toString());
-      }
+      teller?.error(e);
     }
   }
 }
