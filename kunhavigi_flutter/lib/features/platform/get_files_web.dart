@@ -1,7 +1,8 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
 
-List<FileWithSource> getFiles(DropItem item, [String? directory]) {
+List<FileWithSource> getFiles(XFile item, [String? directory]) {
   return switch (item) {
     final DropItemFile file => [
         FileWithSource(
