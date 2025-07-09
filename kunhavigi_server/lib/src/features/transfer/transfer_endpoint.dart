@@ -37,13 +37,14 @@ class TransferEndpoint extends Endpoint {
     final randomAccessFile = await zipFile.open(mode: FileMode.write);
     try {
       await randomAccessFile.writeFrom(zipData);
-      await randomAccessFile.flush();
-    } catch (e) {
-      throw Exception('Failed to create zip file: $e');
-    } finally {
       await randomAccessFile.close();
+    } catch (e) {
+      await randomAccessFile.close();
+      if (zipFile.existsSync()) {
+        await zipFile.delete();
+      }
+      rethrow;
     }
-
     return buildEntry(zipFile) as FileEntry;
   }
 
@@ -87,11 +88,13 @@ class TransferEndpoint extends Endpoint {
       await for (final byteData in data) {
         await randomAccessFile.writeFrom(byteData.buffer.asUint8List());
       }
-      await randomAccessFile.flush();
-    } catch (e) {
-      throw Exception('Failed to upload file: $e');
-    } finally {
       await randomAccessFile.close();
+    } catch (e) {
+      await randomAccessFile.close();
+      if (file.existsSync()) {
+        await file.delete();
+      }
+      rethrow;
     }
 
     return buildEntry(file);

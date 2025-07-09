@@ -128,7 +128,7 @@ final class DropAndUploadUseCase {
 
     for (final item in items) {
       await uploader.upload(
-        dir.append(item.name),
+        dir.joined(item.name),
         item.file.openRead().map(ByteData.sublistView),
         await item.file.length(),
       );
@@ -148,7 +148,7 @@ final class PickAndUploadUseCase {
 
     for (final file in files) {
       await uploader.upload(
-        dir.append(file.name),
+        dir.joined(file.name),
         file.readStream!
             .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
         file.size,

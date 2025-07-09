@@ -15,7 +15,7 @@ extension type const RelativePath(String value) {
 
   String get name => p.basename(value);
 
-  RelativePath append(String segment) {
+  RelativePath joined(String segment) {
     if (isRoot) {
       return RelativePath(segment);
     }
