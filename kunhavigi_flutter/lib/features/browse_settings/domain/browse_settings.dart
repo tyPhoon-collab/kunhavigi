@@ -26,7 +26,7 @@ sealed class BrowseSettings with _$BrowseSettings {
     );
   }
 
-  factory BrowseSettings.fromFromValues(Map<String, dynamic> values) {
+  factory BrowseSettings.fromFormValues(Map<String, dynamic> values) {
     return BrowseSettings(
       serverUrl: values['serverUrl'] as String?,
       token: values['token'] as String?,
@@ -44,7 +44,7 @@ sealed class BrowseSettings with _$BrowseSettings {
     );
   }
 
-  Map<String, dynamic> toFromValues() {
+  Map<String, dynamic> toFormValues() {
     return {
       'serverUrl': serverUrl ?? '',
       'token': token ?? '',

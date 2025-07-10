@@ -2,35 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/domain/browse_settings.dart';
-import 'package:kunhavigi_flutter/features/browse_settings/provider/service_provider.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/bottom_sheet_base.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/messages.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'browse_settings_modal.g.dart';
-
-@riverpod
-class _Settings extends _$Settings {
-  @override
-  Future<BrowseSettings> build() async {
-    return ref.watch(browseSettingsRepositoryProvider).get();
-  }
-
-  Future<void> set(BrowseSettings settings) async {
-    await ref.watch(browseSettingsRepositoryProvider).set(settings);
-    state = AsyncValue.data(settings);
-  }
-}
 
 class BrowseSettingsModal extends ConsumerWidget {
   const BrowseSettingsModal({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsAsync = ref.watch(_settingsProvider);
+    final settingsAsync = ref.watch(currentBrowseSettingsProvider);
 
     return BottomSheetBase(
-      initialChildSize: 0.8,
       padding: EdgeInsets.zero,
       header: const BottomSheetHeader(
         title: 'Browse Settings',
@@ -61,15 +44,15 @@ class _BrowseSettingsForm extends HookConsumerWidget {
       final formState = formKey.currentState;
       if (formState == null || !formState.saveAndValidate()) return;
 
-      final updatedSettings = BrowseSettings.fromFromValues(formState.value);
-      ref.read(_settingsProvider.notifier).set(updatedSettings);
+      final updatedSettings = BrowseSettings.fromFormValues(formState.value);
+      ref.read(currentBrowseSettingsProvider.notifier).set(updatedSettings);
     }
 
     return Padding(
       padding: const EdgeInsets.all(16),
       child: FormBuilder(
         key: formKey,
-        initialValue: settings.toFromValues(),
+        initialValue: settings.toFormValues(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
@@ -83,6 +66,8 @@ class _BrowseSettingsForm extends HookConsumerWidget {
                   name: 'serverUrl',
                   labelText: 'Server URL',
                   prefixIcon: Icons.cloud_outlined,
+                  helperText:
+                      'E.g. https://api.example.com/ or http://localhost:3000/',
                 ),
                 _SettingsPasswordField(
                   name: 'token',
@@ -115,8 +100,14 @@ class _BrowseSettingsForm extends HookConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            _SaveButton(onPressed: onSubmit),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 8,
+              children: [
+                const _ResetButton(),
+                _SaveButton(onPressed: onSubmit),
+              ],
+            ),
           ],
         ),
       ),
@@ -248,6 +239,33 @@ class _SettingsSwitch extends StatelessWidget {
       activeColor: colorScheme.primary,
       initialValue: initialValue,
       decoration: const InputDecoration(border: InputBorder.none),
+    );
+  }
+}
+
+class _ResetButton extends ConsumerWidget {
+  const _ResetButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: ref.read(currentBrowseSettingsProvider.notifier).reset,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.primary,
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1.5,
+          ),
+          textStyle: Theme.of(context).textTheme.labelLarge,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: const Text('Reset to Defaults'),
+      ),
     );
   }
 }

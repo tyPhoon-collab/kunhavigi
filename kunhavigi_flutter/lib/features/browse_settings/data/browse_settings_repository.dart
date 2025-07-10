@@ -21,17 +21,8 @@ final class SharedPreferencesBrowseSettingsRepository
   @override
   Future<BrowseSettings> get() {
     return _prefs.getString(key).then((value) {
-      if (value == null) {
-        return const BrowseSettings(
-          hiddenPatterns: [
-            '.*',
-          ],
-          showHidden: false,
-          ignoreUploadPatterns: [
-            '.DS_Store',
-          ],
-        );
-      }
+      if (value == null) return BrowseSettings.defaultSettings();
+
       return BrowseSettings.fromJson(jsonDecode(value) as Map<String, Object?>);
     });
   }

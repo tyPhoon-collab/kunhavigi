@@ -7,6 +7,7 @@ import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/teller.dart';
+import 'package:kunhavigi_flutter/features/common/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 import 'package:kunhavigi_flutter/main.dart';

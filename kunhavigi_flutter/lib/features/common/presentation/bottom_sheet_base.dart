@@ -4,7 +4,7 @@ class BottomSheetBase extends StatelessWidget {
   const BottomSheetBase({
     required this.header,
     required this.child,
-    this.initialChildSize = 0.7,
+    this.initialChildSize = 0.8,
     this.maxChildSize = 0.9,
     this.minChildSize = 0.3,
     this.padding = const EdgeInsets.all(16),
