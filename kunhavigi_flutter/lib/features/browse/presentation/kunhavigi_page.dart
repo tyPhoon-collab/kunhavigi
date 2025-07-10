@@ -5,6 +5,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.da
 import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
@@ -45,6 +46,7 @@ class KunhavigiPage extends ConsumerWidget {
                 children: [
                   Expanded(child: _PathBreadcrumb()),
                   _ReloadButton(),
+                  _SettingsButton(),
                 ],
               ),
             ),
@@ -92,6 +94,31 @@ class _ReloadButton extends ConsumerWidget {
       ),
       onPressed: () => ref.invalidate(entriesProvider(currentPath)),
       tooltip: 'Reload',
+    );
+  }
+}
+
+class _SettingsButton extends ConsumerWidget {
+  const _SettingsButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return IconButton(
+      icon: Icon(
+        Icons.settings,
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
+      ),
+      onPressed: () {
+        showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const BrowseSettingsModal(),
+        );
+      },
+      tooltip: 'Settings',
     );
   }
 }

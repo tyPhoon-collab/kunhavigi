@@ -1,7 +1,8 @@
 .dart_tool/
 .env
+.DS_Store
 
 # FVM Version Cache
 .fvm/
 
-data/
+/data/

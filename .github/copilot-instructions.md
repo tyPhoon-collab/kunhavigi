@@ -18,15 +18,25 @@
 
 ### Code Style
 
-- `Widget`を返すメソッドはクラス化すること
-- `build`メソッドは見通しを良くすること（`Widget`を分割するなど）
-- `dynamic`型は使用しないこと
+#### Basic
+
+- コード内のテキストは英語で記述すること
 - できるだけ疎結合にすること
 - できるだけprivateにすること
-- コード内のテキストは英語で記述すること（ローカライズ時にKey名としやすいため）
-- 複雑な型は`typedef`を使用すること
-- `static`メソッドは使用しないこと
+- できるだけシンプルなコードを書くこと
+- テストの可用性を考え、`static`メソッドやシングルトンは使用しないこと
 - `logger.dart`を参照し、適切にログを出力すること
+
+#### Type
+
+- `dynamic`型は使用しないこと
+- 複雑な型は`typedef`を使用すること
+
+#### Widget
+
+- `Widget`を返すメソッドはクラス化すること
+- `build`メソッドは見通しを良くすること（`Widget`を分割するなど）
+- Widget構造は保守性を考慮して、できるだけシンプルにすること
 
 ### Code Comment
 
@@ -38,7 +48,9 @@
 
 ### Flutter/Dart Specific
 
-- `riverpod_generator + flutter_hooks`を採用すること
+- `riverpod_generator + flutter_hooks`を採用中
+    - Widget間で状態を共有する場合は、`riverpod`を使用する
+    - Widget内で状態を管理する場合は、`hooks`を使用する
 
 #### Widget
 
@@ -54,6 +66,7 @@ final result = switch (some) {
     B => b,
     C => c,
 }
+```
 
 #### Warning
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_flutter/features/browse/presentation/page/kunhavigi_page.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/kunhavigi_page.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/teller.dart';
 
 Teller? teller;

@@ -28,14 +28,18 @@ dependencies:
   file_saver: ^0.3.0
   flutter:
     sdk: flutter
+  flutter_form_builder: ^10.1.0
   flutter_hooks: ^0.21.2
+  freezed_annotation: ^3.1.0
   hooks_riverpod: ^2.6.1
+  json_annotation: ^4.9.0
   kunhavigi_client:
     path: ../kunhavigi_client
   logger: ^2.6.0
   path: ^1.9.1
   riverpod_annotation: ^2.6.1
   serverpod_flutter: 2.9.1
+  shared_preferences: ^2.5.3
   toastification: ^3.0.3
 
 dev_dependencies:
@@ -44,6 +48,8 @@ dev_dependencies:
   flutter_lints: ">=3.0.0 <7.0.0"
   flutter_test:
     sdk: flutter
+  freezed: ^3.1.0
+  json_serializable: ^6.9.5
   riverpod_generator: ^2.6.5
   riverpod_lint: ^2.6.5
   very_good_analysis: ^9.0.0
