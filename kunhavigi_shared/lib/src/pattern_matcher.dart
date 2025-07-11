@@ -10,11 +10,11 @@ class PatternMatcher {
       return false;
     }
 
+    final uri = Uri.file(path);
+
     for (final pattern in patterns) {
       final glob = Glob(pattern, caseSensitive: false);
-      if (glob.matches(path)) {
-        return true;
-      }
+      if (glob.matches(uri.path)) return true;
     }
 
     return false;
