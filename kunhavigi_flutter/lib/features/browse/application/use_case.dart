@@ -129,12 +129,11 @@ final class DropAndUploadUseCase {
     final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
-    final filteredItems =
-        items.where((e) => settings.shouldUpload(e.file.path));
-
-    for (final item in filteredItems) {
+    for (final item in items) {
+      final path = dir.joined(item.name);
+      if (!settings.shouldUpload(path)) continue;
       await uploader.upload(
-        dir.joined(item.name),
+        path,
         item.file.openRead().map(ByteData.sublistView),
         await item.file.length(),
       );
@@ -153,11 +152,11 @@ final class PickAndUploadUseCase {
     final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
-    final filteredFiles = files.where((e) => settings.shouldUpload(e.path!));
-
-    for (final file in filteredFiles) {
+    for (final file in files) {
+      final path = dir.joined(file.name);
+      if (!settings.shouldUpload(path)) continue;
       await uploader.upload(
-        dir.joined(file.name),
+        path,
         file.readStream!
             .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
         file.size,

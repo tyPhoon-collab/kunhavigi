@@ -62,8 +62,8 @@ sealed class BrowseSettings with _$BrowseSettings {
     return !matcher.matches(path.value);
   }
 
-  bool shouldUpload(String path) {
+  bool shouldUpload(RelativePath path) {
     final matcher = PatternMatcher(ignoreUploadPatterns);
-    return !matcher.matches(path);
+    return !matcher.matches(path.value);
   }
 }
