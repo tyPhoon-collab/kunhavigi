@@ -4,14 +4,14 @@
 
 Kunhavigiはエスペラント語で「共有」を意味する。
 
-## Motivation
+## モチベーション
 
 - Serverpodの学習
 - NextCloudの代替
 
-## Platforms
+## プラットホーム
 
-- macOS
+- Web
 
 ## Features
 
@@ -21,20 +21,37 @@ Kunhavigiはエスペラント語で「共有」を意味する。
 
 - 他プラットフォーム対応
 - ユーザー認証
+- メモのリアルタイム編集
+- コマンド操作（ショートカット）
 
-## Deployment
+## デプロイ
+
+### ビルド
+
+#### Web
+
+静的配信を有効にしている
+
+```bash
+flutter build web -o ../kunhavigi_server/web/static
+```
+
+今後はCI/CDを使用して自動化する予定
 
 ### ローカルサーバー
 
 Dockerを使用したローカルマシン（Ubuntu Server）などのサーバーへのデプロイ
 
-- `git clone <Repo URL>`
-- `kunhavigi_server/config/password.yaml`を配置
-- `.env`ファイルを作成し、以下の内容を記述
+```bash
+git clone <Repo URL>
 
-  ```env
-  POSTGRES_PASSWORD=your_password_here
-  ```
+# `kunhavigi_server/config/password.yaml`を配置
+# `.env`ファイルを作成し、以下の内容を記述
 
-- `cd kunhavigi`
-- `docker-compose up -d`
+#   ```env
+#   POSTGRES_PASSWORD=your_password_here
+#   ```
+
+cd kunhavigi
+docker compose up -d
+```

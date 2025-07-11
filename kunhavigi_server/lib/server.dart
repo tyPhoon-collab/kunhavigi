@@ -1,6 +1,5 @@
 import 'package:kunhavigi_server/src/generated/endpoints.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
-import 'package:kunhavigi_server/src/web/routes/root.dart';
 import 'package:serverpod/serverpod.dart';
 
 // This is the starting point of your Serverpod server. In most cases, you will
@@ -11,9 +10,6 @@ Future<void> run(List<String> args) async {
   // Initialize Serverpod and connect it with your generated code.
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // Setup a default page at the web root.
-  pod.webServer.addRoute(RouteRoot(), '/');
-  pod.webServer.addRoute(RouteRoot(), '/index.html');
   // Serve all files in the /static directory.
   pod.webServer.addRoute(
     RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
