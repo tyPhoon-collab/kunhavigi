@@ -40,12 +40,17 @@ class _BrowseSettingsForm extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormBuilderState>();
 
-    void onSubmit() {
+    void reset() {
+      formKey.currentState?.reset();
+    }
+
+    void submit() {
       final formState = formKey.currentState;
       if (formState == null || !formState.saveAndValidate()) return;
 
       final updatedSettings = BrowseSettings.fromFormValues(formState.value);
       ref.read(currentBrowseSettingsProvider.notifier).set(updatedSettings);
+      Navigator.of(context).pop();
     }
 
     return Padding(
@@ -104,8 +109,8 @@ class _BrowseSettingsForm extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 8,
               children: [
-                const _ResetButton(),
-                _SaveButton(onPressed: onSubmit),
+                _ResetButton(onPressed: reset),
+                _SaveButton(onPressed: submit),
               ],
             ),
           ],
@@ -244,14 +249,16 @@ class _SettingsSwitch extends StatelessWidget {
 }
 
 class _ResetButton extends ConsumerWidget {
-  const _ResetButton();
+  const _ResetButton({required this.onPressed});
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: ref.read(currentBrowseSettingsProvider.notifier).reset,
+        onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: Theme.of(context).colorScheme.primary,
           side: BorderSide(
