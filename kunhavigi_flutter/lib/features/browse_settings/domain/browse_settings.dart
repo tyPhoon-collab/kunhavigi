@@ -8,7 +8,6 @@ part 'browse_settings.g.dart';
 sealed class BrowseSettings with _$BrowseSettings {
   const factory BrowseSettings({
     String? serverUrl,
-    String? token,
     @Default([]) List<String> hiddenPatterns,
     @Default(false) bool showHidden,
     @Default([]) List<String> ignoreUploadPatterns,
@@ -29,7 +28,6 @@ sealed class BrowseSettings with _$BrowseSettings {
   factory BrowseSettings.fromFormValues(Map<String, dynamic> values) {
     return BrowseSettings(
       serverUrl: values['serverUrl'] as String?,
-      token: values['token'] as String?,
       hiddenPatterns: (values['hiddenPatterns'] as String?)
               ?.split(',')
               .map((e) => e.trim())
@@ -49,7 +47,6 @@ sealed class BrowseSettings with _$BrowseSettings {
   Map<String, dynamic> toFormValues() {
     return {
       'serverUrl': serverUrl ?? '',
-      'token': token ?? '',
       'hiddenPatterns': hiddenPatterns.join(', '),
       'showHidden': showHidden,
       'ignoreUploadPatterns': ignoreUploadPatterns.join(', '),

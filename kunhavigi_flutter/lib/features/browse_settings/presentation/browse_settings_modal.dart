@@ -74,11 +74,6 @@ class _BrowseSettingsForm extends HookConsumerWidget {
                   helperText:
                       'E.g. https://api.example.com/ or http://localhost:3000/',
                 ),
-                _SettingsPasswordField(
-                  name: 'token',
-                  labelText: 'Token',
-                  prefixIcon: Icons.vpn_key_outlined,
-                ),
               ],
             ),
             _SettingsSection(
@@ -191,33 +186,6 @@ class _SettingsTextField extends StatelessWidget {
         prefixIcon: Icon(prefixIcon),
         helperText: helperText,
       ),
-    );
-  }
-}
-
-class _SettingsPasswordField extends StatelessWidget {
-  const _SettingsPasswordField({
-    required this.name,
-    required this.labelText,
-    required this.prefixIcon,
-  });
-
-  final String name;
-  final String labelText;
-  final IconData prefixIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return FormBuilderTextField(
-      name: name,
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        prefixIcon: Icon(prefixIcon),
-      ),
-      obscureText: true,
     );
   }
 }

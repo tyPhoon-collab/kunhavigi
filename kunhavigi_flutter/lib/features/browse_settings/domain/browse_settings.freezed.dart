@@ -15,7 +15,6 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BrowseSettings {
   String? get serverUrl;
-  String? get token;
   List<String> get hiddenPatterns;
   bool get showHidden;
   List<String> get ignoreUploadPatterns;
@@ -38,7 +37,6 @@ mixin _$BrowseSettings {
             other is BrowseSettings &&
             (identical(other.serverUrl, serverUrl) ||
                 other.serverUrl == serverUrl) &&
-            (identical(other.token, token) || other.token == token) &&
             const DeepCollectionEquality()
                 .equals(other.hiddenPatterns, hiddenPatterns) &&
             (identical(other.showHidden, showHidden) ||
@@ -52,14 +50,13 @@ mixin _$BrowseSettings {
   int get hashCode => Object.hash(
       runtimeType,
       serverUrl,
-      token,
       const DeepCollectionEquality().hash(hiddenPatterns),
       showHidden,
       const DeepCollectionEquality().hash(ignoreUploadPatterns));
 
   @override
   String toString() {
-    return 'BrowseSettings(serverUrl: $serverUrl, token: $token, hiddenPatterns: $hiddenPatterns, showHidden: $showHidden, ignoreUploadPatterns: $ignoreUploadPatterns)';
+    return 'BrowseSettings(serverUrl: $serverUrl, hiddenPatterns: $hiddenPatterns, showHidden: $showHidden, ignoreUploadPatterns: $ignoreUploadPatterns)';
   }
 }
 
@@ -71,7 +68,6 @@ abstract mixin class $BrowseSettingsCopyWith<$Res> {
   @useResult
   $Res call(
       {String? serverUrl,
-      String? token,
       List<String> hiddenPatterns,
       bool showHidden,
       List<String> ignoreUploadPatterns});
@@ -91,7 +87,6 @@ class _$BrowseSettingsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? serverUrl = freezed,
-    Object? token = freezed,
     Object? hiddenPatterns = null,
     Object? showHidden = null,
     Object? ignoreUploadPatterns = null,
@@ -100,10 +95,6 @@ class _$BrowseSettingsCopyWithImpl<$Res>
       serverUrl: freezed == serverUrl
           ? _self.serverUrl
           : serverUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _self.token
-          : token // ignore: cast_nullable_to_non_nullable
               as String?,
       hiddenPatterns: null == hiddenPatterns
           ? _self.hiddenPatterns
@@ -212,20 +203,16 @@ extension BrowseSettingsPatterns on BrowseSettings {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String? serverUrl,
-            String? token,
-            List<String> hiddenPatterns,
-            bool showHidden,
-            List<String> ignoreUploadPatterns)?
+    TResult Function(String? serverUrl, List<String> hiddenPatterns,
+            bool showHidden, List<String> ignoreUploadPatterns)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _BrowseSettings() when $default != null:
-        return $default(_that.serverUrl, _that.token, _that.hiddenPatterns,
-            _that.showHidden, _that.ignoreUploadPatterns);
+        return $default(_that.serverUrl, _that.hiddenPatterns, _that.showHidden,
+            _that.ignoreUploadPatterns);
       case _:
         return orElse();
     }
@@ -246,19 +233,15 @@ extension BrowseSettingsPatterns on BrowseSettings {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String? serverUrl,
-            String? token,
-            List<String> hiddenPatterns,
-            bool showHidden,
-            List<String> ignoreUploadPatterns)
+    TResult Function(String? serverUrl, List<String> hiddenPatterns,
+            bool showHidden, List<String> ignoreUploadPatterns)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BrowseSettings():
-        return $default(_that.serverUrl, _that.token, _that.hiddenPatterns,
-            _that.showHidden, _that.ignoreUploadPatterns);
+        return $default(_that.serverUrl, _that.hiddenPatterns, _that.showHidden,
+            _that.ignoreUploadPatterns);
     }
   }
 
@@ -276,19 +259,15 @@ extension BrowseSettingsPatterns on BrowseSettings {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            String? serverUrl,
-            String? token,
-            List<String> hiddenPatterns,
-            bool showHidden,
-            List<String> ignoreUploadPatterns)?
+    TResult? Function(String? serverUrl, List<String> hiddenPatterns,
+            bool showHidden, List<String> ignoreUploadPatterns)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _BrowseSettings() when $default != null:
-        return $default(_that.serverUrl, _that.token, _that.hiddenPatterns,
-            _that.showHidden, _that.ignoreUploadPatterns);
+        return $default(_that.serverUrl, _that.hiddenPatterns, _that.showHidden,
+            _that.ignoreUploadPatterns);
       case _:
         return null;
     }
@@ -300,7 +279,6 @@ extension BrowseSettingsPatterns on BrowseSettings {
 class _BrowseSettings extends BrowseSettings {
   const _BrowseSettings(
       {this.serverUrl,
-      this.token,
       final List<String> hiddenPatterns = const [],
       this.showHidden = false,
       final List<String> ignoreUploadPatterns = const []})
@@ -312,8 +290,6 @@ class _BrowseSettings extends BrowseSettings {
 
   @override
   final String? serverUrl;
-  @override
-  final String? token;
   final List<String> _hiddenPatterns;
   @override
   @JsonKey()
@@ -358,7 +334,6 @@ class _BrowseSettings extends BrowseSettings {
             other is _BrowseSettings &&
             (identical(other.serverUrl, serverUrl) ||
                 other.serverUrl == serverUrl) &&
-            (identical(other.token, token) || other.token == token) &&
             const DeepCollectionEquality()
                 .equals(other._hiddenPatterns, _hiddenPatterns) &&
             (identical(other.showHidden, showHidden) ||
@@ -372,14 +347,13 @@ class _BrowseSettings extends BrowseSettings {
   int get hashCode => Object.hash(
       runtimeType,
       serverUrl,
-      token,
       const DeepCollectionEquality().hash(_hiddenPatterns),
       showHidden,
       const DeepCollectionEquality().hash(_ignoreUploadPatterns));
 
   @override
   String toString() {
-    return 'BrowseSettings(serverUrl: $serverUrl, token: $token, hiddenPatterns: $hiddenPatterns, showHidden: $showHidden, ignoreUploadPatterns: $ignoreUploadPatterns)';
+    return 'BrowseSettings(serverUrl: $serverUrl, hiddenPatterns: $hiddenPatterns, showHidden: $showHidden, ignoreUploadPatterns: $ignoreUploadPatterns)';
   }
 }
 
@@ -393,7 +367,6 @@ abstract mixin class _$BrowseSettingsCopyWith<$Res>
   @useResult
   $Res call(
       {String? serverUrl,
-      String? token,
       List<String> hiddenPatterns,
       bool showHidden,
       List<String> ignoreUploadPatterns});
@@ -413,7 +386,6 @@ class __$BrowseSettingsCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? serverUrl = freezed,
-    Object? token = freezed,
     Object? hiddenPatterns = null,
     Object? showHidden = null,
     Object? ignoreUploadPatterns = null,
@@ -422,10 +394,6 @@ class __$BrowseSettingsCopyWithImpl<$Res>
       serverUrl: freezed == serverUrl
           ? _self.serverUrl
           : serverUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      token: freezed == token
-          ? _self.token
-          : token // ignore: cast_nullable_to_non_nullable
               as String?,
       hiddenPatterns: null == hiddenPatterns
           ? _self._hiddenPatterns
