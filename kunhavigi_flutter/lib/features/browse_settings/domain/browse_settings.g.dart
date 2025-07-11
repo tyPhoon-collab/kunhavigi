@@ -11,12 +11,14 @@ _BrowseSettings _$BrowseSettingsFromJson(Map<String, dynamic> json) =>
       serverUrl: json['serverUrl'] as String?,
       token: json['token'] as String?,
       hiddenPatterns: (json['hiddenPatterns'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      showHidden: json['showHidden'] as bool?,
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      showHidden: json['showHidden'] as bool? ?? false,
       ignoreUploadPatterns: (json['ignoreUploadPatterns'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$BrowseSettingsToJson(_BrowseSettings instance) =>

@@ -6,6 +6,7 @@ import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/common/presentation/teller.dart';
 import 'package:kunhavigi_flutter/features/common/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
@@ -125,9 +126,13 @@ final class DropAndUploadUseCase {
   final Ref ref;
 
   Future<void> upload(RelativePath dir, List<FileWithSource> items) async {
+    final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
-    for (final item in items) {
+    final filteredItems =
+        items.where((e) => settings.shouldUpload(e.file.path));
+
+    for (final item in filteredItems) {
       await uploader.upload(
         dir.joined(item.name),
         item.file.openRead().map(ByteData.sublistView),
@@ -145,9 +150,12 @@ final class PickAndUploadUseCase {
   final Ref ref;
 
   Future<void> upload(RelativePath dir, List<PlatformFile> files) async {
+    final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
-    for (final file in files) {
+    final filteredFiles = files.where((e) => settings.shouldUpload(e.path!));
+
+    for (final file in filteredFiles) {
       await uploader.upload(
         dir.joined(file.name),
         file.readStream!

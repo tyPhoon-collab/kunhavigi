@@ -16,9 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$BrowseSettings {
   String? get serverUrl;
   String? get token;
-  List<String>? get hiddenPatterns;
-  bool? get showHidden;
-  List<String>? get ignoreUploadPatterns;
+  List<String> get hiddenPatterns;
+  bool get showHidden;
+  List<String> get ignoreUploadPatterns;
 
   /// Create a copy of BrowseSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -72,9 +72,9 @@ abstract mixin class $BrowseSettingsCopyWith<$Res> {
   $Res call(
       {String? serverUrl,
       String? token,
-      List<String>? hiddenPatterns,
-      bool? showHidden,
-      List<String>? ignoreUploadPatterns});
+      List<String> hiddenPatterns,
+      bool showHidden,
+      List<String> ignoreUploadPatterns});
 }
 
 /// @nodoc
@@ -92,9 +92,9 @@ class _$BrowseSettingsCopyWithImpl<$Res>
   $Res call({
     Object? serverUrl = freezed,
     Object? token = freezed,
-    Object? hiddenPatterns = freezed,
-    Object? showHidden = freezed,
-    Object? ignoreUploadPatterns = freezed,
+    Object? hiddenPatterns = null,
+    Object? showHidden = null,
+    Object? ignoreUploadPatterns = null,
   }) {
     return _then(_self.copyWith(
       serverUrl: freezed == serverUrl
@@ -105,18 +105,18 @@ class _$BrowseSettingsCopyWithImpl<$Res>
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      hiddenPatterns: freezed == hiddenPatterns
+      hiddenPatterns: null == hiddenPatterns
           ? _self.hiddenPatterns
           : hiddenPatterns // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      showHidden: freezed == showHidden
+              as List<String>,
+      showHidden: null == showHidden
           ? _self.showHidden
           : showHidden // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      ignoreUploadPatterns: freezed == ignoreUploadPatterns
+              as bool,
+      ignoreUploadPatterns: null == ignoreUploadPatterns
           ? _self.ignoreUploadPatterns
           : ignoreUploadPatterns // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }
@@ -215,9 +215,9 @@ extension BrowseSettingsPatterns on BrowseSettings {
     TResult Function(
             String? serverUrl,
             String? token,
-            List<String>? hiddenPatterns,
-            bool? showHidden,
-            List<String>? ignoreUploadPatterns)?
+            List<String> hiddenPatterns,
+            bool showHidden,
+            List<String> ignoreUploadPatterns)?
         $default, {
     required TResult orElse(),
   }) {
@@ -249,9 +249,9 @@ extension BrowseSettingsPatterns on BrowseSettings {
     TResult Function(
             String? serverUrl,
             String? token,
-            List<String>? hiddenPatterns,
-            bool? showHidden,
-            List<String>? ignoreUploadPatterns)
+            List<String> hiddenPatterns,
+            bool showHidden,
+            List<String> ignoreUploadPatterns)
         $default,
   ) {
     final _that = this;
@@ -279,9 +279,9 @@ extension BrowseSettingsPatterns on BrowseSettings {
     TResult? Function(
             String? serverUrl,
             String? token,
-            List<String>? hiddenPatterns,
-            bool? showHidden,
-            List<String>? ignoreUploadPatterns)?
+            List<String> hiddenPatterns,
+            bool showHidden,
+            List<String> ignoreUploadPatterns)?
         $default,
   ) {
     final _that = this;
@@ -301,9 +301,9 @@ class _BrowseSettings extends BrowseSettings {
   const _BrowseSettings(
       {this.serverUrl,
       this.token,
-      final List<String>? hiddenPatterns,
-      this.showHidden,
-      final List<String>? ignoreUploadPatterns})
+      final List<String> hiddenPatterns = const [],
+      this.showHidden = false,
+      final List<String> ignoreUploadPatterns = const []})
       : _hiddenPatterns = hiddenPatterns,
         _ignoreUploadPatterns = ignoreUploadPatterns,
         super._();
@@ -314,27 +314,26 @@ class _BrowseSettings extends BrowseSettings {
   final String? serverUrl;
   @override
   final String? token;
-  final List<String>? _hiddenPatterns;
+  final List<String> _hiddenPatterns;
   @override
-  List<String>? get hiddenPatterns {
-    final value = _hiddenPatterns;
-    if (value == null) return null;
+  @JsonKey()
+  List<String> get hiddenPatterns {
     if (_hiddenPatterns is EqualUnmodifiableListView) return _hiddenPatterns;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_hiddenPatterns);
   }
 
   @override
-  final bool? showHidden;
-  final List<String>? _ignoreUploadPatterns;
+  @JsonKey()
+  final bool showHidden;
+  final List<String> _ignoreUploadPatterns;
   @override
-  List<String>? get ignoreUploadPatterns {
-    final value = _ignoreUploadPatterns;
-    if (value == null) return null;
+  @JsonKey()
+  List<String> get ignoreUploadPatterns {
     if (_ignoreUploadPatterns is EqualUnmodifiableListView)
       return _ignoreUploadPatterns;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_ignoreUploadPatterns);
   }
 
   /// Create a copy of BrowseSettings
@@ -395,9 +394,9 @@ abstract mixin class _$BrowseSettingsCopyWith<$Res>
   $Res call(
       {String? serverUrl,
       String? token,
-      List<String>? hiddenPatterns,
-      bool? showHidden,
-      List<String>? ignoreUploadPatterns});
+      List<String> hiddenPatterns,
+      bool showHidden,
+      List<String> ignoreUploadPatterns});
 }
 
 /// @nodoc
@@ -415,9 +414,9 @@ class __$BrowseSettingsCopyWithImpl<$Res>
   $Res call({
     Object? serverUrl = freezed,
     Object? token = freezed,
-    Object? hiddenPatterns = freezed,
-    Object? showHidden = freezed,
-    Object? ignoreUploadPatterns = freezed,
+    Object? hiddenPatterns = null,
+    Object? showHidden = null,
+    Object? ignoreUploadPatterns = null,
   }) {
     return _then(_BrowseSettings(
       serverUrl: freezed == serverUrl
@@ -428,18 +427,18 @@ class __$BrowseSettingsCopyWithImpl<$Res>
           ? _self.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
-      hiddenPatterns: freezed == hiddenPatterns
+      hiddenPatterns: null == hiddenPatterns
           ? _self._hiddenPatterns
           : hiddenPatterns // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      showHidden: freezed == showHidden
+              as List<String>,
+      showHidden: null == showHidden
           ? _self.showHidden
           : showHidden // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      ignoreUploadPatterns: freezed == ignoreUploadPatterns
+              as bool,
+      ignoreUploadPatterns: null == ignoreUploadPatterns
           ? _self._ignoreUploadPatterns
           : ignoreUploadPatterns // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
     ));
   }
 }

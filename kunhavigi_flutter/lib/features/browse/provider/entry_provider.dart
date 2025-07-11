@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/common/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -44,8 +45,41 @@ Future<EntriesResponse> entries(
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.getEntries(path);
-    logger.i('Successfully fetched ${result.entries.length} entries');
+
+    logger.i(
+      'Successfully fetched ${result.entries.length} entries '
+      '(${result.entries.length} total)',
+    );
     return result;
+  } catch (error, stackTrace) {
+    logger.e('Failed to fetch entries for path: $path',
+        error: error, stackTrace: stackTrace);
+    rethrow;
+  }
+}
+
+@Riverpod(keepAlive: true)
+Future<EntriesResponse> filteredEntries(
+  Ref ref,
+  RelativePath path,
+) async {
+  logger.i('Fetching entries for path: $path');
+  try {
+    final result = await ref.watch(entriesProvider(path).future);
+    final settings = await ref.watch(currentBrowseSettingsProvider.future);
+
+    final filteredEntries =
+        result.entries.where((e) => settings.visible(e.path)).toList();
+
+    logger.i(
+      'Successfully fetched ${filteredEntries.length} entries '
+      '(${result.entries.length} total)',
+    );
+    return EntriesResponse(
+      entries: filteredEntries,
+      totalCount: filteredEntries.length,
+      isRootDirectory: result.isRootDirectory,
+    );
   } catch (error, stackTrace) {
     logger.e('Failed to fetch entries for path: $path',
         error: error, stackTrace: stackTrace);

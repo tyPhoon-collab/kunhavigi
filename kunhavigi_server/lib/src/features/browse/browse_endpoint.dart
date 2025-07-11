@@ -9,7 +9,10 @@ import 'package:serverpod/serverpod.dart';
 class BrowseEndpoint extends Endpoint {
   /// Get the list of entries (files and directories) in a given path.
   /// path is relative or absolute, but must be within the data directory.
-  Future<EntriesResponse> getEntries(Session session, RelativePath path) async {
+  Future<EntriesResponse> getEntries(
+    Session session,
+    RelativePath path,
+  ) async {
     final normalizedPath = validateAndNormalizePath(path);
 
     final dir = exactDirectory(normalizedPath);

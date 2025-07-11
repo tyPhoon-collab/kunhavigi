@@ -19,7 +19,7 @@ class EntriesListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final path = ref.watch(currentPathProvider);
-    final entries = ref.watch(entriesProvider(path));
+    final entries = ref.watch(filteredEntriesProvider(path));
 
     return entries.when(
       loading: () => const Center(child: CircularProgressIndicator()),

@@ -6,7 +6,7 @@ part of 'entry_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entriesHash() => r'cd3e49d4cef16fbb5063d71bfb5d20c893bc2c29';
+String _$entriesHash() => r'fc578a681e85004d7510af23e6a5a3bee6e2ed14';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,6 +154,136 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
 
   @override
   RelativePath get path => (origin as EntriesProvider).path;
+}
+
+String _$filteredEntriesHash() => r'f7403426d3beee43c1d2fddf26b79bb7e079634e';
+
+/// See also [filteredEntries].
+@ProviderFor(filteredEntries)
+const filteredEntriesProvider = FilteredEntriesFamily();
+
+/// See also [filteredEntries].
+class FilteredEntriesFamily extends Family<AsyncValue<EntriesResponse>> {
+  /// See also [filteredEntries].
+  const FilteredEntriesFamily();
+
+  /// See also [filteredEntries].
+  FilteredEntriesProvider call(
+    RelativePath path,
+  ) {
+    return FilteredEntriesProvider(
+      path,
+    );
+  }
+
+  @override
+  FilteredEntriesProvider getProviderOverride(
+    covariant FilteredEntriesProvider provider,
+  ) {
+    return call(
+      provider.path,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'filteredEntriesProvider';
+}
+
+/// See also [filteredEntries].
+class FilteredEntriesProvider extends FutureProvider<EntriesResponse> {
+  /// See also [filteredEntries].
+  FilteredEntriesProvider(
+    RelativePath path,
+  ) : this._internal(
+          (ref) => filteredEntries(
+            ref as FilteredEntriesRef,
+            path,
+          ),
+          from: filteredEntriesProvider,
+          name: r'filteredEntriesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$filteredEntriesHash,
+          dependencies: FilteredEntriesFamily._dependencies,
+          allTransitiveDependencies:
+              FilteredEntriesFamily._allTransitiveDependencies,
+          path: path,
+        );
+
+  FilteredEntriesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.path,
+  }) : super.internal();
+
+  final RelativePath path;
+
+  @override
+  Override overrideWith(
+    FutureOr<EntriesResponse> Function(FilteredEntriesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FilteredEntriesProvider._internal(
+        (ref) => create(ref as FilteredEntriesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        path: path,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<EntriesResponse> createElement() {
+    return _FilteredEntriesProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FilteredEntriesProvider && other.path == path;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, path.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin FilteredEntriesRef on FutureProviderRef<EntriesResponse> {
+  /// The parameter `path` of this provider.
+  RelativePath get path;
+}
+
+class _FilteredEntriesProviderElement
+    extends FutureProviderElement<EntriesResponse> with FilteredEntriesRef {
+  _FilteredEntriesProviderElement(super.provider);
+
+  @override
+  RelativePath get path => (origin as FilteredEntriesProvider).path;
 }
 
 String _$entryPreviewHash() => r'6aadfaf63d159a218984270576b07b247dfbfb81';

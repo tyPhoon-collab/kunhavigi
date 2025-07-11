@@ -90,7 +90,7 @@ class _BrowseSettingsForm extends HookConsumerWidget {
                 _SettingsSwitch(
                   name: 'showHidden',
                   title: 'Show Hidden Files',
-                  initialValue: settings.showHidden ?? false,
+                  initialValue: settings.showHidden,
                 ),
                 const _SettingsTextField(
                   name: 'ignoreUploadPatterns',
