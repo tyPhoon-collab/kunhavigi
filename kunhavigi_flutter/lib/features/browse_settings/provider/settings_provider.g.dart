@@ -27,7 +27,7 @@ final _browseSettingsRepositoryProvider =
 typedef _BrowseSettingsRepositoryRef
     = ProviderRef<SharedPreferencesBrowseSettingsRepository>;
 String _$currentBrowseSettingsHash() =>
-    r'52c30ad43aa305b35bc884f2e6e45e1628e6b98b';
+    r'c33d4a6fe8012fdf9ada22f0cd5d6fe6c37a21e4';
 
 /// See also [CurrentBrowseSettings].
 @ProviderFor(CurrentBrowseSettings)

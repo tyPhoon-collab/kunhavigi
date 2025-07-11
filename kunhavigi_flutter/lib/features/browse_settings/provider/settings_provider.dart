@@ -13,12 +13,12 @@ class CurrentBrowseSettings extends _$CurrentBrowseSettings {
   }
 
   Future<void> set(BrowseSettings settings) async {
-    await ref.watch(_browseSettingsRepositoryProvider).set(settings);
+    await ref.read(_browseSettingsRepositoryProvider).set(settings);
     state = AsyncValue.data(settings);
   }
 
   void reset() {
-    ref.watch(_browseSettingsRepositoryProvider).reset();
+    ref.read(_browseSettingsRepositoryProvider).reset();
     state = AsyncValue.data(BrowseSettings.defaultSettings());
   }
 }
