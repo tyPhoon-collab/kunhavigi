@@ -63,7 +63,6 @@ Future<EntriesResponse> filteredEntries(
   Ref ref,
   RelativePath path,
 ) async {
-  logger.i('Fetching entries for path: $path');
   try {
     final result = await ref.watch(entriesProvider(path).future);
     final settings = await ref.watch(currentBrowseSettingsProvider.future);
@@ -71,10 +70,6 @@ Future<EntriesResponse> filteredEntries(
     final filteredEntries =
         result.entries.where((e) => settings.visible(e.path)).toList();
 
-    logger.i(
-      'Successfully fetched ${filteredEntries.length} entries '
-      '(${result.entries.length} total)',
-    );
     return EntriesResponse(
       entries: filteredEntries,
       totalCount: filteredEntries.length,
