@@ -20,6 +20,7 @@ linter:
     unawaited_futures: true
     avoid_print: true
     public_member_api_docs: false
+    one_member_abstracts: false
 
 analyzer:
   exclude:

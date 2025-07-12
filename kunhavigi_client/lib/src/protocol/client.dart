@@ -26,7 +26,6 @@ class EndpointBrowse extends _i1.EndpointRef {
   String get name => 'browse';
 
   /// Get the list of entries (files and directories) in a given path.
-  /// path is relative or absolute, but must be within the data directory.
   _i2.Future<_i3.EntriesResponse> getEntries(_i4.RelativePath path) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
+import 'package:mime/mime.dart';
 import 'package:path/path.dart' as p;
 
 extension type const ValidPath._(String value) {}
@@ -44,6 +46,12 @@ File exactFile(ValidPath path) {
   }
 
   return file as File;
+}
+
+MimeFile exactMimeFile(ValidPath path) {
+  final file = exactFile(path);
+  final mimeType = lookupMimeType(path.value);
+  return MimeFile.fromMimeType(file, mimeType);
 }
 
 Directory exactDirectory(ValidPath path) {
