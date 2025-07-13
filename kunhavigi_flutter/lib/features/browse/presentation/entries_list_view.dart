@@ -137,7 +137,7 @@ class _EntryListTile extends ConsumerWidget {
         ),
         subtitle: switch (entry) {
           final FileEntry fileEntry => Text(
-              '${fileEntry.size} bytes',
+              fileEntry.size.toByteString(),
               style: textTheme.bodySmall?.copyWith(
                 color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
