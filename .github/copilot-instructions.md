@@ -7,6 +7,11 @@
 ### Structure
 
 - Feature-Firstの構造を採用すること（`lib/features/feature_name/`のようにディレクトリを分ける）
+- `kunhavigi_shared`は共通のコードを配置する
+- `kunhavigi_server`はサーバーサイドのコードを配置する
+- `kunhavigi_flutter`はFlutterアプリケーションのコードを配置する
+- `kunhavigi_client`はクライアントサイドのコードを配置する
+    - 基本的に自動生成されるため、参照する必要はない
 
 ### Design
 
@@ -24,50 +29,40 @@
 - できるだけ疎結合にすること
 - できるだけprivateにすること
 - できるだけシンプルなコードを書くこと
-- テストの可用性を考え、`static`メソッドやシングルトンは使用しないこと
-- `logger.dart`を参照し、適切にログを出力すること
+- ログ出力が必要だと判断した場合は`logger.dart`を参照し出力すること
 
 #### Type
 
 - `dynamic`型は使用しないこと
 - 複雑な型は`typedef`を使用すること
+- テストの可用性を考え、`static`メソッドやシングルトンは使用しないこと
 
 #### Widget
 
-- `Widget`を返すメソッドはクラス化すること
+- `Widget`を返すメソッドは使用せず、必ずクラスを用いること
 - `build`メソッドは見通しを良くすること（`Widget`を分割するなど）
 - Widget構造は保守性を考慮して、できるだけシンプルにすること
+- モダンな`Row`や`Column`の`spacing`プロパティを活用すること
 
 ### Code Comment
 
 - コメントは許容しない
-    - ただし、以下のような場合は許可する
-        - `TODO`や`FIXME`などのコメント
-        - 複雑な処理や意図が明確でない場合の説明
-        - 特定の実装方法を選んだ理由
+- ただし、以下のような場合は許可する
+    - `TODO`や`FIXME`などのコメント
+    - 複雑な処理や意図が明確でない場合の説明
+    - 特定の実装方法を選んだ理由
 
 ### Flutter/Dart Specific
 
 - `riverpod_generator + flutter_hooks`を採用中
     - Widget間で状態を共有する場合は、`riverpod`を使用する
     - Widget内で状態を管理する場合は、`hooks`を使用する
+- `case`句は使用しない。以下のようなモダンな書き方をすること。
 
-#### Widget
-
-- モダンな`Row`や`Column`の`spacing`プロパティを活用すること
-
-#### Switch
-
-`case`句は使用しない。以下のようなモダンな書き方をすること。
-
-```dart
-final result = switch (some) {
-    A => a,
-    B => b,
-    C => c,
-}
-```
-
-#### Warning
-
-一切許容しない
+    ```dart
+    final result = switch (some) {
+        A => a,
+        B => b,
+        C => c,
+    }
+    ```
