@@ -41,7 +41,9 @@ class _BrowseSettingsForm extends HookConsumerWidget {
     final formKey = GlobalKey<FormBuilderState>();
 
     void reset() {
-      formKey.currentState?.reset();
+      final defaultSettings = BrowseSettings.defaultSettings();
+      final defaultFormValues = defaultSettings.toFormValues();
+      formKey.currentState?.patchValue(defaultFormValues);
     }
 
     void submit() {
