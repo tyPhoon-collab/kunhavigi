@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
@@ -44,7 +45,7 @@ class KunhavigiPage extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  Expanded(child: _PathBreadcrumb()),
+                  Expanded(child: PathBreadcrumb()),
                   _ReloadButton(),
                   _SettingsButton(),
                 ],
@@ -55,25 +56,6 @@ class KunhavigiPage extends ConsumerWidget {
         body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
         floatingActionButton: const UploadButton(),
       ),
-    );
-  }
-}
-
-class _PathBreadcrumb extends ConsumerWidget {
-  const _PathBreadcrumb();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentPath = ref.watch(currentPathProvider);
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Text(
-      currentPath.isRoot ? 'Root Directory' : currentPath.value,
-      style: textTheme.bodyMedium?.copyWith(
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
-      overflow: TextOverflow.ellipsis,
     );
   }
 }
