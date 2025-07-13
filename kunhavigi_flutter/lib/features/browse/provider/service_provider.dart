@@ -7,7 +7,10 @@ part 'service_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Saver saver(Ref ref) {
-  return const FileSaverSelectPlaceSaver();
+  return CrossPlatformSaver(
+    webSaver: const FileSaverDirectlySaver(),
+    nativeSaver: const FileSaverSaveAsSaver(),
+  );
 }
 
 @Riverpod(keepAlive: true)

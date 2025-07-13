@@ -12,6 +12,7 @@
 - `kunhavigi_flutter`はFlutterアプリケーションのコードを配置する
 - `kunhavigi_client`はクライアントサイドのコードを配置する
     - 基本的に自動生成されるため、参照する必要はない
+    - 生成コマンドは`kunhavigi_server`ディレクトリで`serverpod generate`を使用する
 
 ### Design
 

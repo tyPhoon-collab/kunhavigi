@@ -19,33 +19,40 @@ class TransferEndpoint extends Endpoint {
     }
   }
 
-  // TODO: メモリ効率の改善
-  /// Create a zip file from a directory
-  Future<FileEntry> createZip(Session session, RelativePath path) async {
+  /// Get a download URL for a file or folder
+  /// Folders are zipped before download
+  Future<String> getDownloadUrl(
+    Session session,
+    RelativePath path,
+  ) async {
     final normalizedPath = validateAndNormalizePath(path);
-    final directory = exactDirectory(normalizedPath);
+    final entity = exactEntity(normalizedPath);
 
-    final zipFile =
-        File('${getTemporaryDirectory().path}/${const Uuid().v4()}.zip');
+    final downloadsDir = getDownloadsDirectory();
+    final outPath = '${downloadsDir.path}/${const Uuid().v4()}';
 
+    switch (entity) {
+      case final File file:
+        await file.copy(outPath);
+      case final Directory dir:
+        final zipFile = File(outPath);
+        await _writeZip(dir, zipFile);
+      default:
+        throw UnsupportedError('Unsupported entity type for download');
+    }
+
+    final uri = (session as MethodCallSession).uri;
+    final baseUrl = '${uri.scheme}://${uri.host}:8082';
+    return getDownloadUrlFromPath(baseUrl, outPath);
+  }
+
+  Future<void> _writeZip(Directory dir, File out) async {
     final archive = Archive();
-    await _addDirectoryToArchive(archive, directory, '');
+    await _addDirectoryToArchive(archive, dir, '');
 
     final zipData = ZipEncoder().encode(archive);
 
-    // Create the zip file
-    final randomAccessFile = await zipFile.open(mode: FileMode.write);
-    try {
-      await randomAccessFile.writeFrom(zipData);
-      await randomAccessFile.close();
-    } catch (e) {
-      await randomAccessFile.close();
-      if (zipFile.existsSync()) {
-        await zipFile.delete();
-      }
-      rethrow;
-    }
-    return buildEntry(zipFile) as FileEntry;
+    await out.writeAsBytes(zipData);
   }
 
   /// Recursively add directory contents to archive

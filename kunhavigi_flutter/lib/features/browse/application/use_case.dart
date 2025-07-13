@@ -47,50 +47,20 @@ final class DownloadUseCase extends ClientUseCase {
   const DownloadUseCase(super.ref);
 
   Future<void> download(Entry entry) async {
-    final FileEntry entry_;
-    var zipFileCreated = false;
-    var name = entry.name;
-
-    switch (entry) {
-      case final FileEntry file:
-        entry_ = file;
-      case final DirectoryEntry dir:
-        // Create a zip file for the directory
-        final zipFile = await _client.transfer.createZip(dir.path);
-        entry_ = zipFile;
-        zipFileCreated = true;
-        name = '$name.zip';
-      case final UnknownEntry unknown:
-        throw ArgumentError('Cannot download unknown entry: ${unknown.path}');
-    }
-
-    final stream =
-        _client.transfer.downloadFile(entry_.path).asBroadcastStream();
-
-    var current = 0;
-
-    final id = teller?.progress('Downloading $name', stream.map((event) {
-      return Progress(
-        total: entry_.size,
-        current: current += event.lengthInBytes,
-      );
-    }));
+    final url = await _client.transfer.getDownloadUrl(entry.path);
 
     try {
-      await ref.read(saverProvider).save(
-            stream,
-            name: name,
-            mimeType: entry_.mimeType,
+      await ref.read(saverProvider).saveFromUrl(
+            url,
+            name: entry.name,
+            mimeType: switch (entry) {
+              final FileEntry file => file.mimeType,
+              final DirectoryEntry _ => 'application/zip',
+              final UnknownEntry _ => 'application/octet-stream',
+            },
           );
-
-      // Cleanup zip file if it was created
-      if (zipFileCreated) {
-        await _client.browse.delete(entry_.path);
-      }
     } on Exception catch (e) {
-      logger.e('Failed to download ${entry_.name}: $e');
-    } finally {
-      teller?.dismiss(id!);
+      logger.e('Failed to download ${entry.name}: $e');
     }
   }
 }

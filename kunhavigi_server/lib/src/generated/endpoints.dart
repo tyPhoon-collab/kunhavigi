@@ -120,8 +120,8 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'transfer',
       endpoint: endpoints['transfer']!,
       methodConnectors: {
-        'createZip': _i1.MethodConnector(
-          name: 'createZip',
+        'getDownloadUrl': _i1.MethodConnector(
+          name: 'getDownloadUrl',
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
@@ -133,7 +133,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['transfer'] as _i3.TransferEndpoint).createZip(
+              (endpoints['transfer'] as _i3.TransferEndpoint).getDownloadUrl(
             session,
             params['path'],
           ),

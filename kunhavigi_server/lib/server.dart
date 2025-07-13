@@ -1,3 +1,4 @@
+import 'package:kunhavigi_server/src/features/route/static_route.dart';
 import 'package:kunhavigi_server/src/generated/endpoints.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
@@ -10,9 +11,9 @@ Future<void> run(List<String> args) async {
   // Initialize Serverpod and connect it with your generated code.
   final pod = Serverpod(args, Protocol(), Endpoints());
 
-  // Serve all files in the /static directory.
+  // Serve all files in the /static directory with CORS headers.
   pod.webServer.addRoute(
-    RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
+    StaticRoute(serverDirectory: 'static'),
     '/*',
   );
 

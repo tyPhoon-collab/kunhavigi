@@ -80,11 +80,10 @@ class EndpointTransfer extends _i1.EndpointRef {
         {},
       );
 
-  /// Create a zip file from a directory
-  _i2.Future<_i4.FileEntry> createZip(_i4.RelativePath path) =>
-      caller.callServerEndpoint<_i4.FileEntry>(
+  _i2.Future<String> getDownloadUrl(_i4.RelativePath path) =>
+      caller.callServerEndpoint<String>(
         'transfer',
-        'createZip',
+        'getDownloadUrl',
         {'path': path},
       );
 
