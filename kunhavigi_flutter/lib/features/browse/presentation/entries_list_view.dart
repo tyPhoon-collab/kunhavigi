@@ -21,9 +21,13 @@ class EntriesListView extends ConsumerWidget {
     final path = ref.watch(currentPathProvider);
     final entries = ref.watch(filteredEntriesProvider(path));
 
-    return entries.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => Padding(
+    if (entries.isLoading && !entries.hasValue) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (entries.hasError) {
+      final error = entries.error;
+      return Padding(
         padding: const EdgeInsets.all(16),
         child: ErrorMessage(
           error: switch (error) {
@@ -32,13 +36,16 @@ class EntriesListView extends ConsumerWidget {
               'Path is outside the allowed directory: ${e.path}',
             _ => 'An unexpected error occurred: $error',
           },
-          stackTrace: stackTrace,
+          stackTrace: entries.stackTrace,
         ),
-      ),
-      data: (data) => data.isRootDirectory
-          ? _RootDirectoryListView(data: data, padding: padding, path: path)
-          : _SubDirectoryListView(data: data, padding: padding, path: path),
-    );
+      );
+    }
+
+    final data = entries.requireValue;
+
+    return data.isRootDirectory
+        ? _RootDirectoryListView(data: data, padding: padding, path: path)
+        : _SubDirectoryListView(data: data, padding: padding, path: path);
   }
 }
 
