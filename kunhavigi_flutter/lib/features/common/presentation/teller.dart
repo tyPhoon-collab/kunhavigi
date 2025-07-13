@@ -9,7 +9,17 @@ class Teller {
 
   final BuildContext _context;
 
-  void error(Exception error) {
+  void error(String message) {
+    toastification.show(
+      context: _context,
+      title: Text('Error: $message'),
+      type: ToastificationType.error,
+      autoCloseDuration: const Duration(seconds: 7),
+      alignment: _alignment,
+    );
+  }
+
+  void errorOf(Exception error) {
     logger.e('Error was displayed', error: error);
 
     toastification.show(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
@@ -29,8 +30,12 @@ class KunhavigiPage extends ConsumerWidget {
               .read(dropAndUploadUseCaseProvider)
               .upload(currentPath, files);
           teller?.success('Files uploaded successfully');
+        } on FileAlreadyExistsException {
+          teller?.error(
+            'Some files already exist in the current directory. Please rename them before uploading.',
+          );
         } on Exception catch (e) {
-          teller?.error(e);
+          teller?.errorOf(e);
         }
       },
       child: Scaffold(

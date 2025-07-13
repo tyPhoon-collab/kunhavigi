@@ -5,6 +5,7 @@ import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
 import 'package:kunhavigi_server/src/features/transfer/archive.dart';
 import 'package:kunhavigi_server/src/features/transfer/download.dart';
+import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -57,18 +58,31 @@ class TransferEndpoint extends Endpoint {
     final normalizedPath = validateAndNormalizePath(path);
     final file = File(normalizedPath.value);
 
+    // Check if file already exists and handle appropriately
+    if (file.existsSync()) {
+      throw FileAlreadyExistsException(path: normalizedPath.value);
+    }
+
     // Ensure the directory exists
     await file.parent.create(recursive: true);
 
-    final randomAccessFile = await file.open(mode: FileMode.write);
+    RandomAccessFile? randomAccessFile;
 
     try {
+      randomAccessFile = await file.open(mode: FileMode.write);
+
       await for (final byteData in data) {
-        await randomAccessFile.writeFrom(byteData.buffer.asUint8List());
+        final bytes = byteData.buffer.asUint8List(
+          byteData.offsetInBytes,
+          byteData.lengthInBytes,
+        );
+
+        await randomAccessFile.writeFrom(bytes);
       }
       await randomAccessFile.close();
-    } catch (e) {
-      await randomAccessFile.close();
+    } on Exception {
+      await randomAccessFile?.close();
+      // Clean up file on any error
       if (file.existsSync()) {
         await file.delete();
       }

@@ -97,7 +97,7 @@ class _DownloadEntryMenuItem implements _EntryMenuItem {
         await ref.read(downloadUseCaseProvider).download(entry);
         teller?.success('Downloaded successfully');
       } on Exception catch (e) {
-        teller?.error(e);
+        teller?.errorOf(e);
       }
     }
 
@@ -127,7 +127,7 @@ class _RenameEntryMenuItem implements _EntryMenuItem {
           await ref.read(renameUseCaseProvider).rename(entry.path, result);
           teller?.success('Renamed successfully');
         } on Exception catch (e) {
-          teller?.error(e);
+          teller?.errorOf(e);
         }
       }
     }
@@ -159,7 +159,7 @@ class _DeleteEntryMenuItem implements _EntryMenuItem {
           await ref.read(deleteUseCaseProvider).delete(entry.path);
           teller?.success('Deleted successfully');
         } on Exception catch (e) {
-          teller?.error(e);
+          teller?.errorOf(e);
         }
       }
     }

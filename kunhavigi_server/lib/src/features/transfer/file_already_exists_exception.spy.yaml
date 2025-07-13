@@ -1,0 +1,3 @@
+exception: FileAlreadyExistsException
+fields:
+  path: String
