@@ -1,3 +1,5 @@
+import 'package:kunhavigi_server/src/features/future_call/cleanup_download.dart';
+import 'package:kunhavigi_server/src/features/future_call/future_call_id.dart';
 import 'package:kunhavigi_server/src/features/route/static_route.dart';
 import 'package:kunhavigi_server/src/generated/endpoints.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
@@ -19,4 +21,9 @@ Future<void> run(List<String> args) async {
 
   // Start the server.
   await pod.start();
+
+  pod.registerFutureCall(
+    CleanupDownload(),
+    FutureCallName.cleanupDownload.name,
+  );
 }

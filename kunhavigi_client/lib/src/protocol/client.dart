@@ -80,6 +80,8 @@ class EndpointTransfer extends _i1.EndpointRef {
         {},
       );
 
+  /// Get a download URL for a file or folder
+  /// Folders are zipped before download
   _i2.Future<String> getDownloadUrl(_i4.RelativePath path) =>
       caller.callServerEndpoint<String>(
         'transfer',

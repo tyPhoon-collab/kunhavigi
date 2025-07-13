@@ -62,19 +62,3 @@ Directory exactDirectory(ValidPath path) {
 
   return dir as Directory;
 }
-
-Directory getTemporaryDirectory() {
-  final tempDir = Directory('$dataDirectory/.kunhavigi/tmp')
-    ..createSync(recursive: true);
-  return tempDir;
-}
-
-Directory getDownloadsDirectory() {
-  final downloadsDir = Directory('web/static/downloads')
-    ..createSync(recursive: true);
-  return downloadsDir;
-}
-
-String getDownloadUrlFromPath(String baseUrl, String path) {
-  return '$baseUrl/downloads/${p.basename(path)}';
-}

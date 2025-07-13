@@ -1,0 +1,3 @@
+class: DownloadedFile
+fields:
+  path: String

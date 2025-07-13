@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:archive/archive.dart';
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
+import 'package:kunhavigi_server/src/features/transfer/archive.dart';
+import 'package:kunhavigi_server/src/features/transfer/download.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -36,45 +37,15 @@ class TransferEndpoint extends Endpoint {
         await file.copy(outPath);
       case final Directory dir:
         final zipFile = File(outPath);
-        await _writeZip(dir, zipFile);
+        await writeZip(dir, zipFile);
       default:
         throw UnsupportedError('Unsupported entity type for download');
     }
 
-    final uri = (session as MethodCallSession).uri;
-    final baseUrl = '${uri.scheme}://${uri.host}:8082';
-    return getDownloadUrlFromPath(baseUrl, outPath);
-  }
+    // Schedule cleanup of the downloaded file after 1 hour
+    await registerDownloadCleanup(session, outPath);
 
-  Future<void> _writeZip(Directory dir, File out) async {
-    final archive = Archive();
-    await _addDirectoryToArchive(archive, dir, '');
-
-    final zipData = ZipEncoder().encode(archive);
-
-    await out.writeAsBytes(zipData);
-  }
-
-  /// Recursively add directory contents to archive
-  Future<void> _addDirectoryToArchive(
-    Archive archive,
-    Directory directory,
-    String basePath,
-  ) async {
-    await for (final entity in directory.list()) {
-      final relativePath = entity.path.substring(directory.path.length + 1);
-      final archivePath =
-          basePath.isEmpty ? relativePath : '$basePath/$relativePath';
-
-      if (entity is File) {
-        final fileBytes = await entity.readAsBytes();
-        final archiveFile =
-            ArchiveFile(archivePath, fileBytes.length, fileBytes);
-        archive.addFile(archiveFile);
-      } else if (entity is Directory) {
-        await _addDirectoryToArchive(archive, entity, archivePath);
-      }
-    }
+    return getDownloadUrlFromPath(session as MethodCallSession, outPath);
   }
 
   /// Upload a file to the server
