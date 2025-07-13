@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 
@@ -6,35 +8,32 @@ abstract interface class EntryPreviewGenerator {
 }
 
 class TextPreviewGenerator implements EntryPreviewGenerator {
-  TextPreviewGenerator({this.maxLength = 3000});
-  final int maxLength;
+  TextPreviewGenerator({this.maxBytes = 10 * 1024}); // 10KB limit
+  final int maxBytes;
 
   @override
   Future<EntryPreview> generate(TextMimeFile mimeFile) async {
-    final stream = mimeFile.file.openRead();
-    final buffer = StringBuffer();
-    var isComplete = true;
+    final file = mimeFile.file;
+    final fileSize = await file.length();
 
-    await for (final chunk in stream) {
-      final chunkString = String.fromCharCodes(chunk);
+    final bytesToRead = fileSize > maxBytes ? maxBytes : fileSize;
 
-      if (buffer.length + chunkString.length <= maxLength) {
-        buffer.write(chunkString);
-      } else {
-        final remainingSpace = maxLength - buffer.length;
-        if (remainingSpace > 0) {
-          buffer.write(chunkString.substring(0, remainingSpace));
-        }
-        isComplete = false;
-        break;
-      }
-    }
+    final bytes = await file.openRead(0, bytesToRead).toList();
+    final flatBytes = bytes.expand((chunk) => chunk).toList();
 
-    final text = isComplete
-        ? buffer.toString()
-        : '$buffer\n\n... (truncated, file is larger than $maxLength characters)';
+    final text = const Utf8Decoder(allowMalformed: true).convert(flatBytes);
 
-    return EntryPreview.text(text: text);
+    final result = fileSize <= maxBytes
+        ? text
+        : '$text\n\n... (truncated, file is larger than ${_formatBytes(maxBytes)})';
+
+    return EntryPreview.text(text: result);
+  }
+
+  String _formatBytes(int bytes) {
+    if (bytes < 1024) return '${bytes}B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)}KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)}MB';
   }
 }
 
