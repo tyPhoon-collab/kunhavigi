@@ -36,21 +36,27 @@ class EntriesListView extends ConsumerWidget {
         ),
       ),
       data: (data) => data.isRootDirectory
-          ? _RootDirectoryListView(data: data, padding: padding)
-          : _SubDirectoryListView(data: data, padding: padding),
+          ? _RootDirectoryListView(data: data, padding: padding, path: path)
+          : _SubDirectoryListView(data: data, padding: padding, path: path),
     );
   }
 }
 
 class _RootDirectoryListView extends StatelessWidget {
-  const _RootDirectoryListView({required this.data, this.padding});
+  const _RootDirectoryListView({
+    required this.data,
+    required this.path,
+    this.padding,
+  });
 
   final EntriesResponse data;
   final EdgeInsets? padding;
+  final RelativePath path;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      key: PageStorageKey('directory_list_${path.value}'),
       padding: padding,
       itemCount: data.totalCount,
       itemBuilder: (context, index) =>
@@ -60,14 +66,20 @@ class _RootDirectoryListView extends StatelessWidget {
 }
 
 class _SubDirectoryListView extends ConsumerWidget {
-  const _SubDirectoryListView({required this.data, this.padding});
+  const _SubDirectoryListView({
+    required this.data,
+    required this.path,
+    this.padding,
+  });
 
   final EntriesResponse data;
   final EdgeInsets? padding;
+  final RelativePath path;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
+      key: PageStorageKey('directory_list_${path.value}'),
       padding: padding,
       itemCount: data.totalCount + 2,
       itemBuilder: (context, index) {
