@@ -44,14 +44,8 @@ Dockerを使用したローカルマシン（Ubuntu Server）などのサーバ�
 
 ```bash
 git clone <Repo URL>
-
-# `kunhavigi_server/config/password.yaml`を配置
-# `.env`ファイルを作成し、以下の内容を記述
-
-#   ```env
-#   POSTGRES_PASSWORD=your_password_here
-#   ```
-
+# 1. `kunhavigi_server/config/password.yaml`を配置
+# 2. `.env.example`をコピーし、`.env`ファイル作成、適切に環境変数を設定
 cd kunhavigi
 docker compose up -d
 ```

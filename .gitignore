@@ -2,6 +2,8 @@
 .env
 .DS_Store
 
+tailscale
+
 # FVM Version Cache
 .fvm/
 

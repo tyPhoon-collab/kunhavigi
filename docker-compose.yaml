@@ -1,39 +1,63 @@
 services:
-  # Serverpod アプリケーション
   server:
     build: .
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-      - "8082:8082"
-    depends_on: # DBとRedisが起動してからアプリを起動するようにする
+    depends_on:
       - postgres
       - redis
+      - tailscale
     environment:
       - DATA_DIRECTORY=/app/data
     volumes:
       - /mnt/hdd-data:/app/data  # ハードディスクのデータなどを指定すると良い
+      # - ./data:/app/data
+    networks:
+      kunhavigi_net:
+        ipv4_address: 172.24.0.10
 
-  # Development services
   postgres:
     image: pgvector/pgvector:pg16
-    ports:
-      - "8090:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: kunhavigi
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - kunhavigi_data:/var/lib/postgresql/data
+    networks:
+      - kunhavigi_net
 
   redis:
     image: redis:6.2.6
-    ports:
-      - "8091:6379"
     command: redis-server
     environment:
       - REDIS_REPLICATION_MODE=master
+    networks:
+      - kunhavigi_net
+
+  tailscale:
+    image: tailscale/tailscale:latest
+    hostname: kunhavigi
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_ROUTES=172.24.0.0/24
+      # - TS_EXTRA_ARGS=--advertise-tags=tag:container
+      # - TS_USERSPACE=false
+    volumes:
+      - ${PWD}/tailscale/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+    networks:
+      - kunhavigi_net
+
+networks:
+  kunhavigi_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/24
 
 volumes:
   kunhavigi_data:
-  kunhavigi_test_data:
