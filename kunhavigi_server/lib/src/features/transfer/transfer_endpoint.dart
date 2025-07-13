@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
 import 'package:kunhavigi_server/src/features/transfer/archive.dart';
 import 'package:kunhavigi_server/src/features/transfer/download.dart';
@@ -49,12 +48,12 @@ class TransferEndpoint extends Endpoint {
     return getDownloadUrlFromPath(session as MethodCallSession, outPath);
   }
 
-  /// Upload a file to the server
-  Future<Entry> uploadFile(
+  /// Upload a file to the server with progress updates
+  Stream<UploadProgress> uploadFile(
     Session session, {
     required RelativePath path,
     required Stream<ByteData> data,
-  }) async {
+  }) async* {
     final normalizedPath = validateAndNormalizePath(path);
     final file = File(normalizedPath.value);
 
@@ -67,6 +66,7 @@ class TransferEndpoint extends Endpoint {
     await file.parent.create(recursive: true);
 
     RandomAccessFile? randomAccessFile;
+    var totalBytes = 0;
 
     try {
       randomAccessFile = await file.open(mode: FileMode.write);
@@ -78,8 +78,21 @@ class TransferEndpoint extends Endpoint {
         );
 
         await randomAccessFile.writeFrom(bytes);
+        totalBytes += bytes.length;
+
+        // Emit progress update
+        yield UploadProgress(
+          current: totalBytes,
+          isComplete: false,
+        );
       }
       await randomAccessFile.close();
+
+      // Emit final result
+      yield UploadProgress(
+        current: totalBytes,
+        isComplete: true,
+      );
     } on Exception {
       await randomAccessFile?.close();
       // Clean up file on any error
@@ -88,7 +101,5 @@ class TransferEndpoint extends Endpoint {
       }
       rethrow;
     }
-
-    return buildEntry(file);
   }
 }

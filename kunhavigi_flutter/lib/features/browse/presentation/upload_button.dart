@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/service_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/logger.dart';
-import 'package:kunhavigi_flutter/main.dart';
 
 class UploadButton extends ConsumerWidget {
   const UploadButton({super.key});
@@ -29,18 +27,8 @@ class UploadButton extends ConsumerWidget {
       logger.w('No files selected');
       return;
     }
-    try {
-      await ref
-          .read(pickAndUploadUseCaseProvider)
-          .upload(ref.read(currentPathProvider), files);
-
-      teller?.success('Files uploaded successfully');
-    } on FileAlreadyExistsException {
-      teller?.error(
-        'Some files already exist in the current directory. Please rename them before uploading.',
-      );
-    } on Exception catch (e) {
-      teller?.errorOf(e);
-    }
+    await ref
+        .read(pickAndUploadUseCaseProvider)
+        .upload(ref.read(currentPathProvider), files);
   }
 }

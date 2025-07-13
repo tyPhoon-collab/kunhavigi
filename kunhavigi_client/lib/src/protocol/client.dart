@@ -16,7 +16,9 @@ import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.d
 import 'package:kunhavigi_shared/src/entry.dart' as _i4;
 import 'package:kunhavigi_shared/src/entry_preview.dart' as _i5;
 import 'dart:typed_data' as _i6;
-import 'protocol.dart' as _i7;
+import 'package:kunhavigi_client/src/protocol/features/transfer/upload_progress.dart'
+    as _i7;
+import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -89,12 +91,13 @@ class EndpointTransfer extends _i1.EndpointRef {
         {'path': path},
       );
 
-  /// Upload a file to the server
-  _i2.Future<_i4.Entry> uploadFile({
+  /// Upload a file to the server with progress updates
+  _i2.Stream<_i7.UploadProgress> uploadFile({
     required _i4.RelativePath path,
     required _i2.Stream<_i6.ByteData> data,
   }) =>
-      caller.callStreamingServerEndpoint<_i2.Future<_i4.Entry>, _i4.Entry>(
+      caller.callStreamingServerEndpoint<_i2.Stream<_i7.UploadProgress>,
+          _i7.UploadProgress>(
         'transfer',
         'uploadFile',
         {'path': path},
@@ -118,7 +121,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i8.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

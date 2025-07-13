@@ -19,7 +19,7 @@ class Teller {
     );
   }
 
-  void errorOf(Exception error) {
+  void errorOf(Object error) {
     logger.e('Error was displayed', error: error);
 
     toastification.show(
@@ -41,19 +41,27 @@ class Teller {
     );
   }
 
-  String progress(
+  void progress(
     String message,
-    Stream<Progress> progress,
-  ) {
+    Stream<Progress> progress, {
+    VoidCallback? onSuccess,
+    void Function(Object error)? onError,
+  }) {
+    late String itemId;
     final item = toastification.show(
       context: _context,
       title: Text(message),
-      description: _Tracker(progress: progress),
+      description: _Tracker(
+        progress: progress,
+        onDismiss: () => dismiss(itemId),
+        onSuccess: onSuccess,
+        onError: onError,
+      ),
       type: ToastificationType.info,
       alignment: _alignment,
     );
 
-    return item.id;
+    itemId = item.id;
   }
 
   void dismiss(String id) {
@@ -65,23 +73,32 @@ class Progress {
   const Progress({
     required this.current,
     required this.total,
+    required this.isComplete,
   });
 
   final int current;
   final int total;
+  final bool isComplete;
 
   double get value => total > 0 ? current / total : 0.0;
 
   @override
-  String toString() => 'Progress(current: $current, total: $total)';
+  String toString() =>
+      'Progress(current: $current, total: $total, isComplete: $isComplete)';
 }
 
 class _Tracker extends StatelessWidget {
   const _Tracker({
     required this.progress,
+    required this.onDismiss,
+    this.onSuccess,
+    this.onError,
   });
 
   final Stream<Progress> progress;
+  final VoidCallback onDismiss;
+  final VoidCallback? onSuccess;
+  final void Function(Object error)? onError;
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +107,24 @@ class _Tracker extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final data = snapshot.data!;
+
+          if (data.isComplete) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              onSuccess?.call();
+              onDismiss();
+            });
+          }
+
           return LinearProgressIndicator(
             value: data.value,
             semanticsLabel: 'Progress: ${data.current} of ${data.total}',
             semanticsValue: '${data.current} of ${data.total}',
           );
         } else if (snapshot.hasError) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            onError?.call(snapshot.error!);
+            onDismiss();
+          });
           return Text('Error: ${snapshot.error}');
         } else {
           return const Text('Loading...');

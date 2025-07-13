@@ -1,0 +1,4 @@
+class: UploadProgress
+fields:
+  current: int
+  isComplete: bool

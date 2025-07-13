@@ -73,20 +73,28 @@ final class UploadUseCase extends ClientUseCase {
     Stream<ByteData> data,
     int size,
   ) async {
-    final stream = data.asBroadcastStream();
-    var current = 0;
+    final progressStream =
+        _client.transfer.uploadFile(path: path, data: data).asBroadcastStream();
 
-    final id = teller?.progress('Uploading ${path.name}', stream.map((event) {
-      return Progress(
-        total: size,
-        current: current += event.lengthInBytes,
-      );
-    }));
-    try {
-      final _ = await _client.transfer.uploadFile(path: path, data: stream);
-    } finally {
-      teller?.dismiss(id!);
-    }
+    teller?.progress(
+      'Uploading ${path.name}',
+      progressStream.map((progress) {
+        return Progress(
+          total: size,
+          current: progress.current,
+          isComplete: progress.isComplete,
+        );
+      }),
+      onError: (error) => switch (error) {
+        final FileAlreadyExistsException _ => teller?.error(
+            'Some files already exist in the current directory. Please rename them before uploading.'),
+        final genericError => teller?.errorOf(genericError),
+      },
+      onSuccess: () {
+        teller?.success('File uploaded successfully');
+        ref.invalidate(entriesProvider(path.parent));
+      },
+    );
   }
 }
 
@@ -99,17 +107,22 @@ final class DropAndUploadUseCase {
     final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
+    final uploadTasks = <Future<void>>[];
+
     for (final item in items) {
       final path = dir.joined(item.name);
       if (!settings.shouldUpload(path)) continue;
-      await uploader.upload(
-        path,
-        item.file.openRead().map(ByteData.sublistView),
-        await item.file.length(),
+
+      uploadTasks.add(
+        uploader.upload(
+          path,
+          item.file.openRead().map(ByteData.sublistView),
+          await item.file.length(),
+        ),
       );
     }
 
-    ref.invalidate(entriesProvider);
+    await Future.wait(uploadTasks);
   }
 }
 
@@ -122,17 +135,22 @@ final class PickAndUploadUseCase {
     final settings = await ref.read(currentBrowseSettingsProvider.future);
     final uploader = ref.read(uploadUseCaseProvider);
 
+    final uploadTasks = <Future<void>>[];
+
     for (final file in files) {
       final path = dir.joined(file.name);
       if (!settings.shouldUpload(path)) continue;
-      await uploader.upload(
-        path,
-        file.readStream!
-            .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
-        file.size,
+
+      uploadTasks.add(
+        uploader.upload(
+          path,
+          file.readStream!
+              .map((bytes) => ByteData.sublistView(Uint8List.fromList(bytes))),
+          file.size,
+        ),
       );
     }
 
-    ref.invalidate(entriesProvider);
+    await Future.wait(uploadTasks);
   }
 }

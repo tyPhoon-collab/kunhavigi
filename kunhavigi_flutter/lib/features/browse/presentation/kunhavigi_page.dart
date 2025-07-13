@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
@@ -9,7 +8,6 @@ import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
 import 'package:kunhavigi_flutter/logger.dart';
-import 'package:kunhavigi_flutter/main.dart';
 
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});
@@ -25,18 +23,7 @@ class KunhavigiPage extends ConsumerWidget {
           return;
         }
         final currentPath = ref.read(currentPathProvider);
-        try {
-          await ref
-              .read(dropAndUploadUseCaseProvider)
-              .upload(currentPath, files);
-          teller?.success('Files uploaded successfully');
-        } on FileAlreadyExistsException {
-          teller?.error(
-            'Some files already exist in the current directory. Please rename them before uploading.',
-          );
-        } on Exception catch (e) {
-          teller?.errorOf(e);
-        }
+        await ref.read(dropAndUploadUseCaseProvider).upload(currentPath, files);
       },
       child: Scaffold(
         appBar: AppBar(

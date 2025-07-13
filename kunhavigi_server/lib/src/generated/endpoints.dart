@@ -174,7 +174,7 @@ class Endpoints extends _i1.EndpointDispatch {
               nullable: false,
             )
           },
-          returnType: _i1.MethodStreamReturnType.futureType,
+          returnType: _i1.MethodStreamReturnType.streamType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,

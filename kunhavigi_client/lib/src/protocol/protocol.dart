@@ -17,7 +17,8 @@ import 'features/browse/not_file_exception.dart' as _i5;
 import 'features/browse/path_outside_exception.dart' as _i6;
 import 'features/future_call/downloaded_file.dart' as _i7;
 import 'features/transfer/file_already_exists_exception.dart' as _i8;
-import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i9;
+import 'features/transfer/upload_progress.dart' as _i9;
+import 'package:kunhavigi_shared/kunhavigi_shared.dart' as _i10;
 export 'features/browse/entries_response.dart';
 export 'features/browse/not_directory_exception.dart';
 export 'features/browse/not_exists_exception.dart';
@@ -25,6 +26,7 @@ export 'features/browse/not_file_exception.dart';
 export 'features/browse/path_outside_exception.dart';
 export 'features/future_call/downloaded_file.dart';
 export 'features/transfer/file_already_exists_exception.dart';
+export 'features/transfer/upload_progress.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -61,6 +63,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i8.FileAlreadyExistsException) {
       return _i8.FileAlreadyExistsException.fromJson(data) as T;
     }
+    if (t == _i9.UploadProgress) {
+      return _i9.UploadProgress.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i2.EntriesResponse?>()) {
       return (data != null ? _i2.EntriesResponse.fromJson(data) : null) as T;
     }
@@ -86,26 +91,30 @@ class Protocol extends _i1.SerializationManager {
           ? _i8.FileAlreadyExistsException.fromJson(data)
           : null) as T;
     }
-    if (t == List<_i9.Entry>) {
-      return (data as List).map((e) => deserialize<_i9.Entry>(e)).toList() as T;
+    if (t == _i1.getType<_i9.UploadProgress?>()) {
+      return (data != null ? _i9.UploadProgress.fromJson(data) : null) as T;
     }
-    if (t == _i9.Entry) {
-      return _i9.Entry.fromJson(data) as T;
+    if (t == List<_i10.Entry>) {
+      return (data as List).map((e) => deserialize<_i10.Entry>(e)).toList()
+          as T;
     }
-    if (t == _i9.FileEntry) {
-      return _i9.FileEntry.fromJson(data) as T;
+    if (t == _i10.Entry) {
+      return _i10.Entry.fromJson(data) as T;
     }
-    if (t == _i9.EntryPreview) {
-      return _i9.EntryPreview.fromJson(data) as T;
+    if (t == _i10.FileEntry) {
+      return _i10.FileEntry.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i9.Entry?>()) {
-      return (data != null ? _i9.Entry.fromJson(data) : null) as T;
+    if (t == _i10.EntryPreview) {
+      return _i10.EntryPreview.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i9.FileEntry?>()) {
-      return (data != null ? _i9.FileEntry.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.Entry?>()) {
+      return (data != null ? _i10.Entry.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.EntryPreview?>()) {
-      return (data != null ? _i9.EntryPreview.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i10.FileEntry?>()) {
+      return (data != null ? _i10.FileEntry.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.EntryPreview?>()) {
+      return (data != null ? _i10.EntryPreview.fromJson(data) : null) as T;
     }
     return super.deserialize<T>(data, t);
   }
@@ -114,13 +123,13 @@ class Protocol extends _i1.SerializationManager {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i9.Entry) {
+    if (data is _i10.Entry) {
       return 'Entry';
     }
-    if (data is _i9.FileEntry) {
+    if (data is _i10.FileEntry) {
       return 'FileEntry';
     }
-    if (data is _i9.EntryPreview) {
+    if (data is _i10.EntryPreview) {
       return 'EntryPreview';
     }
     if (data is _i2.EntriesResponse) {
@@ -144,6 +153,9 @@ class Protocol extends _i1.SerializationManager {
     if (data is _i8.FileAlreadyExistsException) {
       return 'FileAlreadyExistsException';
     }
+    if (data is _i9.UploadProgress) {
+      return 'UploadProgress';
+    }
     return null;
   }
 
@@ -154,13 +166,13 @@ class Protocol extends _i1.SerializationManager {
       return super.deserializeByClassName(data);
     }
     if (dataClassName == 'Entry') {
-      return deserialize<_i9.Entry>(data['data']);
+      return deserialize<_i10.Entry>(data['data']);
     }
     if (dataClassName == 'FileEntry') {
-      return deserialize<_i9.FileEntry>(data['data']);
+      return deserialize<_i10.FileEntry>(data['data']);
     }
     if (dataClassName == 'EntryPreview') {
-      return deserialize<_i9.EntryPreview>(data['data']);
+      return deserialize<_i10.EntryPreview>(data['data']);
     }
     if (dataClassName == 'EntriesResponse') {
       return deserialize<_i2.EntriesResponse>(data['data']);
@@ -182,6 +194,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName == 'FileAlreadyExistsException') {
       return deserialize<_i8.FileAlreadyExistsException>(data['data']);
+    }
+    if (dataClassName == 'UploadProgress') {
+      return deserialize<_i9.UploadProgress>(data['data']);
     }
     return super.deserializeByClassName(data);
   }
