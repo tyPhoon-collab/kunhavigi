@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/domain/browse_settings.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/bottom_sheet_base.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/messages.dart';
+import 'package:kunhavigi_flutter/features/core/presentation/bottom_sheet_base.dart';
+import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
 
 class BrowseSettingsModal extends ConsumerWidget {
   const BrowseSettingsModal({super.key});

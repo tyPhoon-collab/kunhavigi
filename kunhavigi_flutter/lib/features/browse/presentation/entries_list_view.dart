@@ -4,7 +4,7 @@ import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entry_menu_button.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/preview_modal.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/features/common/presentation/messages.dart';
+import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
 
 typedef EntryCallback = void Function(Entry entry);
 
