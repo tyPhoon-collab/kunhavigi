@@ -2,7 +2,7 @@
 
 シンプルなファイル共有アプリ
 
-Kunhavigiはエスペラント語で「共有」を意味する。
+Kunhavigiはエスペラント語で「共有する」を意味する。
 
 ## モチベーション
 
@@ -16,12 +16,13 @@ Kunhavigiはエスペラント語で「共有」を意味する。
 ## Features
 
 - 基本的なファイルの操作
+- tailscaleのサポート
 
 ### Coming Soon
 
 - 他プラットフォーム対応
-- ユーザー認証
-- メモのリアルタイム編集
+- 自動ファイル配置
+- ファイル検索
 - コマンド操作（ショートカット）
 
 ## デプロイ
@@ -36,7 +37,7 @@ Kunhavigiはエスペラント語で「共有」を意味する。
 flutter build web -o ../kunhavigi_server/web/static
 ```
 
-GitHub ActionsによるCI/CDパイプラインが設定されており、main・test_ciブランチへのプッシュ時に自動的にビルドされ、成果物がコミットされます。
+GitHub ActionsによるCI/CDパイプラインが設定されており、mainブランチへのプッシュ時に自動的にビルドされ、成果物がコミットされる
 
 ### ローカルサーバー
 
@@ -44,8 +45,15 @@ Dockerを使用したローカルマシン（Ubuntu Server）などのサーバ�
 
 ```bash
 git clone <Repo URL>
+cd kunhavigi
 # 1. `kunhavigi_server/config/password.yaml`を配置
 # 2. `.env.example`をコピーし、`.env`ファイル作成、適切に環境変数を設定
-cd kunhavigi
+docker compose up -d
+```
+
+`git pull`などして更新した場合は、以下のコマンドで再ビルド
+
+```bash
+docker compose build --no-cache
 docker compose up -d
 ```
