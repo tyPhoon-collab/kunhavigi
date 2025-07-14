@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/teller.dart';
 import 'package:kunhavigi_flutter/kunhavigi_page.dart';
+import 'package:kunhavigi_flutter/theme.dart';
 
 Teller? teller;
 
@@ -16,6 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kunhavigi',
+      theme: buildTheme(Brightness.light),
+      darkTheme: buildTheme(Brightness.dark),
       home: Builder(builder: (context) {
         teller = Teller(context);
 
