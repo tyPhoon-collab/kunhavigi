@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:serverpod/serverpod.dart';
 
 class StaticRoute extends RouteStaticDirectory {
-  StaticRoute({required super.serverDirectory}) : super(basePath: '/');
+  StaticRoute({required super.serverDirectory})
+      : super(basePath: '/', serveAsRootPath: '/index.html');
 
   @override
   void setHeaders(HttpHeaders headers) {
