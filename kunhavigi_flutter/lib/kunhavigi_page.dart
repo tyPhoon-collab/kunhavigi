@@ -33,22 +33,41 @@ class KunhavigiPage extends ConsumerWidget {
           elevation: 0,
           bottom: const PreferredSize(
             preferredSize: Size.fromHeight(48),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(child: PathBreadcrumb()),
-                  SortIconButton(),
-                  SortOrderIconButton(),
-                  ReloadIconButton(),
-                  SettingsIconButton(),
-                ],
-              ),
-            ),
+            child: _AppBarBottom(),
           ),
         ),
         body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
         floatingActionButton: const UploadButton(),
+      ),
+    );
+  }
+}
+
+class _AppBarBottom extends StatelessWidget {
+  const _AppBarBottom();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final foregroundColor = colorScheme.onSurface.withValues(alpha: 0.8);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: IconTheme.merge(
+        data: IconThemeData(color: foregroundColor),
+        child: DefaultTextStyle.merge(
+          style: TextStyle(color: foregroundColor),
+          child: const Row(
+            children: [
+              Expanded(child: PathBreadcrumb()),
+              SortIconButton(),
+              SortOrderIconButton(),
+              ReloadIconButton(),
+              SettingsIconButton(),
+            ],
+          ),
+        ),
       ),
     );
   }

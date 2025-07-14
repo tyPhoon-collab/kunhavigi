@@ -10,22 +10,15 @@ class SortIconButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sortSettings = ref.watch(currentSortSettingsProvider);
-    final colorScheme = Theme.of(context).colorScheme;
 
     return MenuAnchor(
       menuChildren: [
         for (final type in SortType.values)
-          _SortMenuItemButton(
-            type: type,
-            sortSettings: sortSettings,
-          ),
+          _SortMenuItemButton(type: type, sortSettings: sortSettings),
       ],
       builder: (context, controller, child) {
         return IconButton(
-          icon: Icon(
-            Icons.sort,
-            color: colorScheme.onSurface.withValues(alpha: 0.8),
-          ),
+          icon: const Icon(Icons.sort),
           onPressed: () {
             if (controller.isOpen) {
               controller.close();
@@ -90,15 +83,11 @@ class SortOrderIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
     final sortSettings = ref.watch(currentSortSettingsProvider);
     final isAscending = sortSettings.order == SortOrder.ascending;
 
     return IconButton(
-      icon: Icon(
-        Icons.swap_vert,
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
+      icon: const Icon(Icons.swap_vert),
       onPressed: () {
         ref.read(currentSortSettingsProvider.notifier).toggleOrder();
       },
@@ -112,15 +101,10 @@ class ReloadIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     final currentPath = ref.watch(currentPathProvider);
 
     return IconButton(
-      icon: Icon(
-        Icons.refresh,
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
+      icon: const Icon(Icons.refresh),
       onPressed: () => ref.invalidate(entriesProvider(currentPath)),
       tooltip: 'Reload',
     );
@@ -132,13 +116,8 @@ class SettingsIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return IconButton(
-      icon: Icon(
-        Icons.settings,
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
+      icon: const Icon(Icons.settings),
       onPressed: () {
         showModalBottomSheet<void>(
           context: context,

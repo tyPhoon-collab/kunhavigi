@@ -9,16 +9,9 @@ class PathBreadcrumb extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPath = ref.watch(currentPathProvider);
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     if (currentPath.isRoot) {
-      return Text(
-        'Root Directory',
-        style: textTheme.bodyMedium?.copyWith(
-          color: colorScheme.onSurface.withValues(alpha: 0.8),
-        ),
-      );
+      return const Text('Root Directory');
     }
 
     final segments = currentPath.segments();
@@ -53,13 +46,12 @@ class _RootSegment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
       onTap: () => ref.read(currentPathProvider.notifier).setAsRoot(),
       child: Text(
         'Root',
-        style: textTheme.bodyMedium?.copyWith(
+        style: TextStyle(
           color: colorScheme.primary,
           decoration: TextDecoration.underline,
         ),
@@ -73,15 +65,7 @@ class _PathSeparator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return Text(
-      ' / ',
-      style: textTheme.bodyMedium?.copyWith(
-        color: colorScheme.onSurface.withValues(alpha: 0.6),
-      ),
-    );
+    return const Text(' / ');
   }
 }
 
@@ -99,16 +83,13 @@ class _PathSegment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
       onTap: onTap,
       child: Text(
         segment,
-        style: textTheme.bodyMedium?.copyWith(
-          color: isLast
-              ? colorScheme.onSurface.withValues(alpha: 0.8)
-              : colorScheme.primary,
+        style: TextStyle(
+          color: isLast ? null : colorScheme.primary,
           decoration: isLast ? null : TextDecoration.underline,
         ),
       ),
