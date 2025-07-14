@@ -18,6 +18,8 @@ class TransferEndpoint extends Endpoint {
     await for (final chunk in fileStream) {
       yield ByteData.sublistView(Uint8List.fromList(chunk));
     }
+
+    session.log('Downloaded ${path.value} (${file.lengthSync()} bytes)');
   }
 
   /// Get a download URL for a file or folder
@@ -35,10 +37,16 @@ class TransferEndpoint extends Endpoint {
     switch (entity) {
       case final File file:
         await file.copy(outPath);
+        session.log('Generated download URL for file: ${path.value}');
       case final Directory dir:
         final zipFile = File(outPath);
         await writeZip(dir, zipFile);
+        session.log(
+            'Generated download URL for directory (zipped): ${path.value}');
       default:
+        session.log(
+            'Unsupported entity type for download: ${entity.runtimeType}',
+            level: LogLevel.warning);
         throw UnsupportedError('Unsupported entity type for download');
     }
 
@@ -59,6 +67,10 @@ class TransferEndpoint extends Endpoint {
 
     // Check if file already exists and handle appropriately
     if (file.existsSync()) {
+      session.log(
+        'File already exists: ${path.value}',
+        level: LogLevel.warning,
+      );
       throw FileAlreadyExistsException(path: normalizedPath.value);
     }
 
@@ -88,12 +100,19 @@ class TransferEndpoint extends Endpoint {
       }
       await randomAccessFile.close();
 
+      session.log('Uploaded ${path.value} ($totalBytes bytes)');
+
       // Emit final result
       yield UploadProgress(
         current: totalBytes,
         isComplete: true,
       );
-    } on Exception {
+    } on Exception catch (e) {
+      session.log(
+        'Upload failed for ${path.value}: $e',
+        level: LogLevel.error,
+        exception: e,
+      );
       await randomAccessFile?.close();
       // Clean up file on any error
       if (file.existsSync()) {

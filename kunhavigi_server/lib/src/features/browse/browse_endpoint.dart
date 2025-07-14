@@ -22,6 +22,8 @@ class BrowseEndpoint extends Endpoint {
 
     final entries = dir.listSync().map(buildEntry).toList();
 
+    session.log('Listed ${entries.length} entries in ${path.value}');
+
     return EntriesResponse(
       entries: entries,
       totalCount: entries.length,
@@ -34,23 +36,32 @@ class BrowseEndpoint extends Endpoint {
     final normalizedPath = validateAndNormalizePath(path);
     final mimeFile = exactMimeFile(normalizedPath);
 
-    return switch (mimeFile) {
-      final TextMimeFile file => _textPreviewGenerator.generate(file),
-      final ImageMimeFile file => _imagePreviewGenerator.generate(file),
+    final preview = switch (mimeFile) {
+      final TextMimeFile file => await _textPreviewGenerator.generate(file),
+      final ImageMimeFile file => await _imagePreviewGenerator.generate(file),
       _ => const EntryPreview.unknown(),
     };
+
+    session.log('Generated ${preview.runtimeType} preview for ${path.value}');
+
+    return preview;
   }
 
   /// Delete a file from the server
   Future<bool> delete(Session session, RelativePath path) async {
     final normalizedPath = validateAndNormalizePath(path);
-
     final file = exactEntity(normalizedPath);
 
     try {
       await file.delete(recursive: true);
+      session.log('Deleted ${path.value}');
       return true;
-    } on Exception {
+    } on Exception catch (e) {
+      session.log(
+        'Failed to delete ${path.value}: $e',
+        level: LogLevel.error,
+        exception: e,
+      );
       return false;
     }
   }
@@ -63,7 +74,19 @@ class BrowseEndpoint extends Endpoint {
   }) async {
     final normalizedPath = validateAndNormalizePath(path);
     final file = exactEntity(normalizedPath);
-    file.renameSync(p.join(file.parent.path, newName));
-    return buildEntry(file);
+
+    try {
+      file.renameSync(p.join(file.parent.path, newName));
+      final entry = buildEntry(file);
+      session.log('Renamed ${path.value} to $newName');
+      return entry;
+    } on Exception catch (e) {
+      session.log(
+        'Failed to rename ${path.value} to $newName: $e',
+        level: LogLevel.error,
+        exception: e,
+      );
+      rethrow;
+    }
   }
 }
