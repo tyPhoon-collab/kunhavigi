@@ -36,7 +36,7 @@ Kunhavigiはエスペラント語で「共有」を意味する。
 flutter build web -o ../kunhavigi_server/web/static
 ```
 
-今後はCI/CDを使用して自動化する予定
+GitHub ActionsによるCI/CDパイプラインが設定されており、main・test_ciブランチへのプッシュ時に自動的にビルドされ、成果物がコミットされます。
 
 ### ローカルサーバー
 
