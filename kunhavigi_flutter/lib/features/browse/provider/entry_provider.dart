@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
-import 'package:kunhavigi_flutter/features/browse/provider/sort_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/domain/sort_settings.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/core/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/logger.dart';
@@ -101,5 +101,25 @@ Future<EntryPreview> entryPreview(
     logger.e('Failed to fetch preview for path: $path',
         error: error, stackTrace: stackTrace);
     rethrow;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class CurrentSortSettings extends _$CurrentSortSettings {
+  @override
+  SortSettings build() {
+    return const SortSettings();
+  }
+
+  void setSortType(SortType type) {
+    if (state.type == type) {
+      state = state.toggleOrder();
+    } else {
+      state = state.copyWith(type: type, order: SortOrder.ascending);
+    }
+  }
+
+  void toggleOrder() {
+    state = state.toggleOrder();
   }
 }

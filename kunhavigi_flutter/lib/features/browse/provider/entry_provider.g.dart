@@ -156,7 +156,7 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
   RelativePath get path => (origin as EntriesProvider).path;
 }
 
-String _$filteredEntriesHash() => r'4fc369a13113d8f890203086a11ac9fe2c670b62';
+String _$filteredEntriesHash() => r'449479bc2b3a4381ca5e4bd7ff327430f82471f7';
 
 /// See also [filteredEntries].
 @ProviderFor(filteredEntries)
@@ -431,5 +431,22 @@ final currentPathProvider =
 );
 
 typedef _$CurrentPath = Notifier<RelativePath>;
+String _$currentSortSettingsHash() =>
+    r'6c4067b62f40de9ce3eaa873015f563f643d9d55';
+
+/// See also [CurrentSortSettings].
+@ProviderFor(CurrentSortSettings)
+final currentSortSettingsProvider =
+    NotifierProvider<CurrentSortSettings, SortSettings>.internal(
+  CurrentSortSettings.new,
+  name: r'currentSortSettingsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentSortSettingsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$CurrentSortSettings = Notifier<SortSettings>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

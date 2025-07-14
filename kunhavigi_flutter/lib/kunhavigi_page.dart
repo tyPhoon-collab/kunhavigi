@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/button/icon_button.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/button/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
-import 'package:kunhavigi_flutter/features/browse/presentation/sort_button.dart';
-import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
-import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 
 class KunhavigiPage extends ConsumerWidget {
@@ -39,10 +38,10 @@ class KunhavigiPage extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(child: PathBreadcrumb()),
-                  SortButton(),
-                  SortOrderButton(),
-                  _ReloadButton(),
-                  _SettingsButton(),
+                  SortIconButton(),
+                  SortOrderIconButton(),
+                  ReloadIconButton(),
+                  SettingsIconButton(),
                 ],
               ),
             ),
@@ -51,51 +50,6 @@ class KunhavigiPage extends ConsumerWidget {
         body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
         floatingActionButton: const UploadButton(),
       ),
-    );
-  }
-}
-
-class _ReloadButton extends ConsumerWidget {
-  const _ReloadButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    final currentPath = ref.watch(currentPathProvider);
-
-    return IconButton(
-      icon: Icon(
-        Icons.refresh,
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
-      onPressed: () => ref.invalidate(entriesProvider(currentPath)),
-      tooltip: 'Reload',
-    );
-  }
-}
-
-class _SettingsButton extends ConsumerWidget {
-  const _SettingsButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return IconButton(
-      icon: Icon(
-        Icons.settings,
-        color: colorScheme.onSurface.withValues(alpha: 0.8),
-      ),
-      onPressed: () {
-        showModalBottomSheet<void>(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const BrowseSettingsModal(),
-        );
-      },
-      tooltip: 'Settings',
     );
   }
 }

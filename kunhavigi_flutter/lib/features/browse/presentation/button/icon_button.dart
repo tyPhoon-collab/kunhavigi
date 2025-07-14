@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/domain/sort_settings.dart';
-import 'package:kunhavigi_flutter/features/browse/provider/sort_provider.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
 
-class SortButton extends ConsumerWidget {
-  const SortButton({super.key});
+class SortIconButton extends ConsumerWidget {
+  const SortIconButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,8 +85,8 @@ class _SortMenuItemButton extends ConsumerWidget {
   }
 }
 
-class SortOrderButton extends ConsumerWidget {
-  const SortOrderButton({super.key});
+class SortOrderIconButton extends ConsumerWidget {
+  const SortOrderIconButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -102,6 +103,51 @@ class SortOrderButton extends ConsumerWidget {
         ref.read(currentSortSettingsProvider.notifier).toggleOrder();
       },
       tooltip: isAscending ? 'Sort Ascending' : 'Sort Descending',
+    );
+  }
+}
+
+class ReloadIconButton extends ConsumerWidget {
+  const ReloadIconButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final currentPath = ref.watch(currentPathProvider);
+
+    return IconButton(
+      icon: Icon(
+        Icons.refresh,
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
+      ),
+      onPressed: () => ref.invalidate(entriesProvider(currentPath)),
+      tooltip: 'Reload',
+    );
+  }
+}
+
+class SettingsIconButton extends ConsumerWidget {
+  const SettingsIconButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return IconButton(
+      icon: Icon(
+        Icons.settings,
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
+      ),
+      onPressed: () {
+        showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const BrowseSettingsModal(),
+        );
+      },
+      tooltip: 'Settings',
     );
   }
 }
