@@ -9,47 +9,49 @@ class Teller {
 
   final BuildContext _context;
 
-  void error(String message) {
-    toastification.show(
-      context: _context,
-      title: Text('Error: $message'),
-      type: ToastificationType.error,
-      autoCloseDuration: const Duration(seconds: 7),
-      alignment: _alignment,
-    );
-  }
+  String error(String message) => toastification
+      .show(
+        context: _context,
+        title: Text('Error: $message'),
+        type: ToastificationType.error,
+        autoCloseDuration: const Duration(seconds: 7),
+        alignment: _alignment,
+      )
+      .id;
 
-  void errorOf(Object error) {
+  String errorOf(Object error) {
     logger.e('Error was displayed', error: error);
 
-    toastification.show(
-      context: _context,
-      title: Text('Error: $error'),
-      type: ToastificationType.error,
-      autoCloseDuration: const Duration(seconds: 7),
-      alignment: _alignment,
-    );
+    return toastification
+        .show(
+          context: _context,
+          title: Text('Error: $error'),
+          type: ToastificationType.error,
+          autoCloseDuration: const Duration(seconds: 7),
+          alignment: _alignment,
+        )
+        .id;
   }
 
-  void info(String message) {
-    toastification.show(
-      context: _context,
-      title: Text(message),
-      type: ToastificationType.info,
-      autoCloseDuration: const Duration(seconds: 3),
-      alignment: _alignment,
-    );
-  }
+  String info(String message) => toastification
+      .show(
+        context: _context,
+        title: Text(message),
+        type: ToastificationType.info,
+        autoCloseDuration: const Duration(seconds: 3),
+        alignment: _alignment,
+      )
+      .id;
 
-  void success(String message) {
-    toastification.show(
-      context: _context,
-      title: Text(message),
-      type: ToastificationType.success,
-      autoCloseDuration: const Duration(seconds: 5),
-      alignment: _alignment,
-    );
-  }
+  String success(String message) => toastification
+      .show(
+        context: _context,
+        title: Text(message),
+        type: ToastificationType.success,
+        autoCloseDuration: const Duration(seconds: 5),
+        alignment: _alignment,
+      )
+      .id;
 
   void progress(
     String message,
@@ -74,9 +76,7 @@ class Teller {
     itemId = item.id;
   }
 
-  void dismiss(String id) {
-    toastification.dismissById(id);
-  }
+  void dismiss(String id) => toastification.dismissById(id);
 }
 
 class Progress {

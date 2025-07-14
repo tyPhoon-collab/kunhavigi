@@ -49,16 +49,17 @@ final class DownloadUseCase extends ClientUseCase {
   Future<void> download(Entry entry) async {
     final progressStream =
         _client.transfer.getDownloadUrl(entry.path).asBroadcastStream();
+    String? id;
 
     try {
       await for (final progress in progressStream) {
         switch (progress) {
           case CopingDownloadProgress():
-            teller?.info(
+            id = teller?.info(
               'Preparing to download ${entry.name}',
             );
           case ZippingDownloadProgress():
-            teller?.info('Zipping ${entry.name} for download');
+            id = teller?.info('Zipping ${entry.name} for download');
           case CompletedDownloadProgress(:final downloadUrl):
             await ref.read(saverProvider).saveFromUrl(
                   downloadUrl,
@@ -69,10 +70,12 @@ final class DownloadUseCase extends ClientUseCase {
                     final UnknownEntry _ => 'application/octet-stream',
                   },
                 );
+            if (id != null) teller?.dismiss(id);
             teller?.success('Download completed for ${entry.name}');
         }
       }
     } on Exception catch (e) {
+      if (id != null) teller?.dismiss(id);
       teller?.errorOf(e);
     }
   }
