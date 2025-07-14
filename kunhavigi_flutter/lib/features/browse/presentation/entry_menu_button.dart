@@ -95,7 +95,6 @@ class _DownloadEntryMenuItem implements _EntryMenuItem {
     Future<void> downloadFile() async {
       try {
         await ref.read(downloadUseCaseProvider).download(entry);
-        teller?.success('Downloaded successfully');
       } on Exception catch (e) {
         teller?.errorOf(e);
       }

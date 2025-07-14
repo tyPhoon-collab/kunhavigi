@@ -31,6 +31,16 @@ class Teller {
     );
   }
 
+  void info(String message) {
+    toastification.show(
+      context: _context,
+      title: Text(message),
+      type: ToastificationType.info,
+      autoCloseDuration: const Duration(seconds: 3),
+      alignment: _alignment,
+    );
+  }
+
   void success(String message) {
     toastification.show(
       context: _context,

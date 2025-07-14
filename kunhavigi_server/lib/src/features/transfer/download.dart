@@ -11,13 +11,10 @@ Directory getDownloadsDirectory() {
   return downloadsDir;
 }
 
-String getDownloadUrlFromPath(MethodCallSession session, String path) {
-  final serverUri = session.uri;
-  final webServerHttpClient = session.serverpod.webServer.httpServer;
-
-  final scheme = serverUri.scheme;
-  final host = serverUri.host;
-  final port = webServerHttpClient.port;
+String getDownloadUrlFromPath(ServerConfig config, String path) {
+  final scheme = config.publicScheme;
+  final host = config.publicHost;
+  final port = config.port;
 
   final baseUrl = '$scheme://$host:$port';
   return '$baseUrl/downloads/${p.basename(path)}';

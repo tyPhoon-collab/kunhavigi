@@ -22,12 +22,12 @@ class TransferEndpoint extends Endpoint {
     session.log('Downloaded ${path.value} (${file.lengthSync()} bytes)');
   }
 
-  /// Get a download URL for a file or folder
+  /// Get a download URL for a file or folder with progress updates
   /// Folders are zipped before download
-  Future<String> getDownloadUrl(
+  Stream<DownloadProgress> getDownloadUrl(
     Session session,
     RelativePath path,
-  ) async {
+  ) async* {
     final normalizedPath = validateAndNormalizePath(path);
     final entity = exactEntity(normalizedPath);
 
@@ -36,13 +36,17 @@ class TransferEndpoint extends Endpoint {
 
     switch (entity) {
       case final File file:
+        yield const DownloadProgress.coping();
         await file.copy(outPath);
         session.log('Generated download URL for file: ${path.value}');
+
       case final Directory dir:
+        yield const DownloadProgress.zipping();
         final zipFile = File(outPath);
         await writeZip(dir, zipFile);
         session.log(
             'Generated download URL for directory (zipped): ${path.value}');
+
       default:
         session.log(
             'Unsupported entity type for download: ${entity.runtimeType}',
@@ -53,7 +57,10 @@ class TransferEndpoint extends Endpoint {
     // Schedule cleanup of the downloaded file after 1 hour
     await registerDownloadCleanup(session, outPath);
 
-    return getDownloadUrlFromPath(session as MethodCallSession, outPath);
+    final downloadUrl =
+        getDownloadUrlFromPath(session.serverpod.config.webServer!, outPath);
+
+    yield DownloadProgress.completed(downloadUrl: downloadUrl);
   }
 
   /// Upload a file to the server with progress updates

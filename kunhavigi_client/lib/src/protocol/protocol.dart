@@ -107,6 +107,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i10.EntryPreview) {
       return _i10.EntryPreview.fromJson(data) as T;
     }
+    if (t == _i10.DownloadProgress) {
+      return _i10.DownloadProgress.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i10.Entry?>()) {
       return (data != null ? _i10.Entry.fromJson(data) : null) as T;
     }
@@ -115,6 +118,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (t == _i1.getType<_i10.EntryPreview?>()) {
       return (data != null ? _i10.EntryPreview.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.DownloadProgress?>()) {
+      return (data != null ? _i10.DownloadProgress.fromJson(data) : null) as T;
     }
     return super.deserialize<T>(data, t);
   }
@@ -131,6 +137,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data is _i10.EntryPreview) {
       return 'EntryPreview';
+    }
+    if (data is _i10.DownloadProgress) {
+      return 'DownloadProgress';
     }
     if (data is _i2.EntriesResponse) {
       return 'EntriesResponse';
@@ -173,6 +182,9 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName == 'EntryPreview') {
       return deserialize<_i10.EntryPreview>(data['data']);
+    }
+    if (dataClassName == 'DownloadProgress') {
+      return deserialize<_i10.DownloadProgress>(data['data']);
     }
     if (dataClassName == 'EntriesResponse') {
       return deserialize<_i2.EntriesResponse>(data['data']);

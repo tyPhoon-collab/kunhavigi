@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -10,7 +11,6 @@ import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_pro
 import 'package:kunhavigi_flutter/features/common/presentation/teller.dart';
 import 'package:kunhavigi_flutter/features/common/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
-import 'package:kunhavigi_flutter/logger.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
 sealed class ClientUseCase {
@@ -47,20 +47,33 @@ final class DownloadUseCase extends ClientUseCase {
   const DownloadUseCase(super.ref);
 
   Future<void> download(Entry entry) async {
-    final url = await _client.transfer.getDownloadUrl(entry.path);
+    final progressStream =
+        _client.transfer.getDownloadUrl(entry.path).asBroadcastStream();
 
     try {
-      await ref.read(saverProvider).saveFromUrl(
-            url,
-            name: entry.name,
-            mimeType: switch (entry) {
-              final FileEntry file => file.mimeType,
-              final DirectoryEntry _ => 'application/zip',
-              final UnknownEntry _ => 'application/octet-stream',
-            },
-          );
+      await for (final progress in progressStream) {
+        switch (progress) {
+          case CopingDownloadProgress():
+            teller?.info(
+              'Preparing to download ${entry.name}',
+            );
+          case ZippingDownloadProgress():
+            teller?.info('Zipping ${entry.name} for download');
+          case CompletedDownloadProgress(:final downloadUrl):
+            await ref.read(saverProvider).saveFromUrl(
+                  downloadUrl,
+                  name: entry.name,
+                  mimeType: switch (entry) {
+                    final FileEntry file => file.mimeType,
+                    final DirectoryEntry _ => 'application/zip',
+                    final UnknownEntry _ => 'application/octet-stream',
+                  },
+                );
+            teller?.success('Download completed for ${entry.name}');
+        }
+      }
     } on Exception catch (e) {
-      logger.e('Failed to download ${entry.name}: $e');
+      teller?.errorOf(e);
     }
   }
 }

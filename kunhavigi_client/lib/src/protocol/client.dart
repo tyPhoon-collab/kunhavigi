@@ -16,9 +16,10 @@ import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.d
 import 'package:kunhavigi_shared/src/entry.dart' as _i4;
 import 'package:kunhavigi_shared/src/entry_preview.dart' as _i5;
 import 'dart:typed_data' as _i6;
+import 'package:kunhavigi_shared/src/download_progress.dart' as _i7;
 import 'package:kunhavigi_client/src/protocol/features/transfer/upload_progress.dart'
-    as _i7;
-import 'protocol.dart' as _i8;
+    as _i8;
+import 'protocol.dart' as _i9;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -82,22 +83,24 @@ class EndpointTransfer extends _i1.EndpointRef {
         {},
       );
 
-  /// Get a download URL for a file or folder
+  /// Get a download URL for a file or folder with progress updates
   /// Folders are zipped before download
-  _i2.Future<String> getDownloadUrl(_i4.RelativePath path) =>
-      caller.callServerEndpoint<String>(
+  _i2.Stream<_i7.DownloadProgress> getDownloadUrl(_i4.RelativePath path) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i7.DownloadProgress>,
+          _i7.DownloadProgress>(
         'transfer',
         'getDownloadUrl',
         {'path': path},
+        {},
       );
 
   /// Upload a file to the server with progress updates
-  _i2.Stream<_i7.UploadProgress> uploadFile({
+  _i2.Stream<_i8.UploadProgress> uploadFile({
     required _i4.RelativePath path,
     required _i2.Stream<_i6.ByteData> data,
   }) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i7.UploadProgress>,
-          _i7.UploadProgress>(
+      caller.callStreamingServerEndpoint<_i2.Stream<_i8.UploadProgress>,
+          _i8.UploadProgress>(
         'transfer',
         'uploadFile',
         {'path': path},
@@ -121,7 +124,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i8.Protocol(),
+          _i9.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

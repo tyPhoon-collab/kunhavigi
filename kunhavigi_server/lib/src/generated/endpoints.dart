@@ -120,24 +120,6 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'transfer',
       endpoint: endpoints['transfer']!,
       methodConnectors: {
-        'getDownloadUrl': _i1.MethodConnector(
-          name: 'getDownloadUrl',
-          params: {
-            'path': _i1.ParameterDescription(
-              name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['transfer'] as _i3.TransferEndpoint).getDownloadUrl(
-            session,
-            params['path'],
-          ),
-        ),
         'downloadFile': _i1.MethodStreamConnector(
           name: 'downloadFile',
           params: {
@@ -155,6 +137,27 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, Stream> streamParams,
           ) =>
               (endpoints['transfer'] as _i3.TransferEndpoint).downloadFile(
+            session,
+            params['path'],
+          ),
+        ),
+        'getDownloadUrl': _i1.MethodStreamConnector(
+          name: 'getDownloadUrl',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath>(),
+              nullable: false,
+            )
+          },
+          streamParams: {},
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['transfer'] as _i3.TransferEndpoint).getDownloadUrl(
             session,
             params['path'],
           ),
