@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
+import 'package:kunhavigi_flutter/features/browse/provider/sort_provider.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/common/provider/client_provider.dart';
 import 'package:kunhavigi_flutter/logger.dart';
@@ -65,14 +66,17 @@ Future<EntriesResponse> filteredEntries(
 ) async {
   try {
     final result = await ref.watch(entriesProvider(path).future);
-    final settings = await ref.watch(currentBrowseSettingsProvider.future);
+    final browseSettings =
+        await ref.watch(currentBrowseSettingsProvider.future);
+    final sortSettings = ref.watch(currentSortSettingsProvider);
 
     final filteredEntries =
-        result.entries.where((e) => settings.visible(e.path)).toList();
+        result.entries.where((e) => browseSettings.visible(e.path)).toList();
+    final sortedEntries = sortSettings.sort(filteredEntries);
 
     return EntriesResponse(
-      entries: filteredEntries,
-      totalCount: filteredEntries.length,
+      entries: sortedEntries,
+      totalCount: sortedEntries.length,
       isRootDirectory: result.isRootDirectory,
     );
   } catch (error, stackTrace) {

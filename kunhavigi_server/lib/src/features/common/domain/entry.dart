@@ -22,9 +22,11 @@ Entry buildEntry(FileSystemEntity file) {
       ),
     FileSystemEntityType.directory => Entry.directory(
         path: path,
+        lastModifiedAt: stat.modified,
       ),
     _ => Entry.unknown(
         path: path,
+        lastModifiedAt: stat.modified,
       ),
   };
 }

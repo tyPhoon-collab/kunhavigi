@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/entries_list_view.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/sort_button.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/upload_button.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
@@ -38,6 +39,8 @@ class KunhavigiPage extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(child: PathBreadcrumb()),
+                  SortButton(),
+                  SortOrderButton(),
                   _ReloadButton(),
                   _SettingsButton(),
                 ],

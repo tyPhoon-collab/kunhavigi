@@ -37,10 +37,12 @@ sealed class Entry with _$Entry {
   @JsonSerializable(explicitToJson: true)
   const factory Entry.directory({
     @_RelativePathConverter() required RelativePath path,
+    required DateTime lastModifiedAt,
   }) = DirectoryEntry;
   @JsonSerializable(explicitToJson: true)
   const factory Entry.unknown({
     @_RelativePathConverter() required RelativePath path,
+    required DateTime lastModifiedAt,
   }) = UnknownEntry;
 
   factory Entry.fromJson(Map<String, Object?> json) => _$EntryFromJson(json);

@@ -25,22 +25,26 @@ Map<String, dynamic> _$FileEntryToJson(FileEntry instance) => <String, dynamic>{
 DirectoryEntry _$DirectoryEntryFromJson(Map<String, dynamic> json) =>
     DirectoryEntry(
       path: const _RelativePathConverter().fromJson(json['path'] as String),
+      lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$DirectoryEntryToJson(DirectoryEntry instance) =>
     <String, dynamic>{
       'path': const _RelativePathConverter().toJson(instance.path),
+      'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
       'runtimeType': instance.$type,
     };
 
 UnknownEntry _$UnknownEntryFromJson(Map<String, dynamic> json) => UnknownEntry(
   path: const _RelativePathConverter().fromJson(json['path'] as String),
+  lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
   $type: json['runtimeType'] as String?,
 );
 
 Map<String, dynamic> _$UnknownEntryToJson(UnknownEntry instance) =>
     <String, dynamic>{
       'path': const _RelativePathConverter().toJson(instance.path),
+      'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
       'runtimeType': instance.$type,
     };

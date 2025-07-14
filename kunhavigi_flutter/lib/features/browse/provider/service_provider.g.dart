@@ -6,7 +6,7 @@ part of 'service_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$saverHash() => r'cbe7b2a77b09a15923f7ab91be03813764fbdc84';
+String _$saverHash() => r'e019a9190867faa8e0016f79edfd1a76845f3bf0';
 
 /// See also [saver].
 @ProviderFor(saver)
