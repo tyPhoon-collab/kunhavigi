@@ -12,8 +12,9 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../features/browse/browse_endpoint.dart' as _i2;
 import '../features/transfer/transfer_endpoint.dart' as _i3;
-import 'package:kunhavigi_shared/src/entry.dart' as _i4;
-import 'dart:typed_data' as _i5;
+import 'package:kunhavigi_shared/src/search_query.dart' as _i4;
+import 'package:kunhavigi_shared/src/entry.dart' as _i5;
+import 'dart:typed_data' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -41,14 +42,9 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'query': _i1.ParameterDescription(
               name: 'query',
-              type: _i1.getType<String>(),
+              type: _i1.getType<_i4.SearchQuery>(),
               nullable: false,
-            ),
-            'path': _i1.ParameterDescription(
-              name: 'path',
-              type: _i1.getType<_i4.RelativePath?>(),
-              nullable: true,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -57,7 +53,6 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['browse'] as _i2.BrowseEndpoint).searchEntries(
             session,
             params['query'],
-            path: params['path'],
           ),
         ),
         'getEntries': _i1.MethodConnector(
@@ -65,7 +60,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
@@ -83,7 +78,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
@@ -101,7 +96,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
@@ -119,7 +114,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             ),
             'newName': _i1.ParameterDescription(
@@ -149,7 +144,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
@@ -170,7 +165,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
@@ -191,12 +186,12 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i4.RelativePath>(),
+              type: _i1.getType<_i5.RelativePath>(),
               nullable: false,
             )
           },
           streamParams: {
-            'data': _i1.StreamParameterDescription<_i5.ByteData>(
+            'data': _i1.StreamParameterDescription<_i6.ByteData>(
               name: 'data',
               nullable: false,
             )
@@ -210,7 +205,7 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['transfer'] as _i3.TransferEndpoint).uploadFile(
             session,
             path: params['path'],
-            data: streamParams['data']!.cast<_i5.ByteData>(),
+            data: streamParams['data']!.cast<_i6.ByteData>(),
           ),
         ),
       },

@@ -26,10 +26,6 @@ String _normalizePath(RelativePath path) {
   return p.normalize(p.join(dataDirectoryPath.value, path.value));
 }
 
-bool isRootDirectory(RelativePath? path) {
-  return path?.value == dataDirectoryPath.value;
-}
-
 FileSystemEntity exactEntity(ValidPath path) {
   final type = FileSystemEntity.typeSync(path.value);
   if (type == FileSystemEntityType.notFound) {
@@ -65,4 +61,13 @@ Directory exactDirectory(ValidPath path) {
   }
 
   return dir as Directory;
+}
+
+Directory exactDataDirectory() {
+  final dir = Directory(dataDirectoryPath.value);
+  if (!dir.existsSync()) {
+    throw NotExistsException(path: dataDirectoryPath.value);
+  }
+
+  return dir;
 }

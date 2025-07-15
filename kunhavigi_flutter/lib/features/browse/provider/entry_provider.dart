@@ -15,6 +15,10 @@ class CurrentPath extends _$CurrentPath {
     return const RelativePath.root();
   }
 
+  bool isRoot() {
+    return state.isRoot;
+  }
+
   void setPath(RelativePath path) {
     logger.i('Navigating to path: $path');
     state = path;
@@ -77,11 +81,32 @@ Future<EntriesResponse> filteredEntries(
     return EntriesResponse(
       entries: sortedEntries,
       totalCount: sortedEntries.length,
-      isRootDirectory: result.isRootDirectory,
     );
   } catch (error, stackTrace) {
     logger.e('Failed to fetch entries for path: $path',
         error: error, stackTrace: stackTrace);
+    rethrow;
+  }
+}
+
+@Riverpod(keepAlive: true)
+Future<EntriesResponse> searchedEntries(
+  Ref ref,
+  SearchQuery query,
+) async {
+  logger.i('Searching entries: $query');
+  try {
+    final client = ref.watch(clientProvider);
+    final result = await client.browse.searchEntries(query);
+    logger.i(
+        'Successfully searched ${result.entries.length} entries (${result.totalCount} total)');
+    return result;
+  } catch (error, stackTrace) {
+    logger.e(
+      'Failed to search entries: $query',
+      error: error,
+      stackTrace: stackTrace,
+    );
     rethrow;
   }
 }

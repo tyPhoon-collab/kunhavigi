@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
@@ -17,26 +15,32 @@ class BrowseEndpoint extends Endpoint {
   /// Search entries (files and directories) by name under a given path, or globally if path is null.
   Future<EntriesResponse> searchEntries(
     Session session,
-    String query, {
-    RelativePath? path,
-  }) async {
-    final dir = path != null
-        ? exactDirectory(validateAndNormalizePath(path))
-        : Directory(dataDirectoryPath.value);
-    final entries = dir
-        .listSync(recursive: true)
-        .where((entity) => p.basename(entity.path).contains(query))
+    SearchQuery query,
+  ) async {
+    if (query.query.isEmpty) {
+      session.log('Search query is empty, returning empty response');
+      return EntriesResponse(entries: [], totalCount: 0);
+    }
+
+    final dir = query.path != null
+        ? exactDirectory(validateAndNormalizePath(query.path!))
+        : exactDataDirectory();
+
+    final allEntries = await dir
+        .list(recursive: true)
+        .where((entity) => p.basename(entity.path).contains(query.query))
         .map(buildEntry)
         .toList();
 
-    final place = path?.value ?? 'root';
+    final pagedEntries =
+        allEntries.skip(query.offset).take(query.limit).toList();
+
     session.log(
-        'Searched ${entries.length} entries in $place with query "$query"');
+        'Searched ${allEntries.length} entries in ${dir.path} with query "$query"');
 
     return EntriesResponse(
-      entries: entries,
-      totalCount: entries.length,
-      isRootDirectory: isRootDirectory(path),
+      entries: pagedEntries,
+      totalCount: allEntries.length,
     );
   }
 
@@ -49,14 +53,13 @@ class BrowseEndpoint extends Endpoint {
 
     final dir = exactDirectory(normalizedPath);
 
-    final entries = dir.listSync().map(buildEntry).toList();
+    final entries = await dir.list().map(buildEntry).toList();
 
     session.log('Listed ${entries.length} entries in ${path.value}');
 
     return EntriesResponse(
       entries: entries,
       totalCount: entries.length,
-      isRootDirectory: isRootDirectory(path),
     );
   }
 

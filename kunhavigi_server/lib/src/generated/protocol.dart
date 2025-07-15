@@ -114,6 +114,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i11.DownloadProgress) {
       return _i11.DownloadProgress.fromJson(data) as T;
     }
+    if (t == _i11.SearchQuery) {
+      return _i11.SearchQuery.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i11.Entry?>()) {
       return (data != null ? _i11.Entry.fromJson(data) : null) as T;
     }
@@ -125,6 +128,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (t == _i1.getType<_i11.DownloadProgress?>()) {
       return (data != null ? _i11.DownloadProgress.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i11.SearchQuery?>()) {
+      return (data != null ? _i11.SearchQuery.fromJson(data) : null) as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -147,6 +153,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (data is _i11.DownloadProgress) {
       return 'DownloadProgress';
+    }
+    if (data is _i11.SearchQuery) {
+      return 'SearchQuery';
     }
     if (data is _i3.EntriesResponse) {
       return 'EntriesResponse';
@@ -196,6 +205,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (dataClassName == 'DownloadProgress') {
       return deserialize<_i11.DownloadProgress>(data['data']);
+    }
+    if (dataClassName == 'SearchQuery') {
+      return deserialize<_i11.SearchQuery>(data['data']);
     }
     if (dataClassName == 'EntriesResponse') {
       return deserialize<_i3.EntriesResponse>(data['data']);

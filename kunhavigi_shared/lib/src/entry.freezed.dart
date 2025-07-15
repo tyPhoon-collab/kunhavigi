@@ -42,7 +42,7 @@ Entry _$EntryFromJson(
 /// @nodoc
 mixin _$Entry {
 
-@_RelativePathConverter() RelativePath get path; DateTime get lastModifiedAt;
+@RelativePathConverter() RelativePath get path; DateTime get lastModifiedAt;
 /// Create a copy of Entry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -75,7 +75,7 @@ abstract mixin class $EntryCopyWith<$Res>  {
   factory $EntryCopyWith(Entry value, $Res Function(Entry) _then) = _$EntryCopyWithImpl;
 @useResult
 $Res call({
-@_RelativePathConverter() RelativePath path, DateTime lastModifiedAt
+@RelativePathConverter() RelativePath path, DateTime lastModifiedAt
 });
 
 
@@ -184,7 +184,7 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  directory,TResult Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function(@RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  directory,TResult Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
 return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
@@ -207,7 +207,7 @@ return unknown(_that.path,_that.lastModifiedAt);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)  file,required TResult Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)  directory,required TResult Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function(@RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)  file,required TResult Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)  directory,required TResult Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry():
 return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry():
@@ -226,7 +226,7 @@ return unknown(_that.path,_that.lastModifiedAt);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function(@_RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult? Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  directory,TResult? Function(@_RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function(@RelativePathConverter()  RelativePath path,  int size,  DateTime lastModifiedAt,  String mimeType)?  file,TResult? Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  directory,TResult? Function(@RelativePathConverter()  RelativePath path,  DateTime lastModifiedAt)?  unknown,}) {final _that = this;
 switch (_that) {
 case FileEntry() when file != null:
 return file(_that.path,_that.size,_that.lastModifiedAt,_that.mimeType);case DirectoryEntry() when directory != null:
@@ -243,10 +243,10 @@ return unknown(_that.path,_that.lastModifiedAt);case _:
 
 @JsonSerializable(explicitToJson: true)
 class FileEntry extends Entry {
-  const FileEntry({@_RelativePathConverter() required this.path, required this.size, required this.lastModifiedAt, required this.mimeType, final  String? $type}): $type = $type ?? 'file',super._();
+  const FileEntry({@RelativePathConverter() required this.path, required this.size, required this.lastModifiedAt, required this.mimeType, final  String? $type}): $type = $type ?? 'file',super._();
   factory FileEntry.fromJson(Map<String, dynamic> json) => _$FileEntryFromJson(json);
 
-@override@_RelativePathConverter() final  RelativePath path;
+@override@RelativePathConverter() final  RelativePath path;
  final  int size;
 @override final  DateTime lastModifiedAt;
  final  String mimeType;
@@ -288,7 +288,7 @@ abstract mixin class $FileEntryCopyWith<$Res> implements $EntryCopyWith<$Res> {
   factory $FileEntryCopyWith(FileEntry value, $Res Function(FileEntry) _then) = _$FileEntryCopyWithImpl;
 @override @useResult
 $Res call({
-@_RelativePathConverter() RelativePath path, int size, DateTime lastModifiedAt, String mimeType
+@RelativePathConverter() RelativePath path, int size, DateTime lastModifiedAt, String mimeType
 });
 
 
@@ -322,10 +322,10 @@ as String,
 
 @JsonSerializable(explicitToJson: true)
 class DirectoryEntry extends Entry {
-  const DirectoryEntry({@_RelativePathConverter() required this.path, required this.lastModifiedAt, final  String? $type}): $type = $type ?? 'directory',super._();
+  const DirectoryEntry({@RelativePathConverter() required this.path, required this.lastModifiedAt, final  String? $type}): $type = $type ?? 'directory',super._();
   factory DirectoryEntry.fromJson(Map<String, dynamic> json) => _$DirectoryEntryFromJson(json);
 
-@override@_RelativePathConverter() final  RelativePath path;
+@override@RelativePathConverter() final  RelativePath path;
 @override final  DateTime lastModifiedAt;
 
 @JsonKey(name: 'runtimeType')
@@ -365,7 +365,7 @@ abstract mixin class $DirectoryEntryCopyWith<$Res> implements $EntryCopyWith<$Re
   factory $DirectoryEntryCopyWith(DirectoryEntry value, $Res Function(DirectoryEntry) _then) = _$DirectoryEntryCopyWithImpl;
 @override @useResult
 $Res call({
-@_RelativePathConverter() RelativePath path, DateTime lastModifiedAt
+@RelativePathConverter() RelativePath path, DateTime lastModifiedAt
 });
 
 
@@ -397,10 +397,10 @@ as DateTime,
 
 @JsonSerializable(explicitToJson: true)
 class UnknownEntry extends Entry {
-  const UnknownEntry({@_RelativePathConverter() required this.path, required this.lastModifiedAt, final  String? $type}): $type = $type ?? 'unknown',super._();
+  const UnknownEntry({@RelativePathConverter() required this.path, required this.lastModifiedAt, final  String? $type}): $type = $type ?? 'unknown',super._();
   factory UnknownEntry.fromJson(Map<String, dynamic> json) => _$UnknownEntryFromJson(json);
 
-@override@_RelativePathConverter() final  RelativePath path;
+@override@RelativePathConverter() final  RelativePath path;
 @override final  DateTime lastModifiedAt;
 
 @JsonKey(name: 'runtimeType')
@@ -440,7 +440,7 @@ abstract mixin class $UnknownEntryCopyWith<$Res> implements $EntryCopyWith<$Res>
   factory $UnknownEntryCopyWith(UnknownEntry value, $Res Function(UnknownEntry) _then) = _$UnknownEntryCopyWithImpl;
 @override @useResult
 $Res call({
-@_RelativePathConverter() RelativePath path, DateTime lastModifiedAt
+@RelativePathConverter() RelativePath path, DateTime lastModifiedAt
 });
 
 

@@ -13,13 +13,14 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:kunhavigi_client/src/protocol/features/browse/entries_response.dart'
     as _i3;
-import 'package:kunhavigi_shared/src/entry.dart' as _i4;
-import 'package:kunhavigi_shared/src/entry_preview.dart' as _i5;
-import 'dart:typed_data' as _i6;
-import 'package:kunhavigi_shared/src/download_progress.dart' as _i7;
+import 'package:kunhavigi_shared/src/search_query.dart' as _i4;
+import 'package:kunhavigi_shared/src/entry.dart' as _i5;
+import 'package:kunhavigi_shared/src/entry_preview.dart' as _i6;
+import 'dart:typed_data' as _i7;
+import 'package:kunhavigi_shared/src/download_progress.dart' as _i8;
 import 'package:kunhavigi_client/src/protocol/features/transfer/upload_progress.dart'
-    as _i8;
-import 'protocol.dart' as _i9;
+    as _i9;
+import 'protocol.dart' as _i10;
 
 /// {@category Endpoint}
 class EndpointBrowse extends _i1.EndpointRef {
@@ -29,21 +30,15 @@ class EndpointBrowse extends _i1.EndpointRef {
   String get name => 'browse';
 
   /// Search entries (files and directories) by name under a given path, or globally if path is null.
-  _i2.Future<_i3.EntriesResponse> searchEntries(
-    String query, {
-    _i4.RelativePath? path,
-  }) =>
+  _i2.Future<_i3.EntriesResponse> searchEntries(_i4.SearchQuery query) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
         'searchEntries',
-        {
-          'query': query,
-          'path': path,
-        },
+        {'query': query},
       );
 
   /// Get the list of entries (files and directories) in a given path.
-  _i2.Future<_i3.EntriesResponse> getEntries(_i4.RelativePath path) =>
+  _i2.Future<_i3.EntriesResponse> getEntries(_i5.RelativePath path) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(
         'browse',
         'getEntries',
@@ -51,15 +46,15 @@ class EndpointBrowse extends _i1.EndpointRef {
       );
 
   /// Peek at the content of a file to generate a preview.
-  _i2.Future<_i5.EntryPreview> peekEntry(_i4.RelativePath path) =>
-      caller.callServerEndpoint<_i5.EntryPreview>(
+  _i2.Future<_i6.EntryPreview> peekEntry(_i5.RelativePath path) =>
+      caller.callServerEndpoint<_i6.EntryPreview>(
         'browse',
         'peekEntry',
         {'path': path},
       );
 
   /// Delete a file from the server
-  _i2.Future<bool> delete(_i4.RelativePath path) =>
+  _i2.Future<bool> delete(_i5.RelativePath path) =>
       caller.callServerEndpoint<bool>(
         'browse',
         'delete',
@@ -67,11 +62,11 @@ class EndpointBrowse extends _i1.EndpointRef {
       );
 
   /// Rename a file or directory on the server
-  _i2.Future<_i4.Entry> rename({
-    required _i4.RelativePath path,
+  _i2.Future<_i5.Entry> rename({
+    required _i5.RelativePath path,
     required String newName,
   }) =>
-      caller.callServerEndpoint<_i4.Entry>(
+      caller.callServerEndpoint<_i5.Entry>(
         'browse',
         'rename',
         {
@@ -89,8 +84,8 @@ class EndpointTransfer extends _i1.EndpointRef {
   String get name => 'transfer';
 
   /// Download a file or folder from the server
-  _i2.Stream<_i6.ByteData> downloadFile(_i4.RelativePath path) => caller
-          .callStreamingServerEndpoint<_i2.Stream<_i6.ByteData>, _i6.ByteData>(
+  _i2.Stream<_i7.ByteData> downloadFile(_i5.RelativePath path) => caller
+          .callStreamingServerEndpoint<_i2.Stream<_i7.ByteData>, _i7.ByteData>(
         'transfer',
         'downloadFile',
         {'path': path},
@@ -99,9 +94,9 @@ class EndpointTransfer extends _i1.EndpointRef {
 
   /// Get a download URL for a file or folder with progress updates
   /// Folders are zipped before download
-  _i2.Stream<_i7.DownloadProgress> getDownloadUrl(_i4.RelativePath path) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i7.DownloadProgress>,
-          _i7.DownloadProgress>(
+  _i2.Stream<_i8.DownloadProgress> getDownloadUrl(_i5.RelativePath path) =>
+      caller.callStreamingServerEndpoint<_i2.Stream<_i8.DownloadProgress>,
+          _i8.DownloadProgress>(
         'transfer',
         'getDownloadUrl',
         {'path': path},
@@ -109,12 +104,12 @@ class EndpointTransfer extends _i1.EndpointRef {
       );
 
   /// Upload a file to the server with progress updates
-  _i2.Stream<_i8.UploadProgress> uploadFile({
-    required _i4.RelativePath path,
-    required _i2.Stream<_i6.ByteData> data,
+  _i2.Stream<_i9.UploadProgress> uploadFile({
+    required _i5.RelativePath path,
+    required _i2.Stream<_i7.ByteData> data,
   }) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<_i8.UploadProgress>,
-          _i8.UploadProgress>(
+      caller.callStreamingServerEndpoint<_i2.Stream<_i9.UploadProgress>,
+          _i9.UploadProgress>(
         'transfer',
         'uploadFile',
         {'path': path},
@@ -138,7 +133,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i9.Protocol(),
+          _i10.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

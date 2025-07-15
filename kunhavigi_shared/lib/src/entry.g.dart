@@ -7,7 +7,7 @@ part of 'entry.dart';
 // **************************************************************************
 
 FileEntry _$FileEntryFromJson(Map<String, dynamic> json) => FileEntry(
-  path: const _RelativePathConverter().fromJson(json['path'] as String),
+  path: const RelativePathConverter().fromJson(json['path'] as String),
   size: (json['size'] as num).toInt(),
   lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
   mimeType: json['mimeType'] as String,
@@ -15,7 +15,7 @@ FileEntry _$FileEntryFromJson(Map<String, dynamic> json) => FileEntry(
 );
 
 Map<String, dynamic> _$FileEntryToJson(FileEntry instance) => <String, dynamic>{
-  'path': const _RelativePathConverter().toJson(instance.path),
+  'path': const RelativePathConverter().toJson(instance.path),
   'size': instance.size,
   'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
   'mimeType': instance.mimeType,
@@ -24,27 +24,27 @@ Map<String, dynamic> _$FileEntryToJson(FileEntry instance) => <String, dynamic>{
 
 DirectoryEntry _$DirectoryEntryFromJson(Map<String, dynamic> json) =>
     DirectoryEntry(
-      path: const _RelativePathConverter().fromJson(json['path'] as String),
+      path: const RelativePathConverter().fromJson(json['path'] as String),
       lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$DirectoryEntryToJson(DirectoryEntry instance) =>
     <String, dynamic>{
-      'path': const _RelativePathConverter().toJson(instance.path),
+      'path': const RelativePathConverter().toJson(instance.path),
       'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
       'runtimeType': instance.$type,
     };
 
 UnknownEntry _$UnknownEntryFromJson(Map<String, dynamic> json) => UnknownEntry(
-  path: const _RelativePathConverter().fromJson(json['path'] as String),
+  path: const RelativePathConverter().fromJson(json['path'] as String),
   lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
   $type: json['runtimeType'] as String?,
 );
 
 Map<String, dynamic> _$UnknownEntryToJson(UnknownEntry instance) =>
     <String, dynamic>{
-      'path': const _RelativePathConverter().toJson(instance.path),
+      'path': const RelativePathConverter().toJson(instance.path),
       'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
       'runtimeType': instance.$type,
     };

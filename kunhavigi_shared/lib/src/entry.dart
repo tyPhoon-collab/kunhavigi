@@ -29,19 +29,19 @@ extension type const RelativePath(String value) {
 sealed class Entry with _$Entry {
   @JsonSerializable(explicitToJson: true)
   const factory Entry.file({
-    @_RelativePathConverter() required RelativePath path,
+    @RelativePathConverter() required RelativePath path,
     required int size,
     required DateTime lastModifiedAt,
     required String mimeType,
   }) = FileEntry;
   @JsonSerializable(explicitToJson: true)
   const factory Entry.directory({
-    @_RelativePathConverter() required RelativePath path,
+    @RelativePathConverter() required RelativePath path,
     required DateTime lastModifiedAt,
   }) = DirectoryEntry;
   @JsonSerializable(explicitToJson: true)
   const factory Entry.unknown({
-    @_RelativePathConverter() required RelativePath path,
+    @RelativePathConverter() required RelativePath path,
     required DateTime lastModifiedAt,
   }) = UnknownEntry;
 
@@ -53,8 +53,8 @@ sealed class Entry with _$Entry {
   RelativePath get parent => RelativePath(p.dirname(path.value));
 }
 
-class _RelativePathConverter implements JsonConverter<RelativePath, String> {
-  const _RelativePathConverter();
+class RelativePathConverter implements JsonConverter<RelativePath, String> {
+  const RelativePathConverter();
 
   @override
   RelativePath fromJson(String json) => RelativePath(json);

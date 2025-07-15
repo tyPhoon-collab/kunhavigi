@@ -57,6 +57,7 @@ class _AppBarBottom extends StatelessWidget {
             spacing: 4,
             children: [
               Expanded(child: PathBreadcrumb()),
+              SearchIconButton(),
               SortIconButton(),
               SortOrderIconButton(),
               ReloadIconButton(),

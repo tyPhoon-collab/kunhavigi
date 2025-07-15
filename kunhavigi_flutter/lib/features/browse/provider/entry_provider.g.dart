@@ -156,7 +156,7 @@ class _EntriesProviderElement extends FutureProviderElement<EntriesResponse>
   RelativePath get path => (origin as EntriesProvider).path;
 }
 
-String _$filteredEntriesHash() => r'449479bc2b3a4381ca5e4bd7ff327430f82471f7';
+String _$filteredEntriesHash() => r'70752b56b47d674f6b5dc460791b85f3aab20f06';
 
 /// See also [filteredEntries].
 @ProviderFor(filteredEntries)
@@ -284,6 +284,136 @@ class _FilteredEntriesProviderElement
 
   @override
   RelativePath get path => (origin as FilteredEntriesProvider).path;
+}
+
+String _$searchedEntriesHash() => r'614dc45ff185793b980c246f8cf74ad67658555b';
+
+/// See also [searchedEntries].
+@ProviderFor(searchedEntries)
+const searchedEntriesProvider = SearchedEntriesFamily();
+
+/// See also [searchedEntries].
+class SearchedEntriesFamily extends Family<AsyncValue<EntriesResponse>> {
+  /// See also [searchedEntries].
+  const SearchedEntriesFamily();
+
+  /// See also [searchedEntries].
+  SearchedEntriesProvider call(
+    SearchQuery query,
+  ) {
+    return SearchedEntriesProvider(
+      query,
+    );
+  }
+
+  @override
+  SearchedEntriesProvider getProviderOverride(
+    covariant SearchedEntriesProvider provider,
+  ) {
+    return call(
+      provider.query,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'searchedEntriesProvider';
+}
+
+/// See also [searchedEntries].
+class SearchedEntriesProvider extends FutureProvider<EntriesResponse> {
+  /// See also [searchedEntries].
+  SearchedEntriesProvider(
+    SearchQuery query,
+  ) : this._internal(
+          (ref) => searchedEntries(
+            ref as SearchedEntriesRef,
+            query,
+          ),
+          from: searchedEntriesProvider,
+          name: r'searchedEntriesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$searchedEntriesHash,
+          dependencies: SearchedEntriesFamily._dependencies,
+          allTransitiveDependencies:
+              SearchedEntriesFamily._allTransitiveDependencies,
+          query: query,
+        );
+
+  SearchedEntriesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.query,
+  }) : super.internal();
+
+  final SearchQuery query;
+
+  @override
+  Override overrideWith(
+    FutureOr<EntriesResponse> Function(SearchedEntriesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SearchedEntriesProvider._internal(
+        (ref) => create(ref as SearchedEntriesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        query: query,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<EntriesResponse> createElement() {
+    return _SearchedEntriesProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SearchedEntriesProvider && other.query == query;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, query.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin SearchedEntriesRef on FutureProviderRef<EntriesResponse> {
+  /// The parameter `query` of this provider.
+  SearchQuery get query;
+}
+
+class _SearchedEntriesProviderElement
+    extends FutureProviderElement<EntriesResponse> with SearchedEntriesRef {
+  _SearchedEntriesProviderElement(super.provider);
+
+  @override
+  SearchQuery get query => (origin as SearchedEntriesProvider).query;
 }
 
 String _$entryPreviewHash() => r'6aadfaf63d159a218984270576b07b247dfbfb81';
@@ -416,7 +546,7 @@ class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
   RelativePath get path => (origin as EntryPreviewProvider).path;
 }
 
-String _$currentPathHash() => r'8bfaed936797a3159e21edf170309b10cfe6e972';
+String _$currentPathHash() => r'68779e9d98eda3bb3cc7dc4bee89db9b28394bca';
 
 /// See also [CurrentPath].
 @ProviderFor(CurrentPath)

@@ -2,4 +2,3 @@ class: EntriesResponse
 fields:
   entries: List<Entry>
   totalCount: int
-  isRootDirectory: bool

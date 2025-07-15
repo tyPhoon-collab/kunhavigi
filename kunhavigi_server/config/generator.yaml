@@ -8,3 +8,4 @@ extraClasses:
   - package:kunhavigi_shared/kunhavigi_shared.dart:FileEntry
   - package:kunhavigi_shared/kunhavigi_shared.dart:EntryPreview
   - package:kunhavigi_shared/kunhavigi_shared.dart:DownloadProgress
+  - package:kunhavigi_shared/kunhavigi_shared.dart:SearchQuery

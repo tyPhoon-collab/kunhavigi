@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/button/entry_menu_button.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/extension.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/preview_modal.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
@@ -45,7 +45,7 @@ class EntriesListView extends ConsumerWidget {
 
     final data = entries.requireValue;
 
-    return data.isRootDirectory
+    return path.isRoot
         ? _RootDirectoryListView(data: data, padding: padding, path: path)
         : _SubDirectoryListView(data: data, padding: padding, path: path);
   }
@@ -221,46 +221,5 @@ class _NavigationTile extends StatelessWidget {
         shape: shape,
       ),
     );
-  }
-}
-
-extension on Entry {
-  ({
-    Color backgroundColor,
-    Color iconColor,
-    IconData icon,
-  }) presentation(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return switch (this) {
-      final FileEntry _ => (
-          backgroundColor: colorScheme.secondaryContainer,
-          iconColor: colorScheme.onSecondaryContainer,
-          icon: Icons.insert_drive_file,
-        ),
-      final DirectoryEntry _ => (
-          backgroundColor: colorScheme.tertiaryContainer,
-          iconColor: colorScheme.onTertiaryContainer,
-          icon: Icons.folder,
-        ),
-      final UnknownEntry _ => (
-          backgroundColor: colorScheme.errorContainer,
-          iconColor: colorScheme.onErrorContainer,
-          icon: Icons.question_mark,
-        ),
-    };
-  }
-
-  String tooltip() {
-    final format = DateFormat.yMMMd().add_jm().format;
-
-    return switch (this) {
-      FileEntry(:final size, :final lastModifiedAt, :final mimeType) =>
-        '$mimeType, $size bytes | Modified: ${format(lastModifiedAt)}',
-      DirectoryEntry(:final lastModifiedAt) =>
-        'Modified: ${format(lastModifiedAt)}',
-      UnknownEntry(:final lastModifiedAt) =>
-        'Modified: ${format(lastModifiedAt)}',
-    };
   }
 }

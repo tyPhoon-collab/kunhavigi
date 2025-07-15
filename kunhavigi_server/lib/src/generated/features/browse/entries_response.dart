@@ -17,13 +17,11 @@ abstract class EntriesResponse
   EntriesResponse._({
     required this.entries,
     required this.totalCount,
-    required this.isRootDirectory,
   });
 
   factory EntriesResponse({
     required List<_i2.Entry> entries,
     required int totalCount,
-    required bool isRootDirectory,
   }) = _EntriesResponseImpl;
 
   factory EntriesResponse.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -32,7 +30,6 @@ abstract class EntriesResponse
           .map((e) => _i2.Entry.fromJson(e))
           .toList(),
       totalCount: jsonSerialization['totalCount'] as int,
-      isRootDirectory: jsonSerialization['isRootDirectory'] as bool,
     );
   }
 
@@ -40,22 +37,18 @@ abstract class EntriesResponse
 
   int totalCount;
 
-  bool isRootDirectory;
-
   /// Returns a shallow copy of this [EntriesResponse]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   EntriesResponse copyWith({
     List<_i2.Entry>? entries,
     int? totalCount,
-    bool? isRootDirectory,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       'entries': entries.toJson(valueToJson: (v) => v.toJson()),
       'totalCount': totalCount,
-      'isRootDirectory': isRootDirectory,
     };
   }
 
@@ -69,7 +62,6 @@ abstract class EntriesResponse
                   ? (v as _i1.ProtocolSerialization).toJsonForProtocol()
                   : v.toJson()),
       'totalCount': totalCount,
-      'isRootDirectory': isRootDirectory,
     };
   }
 
@@ -83,11 +75,9 @@ class _EntriesResponseImpl extends EntriesResponse {
   _EntriesResponseImpl({
     required List<_i2.Entry> entries,
     required int totalCount,
-    required bool isRootDirectory,
   }) : super._(
           entries: entries,
           totalCount: totalCount,
-          isRootDirectory: isRootDirectory,
         );
 
   /// Returns a shallow copy of this [EntriesResponse]
@@ -97,12 +87,10 @@ class _EntriesResponseImpl extends EntriesResponse {
   EntriesResponse copyWith({
     List<_i2.Entry>? entries,
     int? totalCount,
-    bool? isRootDirectory,
   }) {
     return EntriesResponse(
       entries: entries ?? this.entries.map((e0) => e0.copyWith()).toList(),
       totalCount: totalCount ?? this.totalCount,
-      isRootDirectory: isRootDirectory ?? this.isRootDirectory,
     );
   }
 }
