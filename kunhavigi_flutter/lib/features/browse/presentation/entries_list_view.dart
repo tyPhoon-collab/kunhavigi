@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/button/entry_menu_button.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/preview_modal.dart';
@@ -140,46 +141,50 @@ class _EntryListTile extends ConsumerWidget {
 
     return Padding(
       padding: _margin,
-      child: ListTile(
-        title: Text(
-          entry.name,
-          style: textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
+      child: Tooltip(
+        message: entry.tooltip(),
+        waitDuration: const Duration(milliseconds: 500),
+        child: ListTile(
+          title: Text(
+            entry.name,
+            style: textTheme.bodyLarge?.copyWith(
+              color: colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        subtitle: switch (entry) {
-          final FileEntry fileEntry => Text(
-              fileEntry.size.toByteString(),
-              style: textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurface.withValues(alpha: 0.7),
+          subtitle: switch (entry) {
+            final FileEntry fileEntry => Text(
+                fileEntry.size.toByteString(),
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+              ),
+            final DirectoryEntry _ => null,
+            final UnknownEntry _ => null,
+          },
+          leading: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: ShapeDecoration(
+              color: backgroundColor,
+              shape: shape.copyWith(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-          final DirectoryEntry _ => null,
-          final UnknownEntry _ => null,
-        },
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: ShapeDecoration(
-            color: backgroundColor,
-            shape: shape.copyWith(
-              borderRadius: BorderRadius.circular(8),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 20,
             ),
           ),
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: 20,
-          ),
+          trailing: EntryMenuButton(entry: entry),
+          onTap: switch (entry) {
+            FileEntry() => showPreviewModal,
+            DirectoryEntry() => navigate,
+            UnknownEntry() => () {},
+          },
+          shape: shape,
+          tileColor: colorScheme.surfaceContainerLowest,
         ),
-        trailing: EntryMenuButton(entry: entry),
-        onTap: switch (entry) {
-          FileEntry() => showPreviewModal,
-          DirectoryEntry() => navigate,
-          UnknownEntry() => () {},
-        },
-        shape: shape,
-        tileColor: colorScheme.surfaceContainerLowest,
       ),
     );
   }
@@ -247,6 +252,19 @@ extension on Entry {
           iconColor: colorScheme.onErrorContainer,
           icon: Icons.question_mark,
         ),
+    };
+  }
+
+  String tooltip() {
+    final format = DateFormat.yMMMd().add_jm().format;
+
+    return switch (this) {
+      FileEntry(:final size, :final lastModifiedAt, :final mimeType) =>
+        '$mimeType, $size bytes | Modified: ${format(lastModifiedAt)}',
+      DirectoryEntry(:final lastModifiedAt) =>
+        'Modified: ${format(lastModifiedAt)}',
+      UnknownEntry(:final lastModifiedAt) =>
+        'Modified: ${format(lastModifiedAt)}',
     };
   }
 }

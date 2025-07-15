@@ -12,6 +12,7 @@ class UploadButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
       onPressed: () => _pickFiles(context, ref),
+      tooltip: 'Upload Files',
       child: const Icon(Icons.upload_file),
     );
   }
