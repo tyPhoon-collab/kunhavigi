@@ -1,17 +1,11 @@
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
-import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
-import 'package:kunhavigi_server/src/features/preview/entry_preview_generator.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:path/path.dart' as p;
 import 'package:serverpod/serverpod.dart';
 
 class BrowseEndpoint extends Endpoint {
-  final _textPreviewGenerator = TextPreviewGenerator();
-
-  final _imagePreviewGenerator = ImagePreviewGenerator();
-
   /// Search entries (files and directories) by name under a given path, or globally if path is null.
   Future<EntriesResponse> searchEntries(
     Session session,
@@ -61,23 +55,6 @@ class BrowseEndpoint extends Endpoint {
       entries: entries,
       totalCount: entries.length,
     );
-  }
-
-  /// Peek at the content of a file to generate a preview.
-  Future<EntryPreview> peekEntry(Session session, RelativePath path) async {
-    final normalizedPath = validateAndNormalizePath(path);
-    final mimeFile = exactMimeFile(normalizedPath);
-
-    final preview = switch (mimeFile) {
-      final TextMimeFile file => await _textPreviewGenerator.generate(file),
-      final ImageMimeFile file => await _imagePreviewGenerator.generate(file),
-      _ => const EntryPreview.unknown(),
-    };
-
-    final title = '${preview.runtimeType}(${mimeFile.mimeType})';
-    session.log('Generated $title preview for ${path.value}');
-
-    return preview;
   }
 
   /// Delete a file from the server

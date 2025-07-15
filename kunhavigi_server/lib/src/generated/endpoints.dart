@@ -73,24 +73,6 @@ class Endpoints extends _i1.EndpointDispatch {
             params['path'],
           ),
         ),
-        'peekEntry': _i1.MethodConnector(
-          name: 'peekEntry',
-          params: {
-            'path': _i1.ParameterDescription(
-              name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['browse'] as _i2.BrowseEndpoint).peekEntry(
-            session,
-            params['path'],
-          ),
-        ),
         'delete': _i1.MethodConnector(
           name: 'delete',
           params: {
@@ -139,6 +121,24 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'transfer',
       endpoint: endpoints['transfer']!,
       methodConnectors: {
+        'peekEntry': _i1.MethodConnector(
+          name: 'peekEntry',
+          params: {
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i5.RelativePath>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['transfer'] as _i3.TransferEndpoint).peekEntry(
+            session,
+            params['path'],
+          ),
+        ),
         'downloadFile': _i1.MethodStreamConnector(
           name: 'downloadFile',
           params: {

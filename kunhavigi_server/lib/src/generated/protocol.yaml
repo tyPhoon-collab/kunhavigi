@@ -1,10 +1,10 @@
 browse:
   - searchEntries:
   - getEntries:
-  - peekEntry:
   - delete:
   - rename:
 transfer:
+  - peekEntry:
   - downloadFile:
   - getDownloadUrl:
   - uploadFile:

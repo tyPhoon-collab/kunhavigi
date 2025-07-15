@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
+import 'package:kunhavigi_server/src/features/preview/entry_preview_generator.dart';
 import 'package:kunhavigi_server/src/features/transfer/archive.dart';
 import 'package:kunhavigi_server/src/features/transfer/download.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
@@ -9,6 +11,27 @@ import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:serverpod/serverpod.dart';
 
 class TransferEndpoint extends Endpoint {
+  final _textPreviewGenerator = TextPreviewGenerator();
+
+  final _imagePreviewGenerator = ImagePreviewGenerator();
+
+  /// Peek at the content of a file to generate a preview.
+  Future<EntryPreview> peekEntry(Session session, RelativePath path) async {
+    final normalizedPath = validateAndNormalizePath(path);
+    final mimeFile = exactMimeFile(normalizedPath);
+
+    final preview = switch (mimeFile) {
+      final TextMimeFile file => await _textPreviewGenerator.generate(file),
+      final ImageMimeFile file => await _imagePreviewGenerator.generate(file),
+      _ => const EntryPreview.unknown(),
+    };
+
+    final title = '${preview.runtimeType}(${mimeFile.mimeType})';
+    session.log('Generated $title preview for ${path.value}');
+
+    return preview;
+  }
+
   /// Download a file or folder from the server
   Stream<ByteData> downloadFile(Session session, RelativePath path) async* {
     final normalizedPath = validateAndNormalizePath(path);

@@ -45,14 +45,6 @@ class EndpointBrowse extends _i1.EndpointRef {
         {'path': path},
       );
 
-  /// Peek at the content of a file to generate a preview.
-  _i2.Future<_i6.EntryPreview> peekEntry(_i5.RelativePath path) =>
-      caller.callServerEndpoint<_i6.EntryPreview>(
-        'browse',
-        'peekEntry',
-        {'path': path},
-      );
-
   /// Delete a file from the server
   _i2.Future<bool> delete(_i5.RelativePath path) =>
       caller.callServerEndpoint<bool>(
@@ -82,6 +74,14 @@ class EndpointTransfer extends _i1.EndpointRef {
 
   @override
   String get name => 'transfer';
+
+  /// Peek at the content of a file to generate a preview.
+  _i2.Future<_i6.EntryPreview> peekEntry(_i5.RelativePath path) =>
+      caller.callServerEndpoint<_i6.EntryPreview>(
+        'transfer',
+        'peekEntry',
+        {'path': path},
+      );
 
   /// Download a file or folder from the server
   _i2.Stream<_i7.ByteData> downloadFile(_i5.RelativePath path) => caller

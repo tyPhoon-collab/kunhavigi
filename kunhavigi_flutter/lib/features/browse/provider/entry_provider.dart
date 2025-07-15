@@ -110,7 +110,7 @@ Future<EntryPreview> entryPreview(
 ) async {
   try {
     final client = ref.watch(clientProvider);
-    final result = await client.browse.peekEntry(path);
+    final result = await client.transfer.peekEntry(path);
     logger.i('Successfully fetched preview for: $path');
     return result;
   } catch (error, stackTrace) {
