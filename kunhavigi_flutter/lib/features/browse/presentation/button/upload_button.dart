@@ -10,12 +10,8 @@ class UploadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return FloatingActionButton(
       onPressed: () => _pickFiles(context, ref),
-      backgroundColor: colorScheme.primary,
-      foregroundColor: colorScheme.onPrimary,
       child: const Icon(Icons.upload_file),
     );
   }

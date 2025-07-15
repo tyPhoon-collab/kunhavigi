@@ -20,6 +20,11 @@ ThemeData buildTheme(Brightness brightness) {
   return ThemeData(
     colorScheme: colorScheme,
     useMaterial3: true,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: colorScheme.primary,
+      foregroundColor: colorScheme.onPrimary,
+      shape: shape,
+    ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
