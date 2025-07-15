@@ -59,6 +59,7 @@ class _AppBarBottom extends StatelessWidget {
         child: DefaultTextStyle.merge(
           style: TextStyle(color: foregroundColor),
           child: const Row(
+            spacing: 4,
             children: [
               Expanded(child: PathBreadcrumb()),
               SortIconButton(),
