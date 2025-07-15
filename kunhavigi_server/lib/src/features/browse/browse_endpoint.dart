@@ -42,7 +42,8 @@ class BrowseEndpoint extends Endpoint {
       _ => const EntryPreview.unknown(),
     };
 
-    session.log('Generated ${preview.runtimeType} preview for ${path.value}');
+    session.log(
+        'Generated ${preview.runtimeType}(${mimeFile.mimeType}) preview for ${path.value}');
 
     return preview;
   }
