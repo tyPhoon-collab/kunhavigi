@@ -20,12 +20,10 @@ class CurrentPath extends _$CurrentPath {
   }
 
   void setPath(RelativePath path) {
-    logger.i('Navigating to path: $path');
     state = path;
   }
 
   void setAsRoot() {
-    logger.i('Navigating to root directory');
     state = const RelativePath.root();
   }
 
@@ -37,7 +35,6 @@ class CurrentPath extends _$CurrentPath {
     } else {
       state = state.parent;
     }
-    logger.i('Navigating to parent directory: $state');
   }
 }
 
@@ -46,7 +43,6 @@ Future<EntriesResponse> entries(
   Ref ref,
   RelativePath path,
 ) async {
-  logger.i('Fetching entries for path: $path');
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.getEntries(path);
@@ -94,7 +90,6 @@ Future<EntriesResponse> searchedEntries(
   Ref ref,
   SearchQuery query,
 ) async {
-  logger.i('Searching entries: $query');
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.searchEntries(query);
@@ -116,7 +111,6 @@ Future<EntryPreview> entryPreview(
   Ref ref,
   RelativePath path,
 ) async {
-  logger.i('Fetching preview for path: $path');
   try {
     final client = ref.watch(clientProvider);
     final result = await client.browse.peekEntry(path);

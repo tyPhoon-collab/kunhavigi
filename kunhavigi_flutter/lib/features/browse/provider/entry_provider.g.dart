@@ -6,7 +6,7 @@ part of 'entry_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$entriesHash() => r'fc578a681e85004d7510af23e6a5a3bee6e2ed14';
+String _$entriesHash() => r'75b899cae0687f4df32a23b567e1135a7c8817ad';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -286,7 +286,7 @@ class _FilteredEntriesProviderElement
   RelativePath get path => (origin as FilteredEntriesProvider).path;
 }
 
-String _$searchedEntriesHash() => r'614dc45ff185793b980c246f8cf74ad67658555b';
+String _$searchedEntriesHash() => r'8aadb8f441148251841488864364c22b4fc5f391';
 
 /// See also [searchedEntries].
 @ProviderFor(searchedEntries)
@@ -416,7 +416,7 @@ class _SearchedEntriesProviderElement
   SearchQuery get query => (origin as SearchedEntriesProvider).query;
 }
 
-String _$entryPreviewHash() => r'6aadfaf63d159a218984270576b07b247dfbfb81';
+String _$entryPreviewHash() => r'8d4d2a834f8abfdaf0506ebd325261b33e068f4b';
 
 /// See also [entryPreview].
 @ProviderFor(entryPreview)
@@ -546,7 +546,7 @@ class _EntryPreviewProviderElement extends FutureProviderElement<EntryPreview>
   RelativePath get path => (origin as EntryPreviewProvider).path;
 }
 
-String _$currentPathHash() => r'68779e9d98eda3bb3cc7dc4bee89db9b28394bca';
+String _$currentPathHash() => r'5daefd505aac78e067b5ea1386daf2aae121f246';
 
 /// See also [CurrentPath].
 @ProviderFor(CurrentPath)
