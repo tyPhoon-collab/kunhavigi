@@ -7,4 +7,3 @@ export 'src/byte_format.dart';
 export 'src/download_progress.dart';
 export 'src/entry.dart';
 export 'src/entry_preview.dart';
-export 'src/pattern_matcher.dart';

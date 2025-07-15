@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
+import 'package:kunhavigi_flutter/features/browse_settings/application/pattern_matcher.dart';
 
 part 'browse_settings.freezed.dart';
 part 'browse_settings.g.dart';
