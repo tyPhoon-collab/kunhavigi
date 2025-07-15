@@ -79,7 +79,7 @@ class _BrowseSettingsForm extends HookConsumerWidget {
               ],
             ),
             _SettingsSection(
-              title: 'Display',
+              title: 'Behavior',
               icon: Icons.visibility_outlined,
               children: [
                 const _SettingsTextField(
@@ -103,7 +103,6 @@ class _BrowseSettingsForm extends HookConsumerWidget {
               ],
             ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 8,
               children: [
                 _ResetButton(onPressed: reset),
@@ -131,14 +130,13 @@ class _SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 12,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
               Icon(
@@ -149,9 +147,9 @@ class _SettingsSection extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: textTheme.labelLarge?.copyWith(
+                style: TextStyle(
                   color: colorScheme.primary,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -182,9 +180,6 @@ class _SettingsTextField extends StatelessWidget {
       name: name,
       decoration: InputDecoration(
         labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
         prefixIcon: Icon(prefixIcon),
         helperText: helperText,
       ),
@@ -229,18 +224,6 @@ class _ResetButton extends ConsumerWidget {
       width: double.infinity,
       child: OutlinedButton(
         onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.primary,
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-            width: 1.5,
-          ),
-          textStyle: Theme.of(context).textTheme.labelLarge,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
         child: const Text('Reset to Defaults'),
       ),
     );
@@ -254,22 +237,10 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
-          textStyle: textTheme.labelLarge,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
         child: const Text('Save'),
       ),
     );
