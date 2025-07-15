@@ -205,8 +205,8 @@ return $default(_that.query,_that.path,_that.limit,_that.offset);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _SearchQuery implements SearchQuery {
-  const _SearchQuery({required this.query, @RelativePathConverter() this.path, this.limit = 50, this.offset = 0});
+class _SearchQuery extends SearchQuery {
+  const _SearchQuery({required this.query, @RelativePathConverter() this.path, this.limit = 10, this.offset = 0}): super._();
   factory _SearchQuery.fromJson(Map<String, dynamic> json) => _$SearchQueryFromJson(json);
 
 @override final  String query;

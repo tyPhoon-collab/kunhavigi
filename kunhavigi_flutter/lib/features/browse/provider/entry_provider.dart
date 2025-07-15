@@ -86,12 +86,9 @@ Future<EntriesResponse> filteredEntries(
 }
 
 @Riverpod(keepAlive: true)
-Future<EntriesResponse> searchedEntries(
-  Ref ref,
-  SearchQuery query,
-) async {
+Future<EntriesResponse> searchedEntries(Ref ref, SearchQuery query) async {
+  final client = ref.watch(clientProvider);
   try {
-    final client = ref.watch(clientProvider);
     final result = await client.browse.searchEntries(query);
     logger.i(
         'Successfully searched ${result.entries.length} entries (${result.totalCount} total)');

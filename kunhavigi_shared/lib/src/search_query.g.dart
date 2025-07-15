@@ -12,7 +12,7 @@ _SearchQuery _$SearchQueryFromJson(Map<String, dynamic> json) => _SearchQuery(
     json['path'],
     const RelativePathConverter().fromJson,
   ),
-  limit: (json['limit'] as num?)?.toInt() ?? 50,
+  limit: (json['limit'] as num?)?.toInt() ?? 10,
   offset: (json['offset'] as num?)?.toInt() ?? 0,
 );
 

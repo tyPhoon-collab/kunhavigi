@@ -286,7 +286,7 @@ class _FilteredEntriesProviderElement
   RelativePath get path => (origin as FilteredEntriesProvider).path;
 }
 
-String _$searchedEntriesHash() => r'8aadb8f441148251841488864364c22b4fc5f391';
+String _$searchedEntriesHash() => r'4a14e1097df24e55f9c61b94af7031e2066993fe';
 
 /// See also [searchedEntries].
 @ProviderFor(searchedEntries)

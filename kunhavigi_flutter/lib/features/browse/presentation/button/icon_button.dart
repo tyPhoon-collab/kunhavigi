@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/domain/sort_settings.dart';
-import 'package:kunhavigi_flutter/features/browse/presentation/search_suggestion.dart';
+import 'package:kunhavigi_flutter/features/browse/presentation/search.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
 import 'package:kunhavigi_flutter/theme.dart';
@@ -12,14 +12,7 @@ class SearchIconButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SearchAnchor(
-      suggestionsBuilder: (context, controller) async {
-        return [
-          SearchSuggestion(text: controller.text),
-        ];
-      },
-      viewShape: shape,
-      shrinkWrap: true,
+    return EntriesSearchAnchor(
       builder: (context, controller) => _IconButton(
         icon: Icons.search,
         onPressed: controller.openView,
