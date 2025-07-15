@@ -20,6 +20,13 @@ ThemeData buildTheme(Brightness brightness) {
   return ThemeData(
     colorScheme: colorScheme,
     useMaterial3: true,
+    scaffoldBackgroundColor: colorScheme.surfaceContainer,
+    appBarTheme: AppBarTheme(
+      backgroundColor: colorScheme.surfaceContainer,
+      foregroundColor: colorScheme.onSurface,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,

@@ -14,8 +14,6 @@ class KunhavigiPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return FileDropZone(
       onFilesDropped: (files) async {
         if (files.isEmpty) {
@@ -28,9 +26,6 @@ class KunhavigiPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Kunhavigi'),
-          backgroundColor: colorScheme.surface,
-          foregroundColor: colorScheme.onSurface,
-          elevation: 0,
           bottom: const PreferredSize(
             preferredSize: Size.fromHeight(48),
             child: _AppBarBottom(),

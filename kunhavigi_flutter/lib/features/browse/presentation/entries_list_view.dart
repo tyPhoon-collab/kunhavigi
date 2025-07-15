@@ -95,16 +95,12 @@ class _SubDirectoryListView extends ConsumerWidget {
           0 => _NavigationTile(
               title: 'Go to root directory',
               icon: Icons.home,
-              onTap: () {
-                ref.read(currentPathProvider.notifier).setAsRoot();
-              },
+              onTap: ref.read(currentPathProvider.notifier).setAsRoot,
             ),
           1 => _NavigationTile(
               title: 'Go to parent directory',
               icon: Icons.arrow_back,
-              onTap: () {
-                ref.read(currentPathProvider.notifier).setAsParent();
-              },
+              onTap: ref.read(currentPathProvider.notifier).setAsParent,
             ),
           _ => _EntryListTile(entry: data.entries[index - 2]),
         };
@@ -112,6 +108,8 @@ class _SubDirectoryListView extends ConsumerWidget {
     );
   }
 }
+
+const _margin = EdgeInsets.symmetric(horizontal: 16, vertical: 2);
 
 class _EntryListTile extends ConsumerWidget {
   const _EntryListTile({
@@ -140,8 +138,8 @@ class _EntryListTile extends ConsumerWidget {
       ref.read(currentPathProvider.notifier).setPath(entry.path);
     }
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+    return Padding(
+      padding: _margin,
       child: ListTile(
         title: Text(
           entry.name,
@@ -201,28 +199,23 @@ class _NavigationTile extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
-      ),
+    final foregroundColor = colorScheme.onSecondaryContainer;
+    final backgroundColor = colorScheme.secondaryContainer;
+
+    return Padding(
+      padding: _margin,
       child: ListTile(
         title: Text(
           title,
           style: textTheme.bodyMedium?.copyWith(
-            color: colorScheme.onPrimaryContainer,
+            color: foregroundColor,
             fontWeight: FontWeight.w500,
           ),
         ),
-        leading: Icon(
-          icon,
-          color: colorScheme.onPrimaryContainer,
-        ),
+        leading: Icon(icon, color: foregroundColor),
+        tileColor: backgroundColor,
         onTap: onTap,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: shape,
       ),
     );
   }

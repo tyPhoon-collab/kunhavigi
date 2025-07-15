@@ -138,7 +138,7 @@ class _IconButton extends StatelessWidget {
       style: IconButton.styleFrom(
         shape: shape,
         foregroundColor: colorScheme.onSurfaceVariant,
-        backgroundColor: colorScheme.surfaceContainerHigh,
+        backgroundColor: colorScheme.surfaceContainerLowest,
       ),
       icon: Icon(icon),
       onPressed: onPressed,
