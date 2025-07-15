@@ -162,7 +162,9 @@ class _EntryListTile extends ConsumerWidget {
           padding: const EdgeInsets.all(8),
           decoration: ShapeDecoration(
             color: backgroundColor,
-            shape: innerShape,
+            shape: shape.copyWith(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
           child: Icon(
             icon,

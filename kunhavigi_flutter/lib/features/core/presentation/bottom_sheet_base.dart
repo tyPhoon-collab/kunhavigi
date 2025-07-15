@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kunhavigi_flutter/theme.dart';
 
 class BottomSheetBase extends StatelessWidget {
   const BottomSheetBase({
@@ -28,11 +29,16 @@ class BottomSheetBase extends StatelessWidget {
       minChildSize: minChildSize,
       builder: (context, scrollController) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
+            shape: shape.copyWith(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+            ),
             color: colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           ),
+          clipBehavior: Clip.antiAlias,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               header,
               Expanded(
@@ -73,10 +79,7 @@ class BottomSheetHeader extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      color: colorScheme.surfaceContainerHighest,
       child: Row(
         children: [
           Icon(

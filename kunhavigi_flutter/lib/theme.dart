@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 final shape = RoundedSuperellipseBorder(
   borderRadius: BorderRadius.circular(16),
 );
-final innerShape = RoundedSuperellipseBorder(
-  borderRadius: BorderRadius.circular(8),
-);
 
 ThemeData buildTheme(Brightness brightness) {
   final colorScheme = ColorScheme.fromSeed(

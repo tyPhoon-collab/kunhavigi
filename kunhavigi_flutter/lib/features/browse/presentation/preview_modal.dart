@@ -4,6 +4,7 @@ import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/bottom_sheet_base.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
+import 'package:kunhavigi_flutter/theme.dart';
 
 class PreviewModal extends StatelessWidget {
   const PreviewModal({required this.entry, super.key});
@@ -80,8 +81,9 @@ class _PreviewContent extends StatelessWidget {
             ),
           ),
         ),
-      final ImageEntryPreview image => ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+      final ImageEntryPreview image => Material(
+          shape: shape,
+          clipBehavior: Clip.antiAlias,
           child: Image.memory(
             image.base64,
             fit: BoxFit.contain,
