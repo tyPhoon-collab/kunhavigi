@@ -8,7 +8,6 @@ class BottomSheetBase extends StatelessWidget {
     this.initialChildSize = 0.8,
     this.maxChildSize = 0.9,
     this.minChildSize = 0.3,
-    this.padding = const EdgeInsets.all(16),
     super.key,
   });
 
@@ -17,7 +16,6 @@ class BottomSheetBase extends StatelessWidget {
   final double initialChildSize;
   final double maxChildSize;
   final double minChildSize;
-  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class BottomSheetBase extends StatelessWidget {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Padding(
-                    padding: padding,
+                    padding: const EdgeInsets.all(16),
                     child: child,
                   ),
                 ),

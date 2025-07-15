@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
@@ -60,27 +61,8 @@ class _PreviewContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
     return switch (data) {
-      final TextEntryPreview text => Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: colorScheme.outline.withValues(alpha: 0.3),
-            ),
-          ),
-          child: SelectableText(
-            text.text,
-            style: textTheme.bodyMedium?.copyWith(
-              fontFamily: 'monospace',
-              color: colorScheme.onSurface,
-            ),
-          ),
-        ),
+      final TextEntryPreview text => GptMarkdown(text.text),
       final ImageEntryPreview image => Material(
           shape: shape,
           clipBehavior: Clip.antiAlias,

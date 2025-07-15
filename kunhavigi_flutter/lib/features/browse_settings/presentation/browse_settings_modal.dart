@@ -14,7 +14,6 @@ class BrowseSettingsModal extends ConsumerWidget {
     final settingsAsync = ref.watch(currentBrowseSettingsProvider);
 
     return BottomSheetBase(
-      padding: EdgeInsets.zero,
       header: const BottomSheetHeader(
         title: 'Browse Settings',
         subtitle: 'Configure browse and connection settings',
@@ -22,10 +21,7 @@ class BrowseSettingsModal extends ConsumerWidget {
       ),
       child: settingsAsync.when(
         data: (settings) => _BrowseSettingsForm(settings: settings),
-        error: (error, stack) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: ErrorMessage(error: error, stackTrace: stack),
-        ),
+        error: (error, stack) => ErrorMessage(error: error, stackTrace: stack),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
@@ -55,62 +51,59 @@ class _BrowseSettingsForm extends HookConsumerWidget {
       Navigator.of(context).pop();
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: FormBuilder(
-        key: formKey,
-        initialValue: settings.toFormValues(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          spacing: 24,
-          children: [
-            const _SettingsSection(
-              title: 'Connection',
-              icon: Icons.cloud_outlined,
-              children: [
-                _SettingsTextField(
-                  name: 'serverUrl',
-                  labelText: 'Server URL',
-                  prefixIcon: Icons.cloud_outlined,
-                  helperText:
-                      'E.g. https://api.example.com/ or http://localhost:3000/',
-                ),
-              ],
-            ),
-            _SettingsSection(
-              title: 'Behavior',
-              icon: Icons.visibility_outlined,
-              children: [
-                const _SettingsTextField(
-                  name: 'hiddenPatterns',
-                  labelText: 'Hidden Patterns',
-                  prefixIcon: Icons.visibility_off_outlined,
-                  helperText:
-                      'Comma separated patterns to hide (e.g. .DS_Store, .git)',
-                ),
-                _SettingsSwitch(
-                  name: 'showHidden',
-                  title: 'Show Hidden Files',
-                  initialValue: settings.showHidden,
-                ),
-                const _SettingsTextField(
-                  name: 'ignoreUploadPatterns',
-                  labelText: 'Ignore Upload Patterns',
-                  prefixIcon: Icons.upload_file_outlined,
-                  helperText: 'Comma separated patterns to ignore on upload',
-                ),
-              ],
-            ),
-            Column(
-              spacing: 8,
-              children: [
-                _ResetButton(onPressed: reset),
-                _SaveButton(onPressed: submit),
-              ],
-            ),
-          ],
-        ),
+    return FormBuilder(
+      key: formKey,
+      initialValue: settings.toFormValues(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 24,
+        children: [
+          const _SettingsSection(
+            title: 'Connection',
+            icon: Icons.cloud_outlined,
+            children: [
+              _SettingsTextField(
+                name: 'serverUrl',
+                labelText: 'Server URL',
+                prefixIcon: Icons.cloud_outlined,
+                helperText:
+                    'E.g. https://api.example.com/ or http://localhost:3000/',
+              ),
+            ],
+          ),
+          _SettingsSection(
+            title: 'Behavior',
+            icon: Icons.visibility_outlined,
+            children: [
+              const _SettingsTextField(
+                name: 'hiddenPatterns',
+                labelText: 'Hidden Patterns',
+                prefixIcon: Icons.visibility_off_outlined,
+                helperText:
+                    'Comma separated patterns to hide (e.g. .DS_Store, .git)',
+              ),
+              _SettingsSwitch(
+                name: 'showHidden',
+                title: 'Show Hidden Files',
+                initialValue: settings.showHidden,
+              ),
+              const _SettingsTextField(
+                name: 'ignoreUploadPatterns',
+                labelText: 'Ignore Upload Patterns',
+                prefixIcon: Icons.upload_file_outlined,
+                helperText: 'Comma separated patterns to ignore on upload',
+              ),
+            ],
+          ),
+          Column(
+            spacing: 8,
+            children: [
+              _ResetButton(onPressed: reset),
+              _SaveButton(onPressed: submit),
+            ],
+          ),
+        ],
       ),
     );
   }
