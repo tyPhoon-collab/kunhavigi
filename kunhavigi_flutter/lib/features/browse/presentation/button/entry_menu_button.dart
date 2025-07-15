@@ -13,6 +13,25 @@ List<_EntryMenuItem> _commonMenuItems(Entry entry) {
   ];
 }
 
+class EntryMenuButton extends StatelessWidget {
+  const EntryMenuButton({
+    required this.entry,
+    super.key,
+  });
+
+  final Entry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    return switch (entry) {
+      final FileEntry fileEntry => FileEntryMenuButton(fileEntry: fileEntry),
+      final DirectoryEntry directoryEntry =>
+        DirectoryEntryMenuButton(directoryEntry: directoryEntry),
+      final UnknownEntry _ => const SizedBox.shrink(),
+    };
+  }
+}
+
 class FileEntryMenuButton extends StatelessWidget {
   const FileEntryMenuButton({
     required this.fileEntry,

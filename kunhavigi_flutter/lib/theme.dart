@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+final shape = RoundedSuperellipseBorder(
+  borderRadius: BorderRadius.circular(16),
+);
+final innerShape = RoundedSuperellipseBorder(
+  borderRadius: BorderRadius.circular(8),
+);
+
 ThemeData buildTheme(Brightness brightness) {
   final colorScheme = ColorScheme.fromSeed(
     seedColor: Colors.green,
@@ -8,10 +15,6 @@ ThemeData buildTheme(Brightness brightness) {
 
   const buttonTextStyle = TextStyle(
     fontSize: 16,
-  );
-
-  final shape = RoundedSuperellipseBorder(
-    borderRadius: BorderRadius.circular(16),
   );
 
   return ThemeData(

@@ -5,6 +5,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/button/entry_menu
 import 'package:kunhavigi_flutter/features/browse/presentation/preview_modal.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
+import 'package:kunhavigi_flutter/theme.dart';
 
 typedef EntryCallback = void Function(Entry entry);
 
@@ -124,6 +125,8 @@ class _EntryListTile extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
+    final (:backgroundColor, :iconColor, :icon) = entry.presentation(context);
+
     void showPreviewModal() {
       showModalBottomSheet<void>(
         context: context,
@@ -139,19 +142,12 @@ class _EntryListTile extends ConsumerWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: colorScheme.outline.withValues(alpha: 0.2),
-        ),
-      ),
       child: ListTile(
         title: Text(
           entry.name,
           style: textTheme.bodyLarge?.copyWith(
             color: colorScheme.onSurface,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         subtitle: switch (entry) {
@@ -166,58 +162,26 @@ class _EntryListTile extends ConsumerWidget {
         },
         leading: Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: _getIconBackgroundColor(colorScheme),
-            borderRadius: BorderRadius.circular(6),
+          decoration: ShapeDecoration(
+            color: backgroundColor,
+            shape: innerShape,
           ),
           child: Icon(
-            switch (entry) {
-              final FileEntry _ => Icons.insert_drive_file,
-              final DirectoryEntry _ => Icons.folder,
-              final UnknownEntry _ => Icons.question_mark,
-            },
-            color: _getIconColor(colorScheme),
+            icon,
+            color: iconColor,
             size: 20,
           ),
         ),
-        trailing: switch (entry) {
-          final FileEntry fileEntry =>
-            FileEntryMenuButton(fileEntry: fileEntry),
-          final DirectoryEntry directoryEntry =>
-            DirectoryEntryMenuButton(directoryEntry: directoryEntry),
-          final UnknownEntry _ => null,
+        trailing: EntryMenuButton(entry: entry),
+        onTap: switch (entry) {
+          FileEntry() => showPreviewModal,
+          DirectoryEntry() => navigate,
+          UnknownEntry() => () {},
         },
-        onTap: () {
-          switch (entry) {
-            case final FileEntry _:
-              showPreviewModal();
-            case final DirectoryEntry _:
-              navigate();
-            case final UnknownEntry _:
-              break;
-          }
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: shape,
+        tileColor: colorScheme.surfaceContainerLowest,
       ),
     );
-  }
-
-  Color _getIconBackgroundColor(ColorScheme colorScheme) {
-    return switch (entry) {
-      final FileEntry _ => colorScheme.secondaryContainer,
-      final DirectoryEntry _ => colorScheme.tertiaryContainer,
-      final UnknownEntry _ => colorScheme.errorContainer,
-    };
-  }
-
-  Color _getIconColor(ColorScheme colorScheme) {
-    return switch (entry) {
-      final FileEntry _ => colorScheme.onSecondaryContainer,
-      final DirectoryEntry _ => colorScheme.onTertiaryContainer,
-      final UnknownEntry _ => colorScheme.onErrorContainer,
-    };
   }
 }
 
@@ -261,5 +225,33 @@ class _NavigationTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on Entry {
+  ({
+    Color backgroundColor,
+    Color iconColor,
+    IconData icon,
+  }) presentation(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return switch (this) {
+      final FileEntry _ => (
+          backgroundColor: colorScheme.secondaryContainer,
+          iconColor: colorScheme.onSecondaryContainer,
+          icon: Icons.insert_drive_file,
+        ),
+      final DirectoryEntry _ => (
+          backgroundColor: colorScheme.tertiaryContainer,
+          iconColor: colorScheme.onTertiaryContainer,
+          icon: Icons.folder,
+        ),
+      final UnknownEntry _ => (
+          backgroundColor: colorScheme.errorContainer,
+          iconColor: colorScheme.onErrorContainer,
+          icon: Icons.question_mark,
+        ),
+    };
   }
 }
