@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
+import 'package:serverpod/serverpod.dart';
 
 abstract interface class EntryPreviewGenerator {
   Future<EntryPreview> generate(covariant MimeFile mimeFile);
@@ -48,5 +50,34 @@ class ImagePreviewGenerator implements EntryPreviewGenerator {
     final bytes = await file.readAsBytes();
 
     return EntryPreview.image(base64: bytes);
+  }
+}
+
+class VideoPreviewGenerator implements EntryPreviewGenerator {
+  VideoPreviewGenerator();
+
+  @override
+  Future<EntryPreview> generate(VideoMimeFile mimeFile) async {
+    final file = mimeFile.file;
+    // 一時ファイルパス取得
+    final filePath = file.path;
+    final thumbPath = '${const Uuid().v4()}-thumb.jpg';
+
+    // ffmpegで1秒目のフレームを抽出（-ssを-iの前にして高速化）
+    final result = await Process.run(
+      'ffmpeg',
+      ['-ss', '00:00:01', '-i', filePath, '-vframes', '1', thumbPath],
+    );
+    if (result.exitCode != 0) {
+      throw Exception(
+        'Failed to generate video preview: ${result.stderr}',
+      );
+    }
+
+    final thumbFile = File(thumbPath);
+    final thumbBytes = await thumbFile.readAsBytes();
+    await thumbFile.delete();
+
+    return EntryPreview.video(base64: thumbBytes);
   }
 }

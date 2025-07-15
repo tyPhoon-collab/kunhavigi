@@ -23,6 +23,10 @@ EntryPreview _$EntryPreviewFromJson(
           return ImageEntryPreview.fromJson(
             json
           );
+                case 'video':
+          return VideoEntryPreview.fromJson(
+            json
+          );
                 case 'unknown':
           return UnknownEntryPreview.fromJson(
             json
@@ -85,12 +89,13 @@ extension EntryPreviewPatterns on EntryPreview {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TextEntryPreview value)?  text,TResult Function( ImageEntryPreview value)?  image,TResult Function( UnknownEntryPreview value)?  unknown,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( TextEntryPreview value)?  text,TResult Function( ImageEntryPreview value)?  image,TResult Function( VideoEntryPreview value)?  video,TResult Function( UnknownEntryPreview value)?  unknown,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case TextEntryPreview() when text != null:
 return text(_that);case ImageEntryPreview() when image != null:
-return image(_that);case UnknownEntryPreview() when unknown != null:
+return image(_that);case VideoEntryPreview() when video != null:
+return video(_that);case UnknownEntryPreview() when unknown != null:
 return unknown(_that);case _:
   return orElse();
 
@@ -109,12 +114,13 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TextEntryPreview value)  text,required TResult Function( ImageEntryPreview value)  image,required TResult Function( UnknownEntryPreview value)  unknown,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( TextEntryPreview value)  text,required TResult Function( ImageEntryPreview value)  image,required TResult Function( VideoEntryPreview value)  video,required TResult Function( UnknownEntryPreview value)  unknown,}){
 final _that = this;
 switch (_that) {
 case TextEntryPreview():
 return text(_that);case ImageEntryPreview():
-return image(_that);case UnknownEntryPreview():
+return image(_that);case VideoEntryPreview():
+return video(_that);case UnknownEntryPreview():
 return unknown(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -129,12 +135,13 @@ return unknown(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TextEntryPreview value)?  text,TResult? Function( ImageEntryPreview value)?  image,TResult? Function( UnknownEntryPreview value)?  unknown,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( TextEntryPreview value)?  text,TResult? Function( ImageEntryPreview value)?  image,TResult? Function( VideoEntryPreview value)?  video,TResult? Function( UnknownEntryPreview value)?  unknown,}){
 final _that = this;
 switch (_that) {
 case TextEntryPreview() when text != null:
 return text(_that);case ImageEntryPreview() when image != null:
-return image(_that);case UnknownEntryPreview() when unknown != null:
+return image(_that);case VideoEntryPreview() when video != null:
+return video(_that);case UnknownEntryPreview() when unknown != null:
 return unknown(_that);case _:
   return null;
 
@@ -152,11 +159,12 @@ return unknown(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String text)?  text,TResult Function(@BytesToBase64Converter()  Uint8List base64)?  image,TResult Function()?  unknown,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String text)?  text,TResult Function(@BytesToBase64Converter()  Uint8List base64)?  image,TResult Function(@BytesToBase64Converter()  Uint8List base64)?  video,TResult Function()?  unknown,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case TextEntryPreview() when text != null:
 return text(_that.text);case ImageEntryPreview() when image != null:
-return image(_that.base64);case UnknownEntryPreview() when unknown != null:
+return image(_that.base64);case VideoEntryPreview() when video != null:
+return video(_that.base64);case UnknownEntryPreview() when unknown != null:
 return unknown();case _:
   return orElse();
 
@@ -175,11 +183,12 @@ return unknown();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String text)  text,required TResult Function(@BytesToBase64Converter()  Uint8List base64)  image,required TResult Function()  unknown,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String text)  text,required TResult Function(@BytesToBase64Converter()  Uint8List base64)  image,required TResult Function(@BytesToBase64Converter()  Uint8List base64)  video,required TResult Function()  unknown,}) {final _that = this;
 switch (_that) {
 case TextEntryPreview():
 return text(_that.text);case ImageEntryPreview():
-return image(_that.base64);case UnknownEntryPreview():
+return image(_that.base64);case VideoEntryPreview():
+return video(_that.base64);case UnknownEntryPreview():
 return unknown();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -194,11 +203,12 @@ return unknown();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String text)?  text,TResult? Function(@BytesToBase64Converter()  Uint8List base64)?  image,TResult? Function()?  unknown,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String text)?  text,TResult? Function(@BytesToBase64Converter()  Uint8List base64)?  image,TResult? Function(@BytesToBase64Converter()  Uint8List base64)?  video,TResult? Function()?  unknown,}) {final _that = this;
 switch (_that) {
 case TextEntryPreview() when text != null:
 return text(_that.text);case ImageEntryPreview() when image != null:
-return image(_that.base64);case UnknownEntryPreview() when unknown != null:
+return image(_that.base64);case VideoEntryPreview() when video != null:
+return video(_that.base64);case UnknownEntryPreview() when unknown != null:
 return unknown();case _:
   return null;
 
@@ -345,6 +355,79 @@ class _$ImageEntryPreviewCopyWithImpl<$Res>
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? base64 = null,}) {
   return _then(ImageEntryPreview(
+base64: null == base64 ? _self.base64 : base64 // ignore: cast_nullable_to_non_nullable
+as Uint8List,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class VideoEntryPreview implements EntryPreview {
+  const VideoEntryPreview({@BytesToBase64Converter() required this.base64, final  String? $type}): $type = $type ?? 'video';
+  factory VideoEntryPreview.fromJson(Map<String, dynamic> json) => _$VideoEntryPreviewFromJson(json);
+
+@BytesToBase64Converter() final  Uint8List base64;
+
+@JsonKey(name: 'runtimeType')
+final String $type;
+
+
+/// Create a copy of EntryPreview
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$VideoEntryPreviewCopyWith<VideoEntryPreview> get copyWith => _$VideoEntryPreviewCopyWithImpl<VideoEntryPreview>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$VideoEntryPreviewToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VideoEntryPreview&&const DeepCollectionEquality().equals(other.base64, base64));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(base64));
+
+@override
+String toString() {
+  return 'EntryPreview.video(base64: $base64)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $VideoEntryPreviewCopyWith<$Res> implements $EntryPreviewCopyWith<$Res> {
+  factory $VideoEntryPreviewCopyWith(VideoEntryPreview value, $Res Function(VideoEntryPreview) _then) = _$VideoEntryPreviewCopyWithImpl;
+@useResult
+$Res call({
+@BytesToBase64Converter() Uint8List base64
+});
+
+
+
+
+}
+/// @nodoc
+class _$VideoEntryPreviewCopyWithImpl<$Res>
+    implements $VideoEntryPreviewCopyWith<$Res> {
+  _$VideoEntryPreviewCopyWithImpl(this._self, this._then);
+
+  final VideoEntryPreview _self;
+  final $Res Function(VideoEntryPreview) _then;
+
+/// Create a copy of EntryPreview
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? base64 = null,}) {
+  return _then(VideoEntryPreview(
 base64: null == base64 ? _self.base64 : base64 // ignore: cast_nullable_to_non_nullable
 as Uint8List,
   ));

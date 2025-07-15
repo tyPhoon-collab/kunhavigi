@@ -7,8 +7,12 @@ COPY . .
 RUN dart pub get
 RUN dart compile exe kunhavigi_server/bin/main.dart -o kunhavigi_server/bin/server
 
+
 # Final stage
 FROM alpine:latest
+
+# ffmpeg install (for video preview generation)
+RUN apk add --no-cache ffmpeg
 
 # Environment variables
 ENV runmode=staging

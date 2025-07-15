@@ -12,6 +12,9 @@ sealed class EntryPreview with _$EntryPreview {
   const factory EntryPreview.image({
     @BytesToBase64Converter() required Uint8List base64,
   }) = ImageEntryPreview;
+  const factory EntryPreview.video({
+    @BytesToBase64Converter() required Uint8List base64,
+  }) = VideoEntryPreview;
   const factory EntryPreview.unknown() = UnknownEntryPreview;
 
   factory EntryPreview.fromJson(Map<String, Object?> json) =>

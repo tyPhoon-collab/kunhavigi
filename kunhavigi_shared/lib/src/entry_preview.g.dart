@@ -27,6 +27,18 @@ Map<String, dynamic> _$ImageEntryPreviewToJson(ImageEntryPreview instance) =>
       'runtimeType': instance.$type,
     };
 
+VideoEntryPreview _$VideoEntryPreviewFromJson(Map<String, dynamic> json) =>
+    VideoEntryPreview(
+      base64: const BytesToBase64Converter().fromJson(json['base64'] as String),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$VideoEntryPreviewToJson(VideoEntryPreview instance) =>
+    <String, dynamic>{
+      'base64': const BytesToBase64Converter().toJson(instance.base64),
+      'runtimeType': instance.$type,
+    };
+
 UnknownEntryPreview _$UnknownEntryPreviewFromJson(Map<String, dynamic> json) =>
     UnknownEntryPreview($type: json['runtimeType'] as String?);
 

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -63,21 +65,33 @@ class _PreviewContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (data) {
       final TextEntryPreview text => GptMarkdown(text.text),
-      final ImageEntryPreview image => Material(
-          shape: shape,
-          clipBehavior: Clip.antiAlias,
-          child: Image.memory(
-            image.base64,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => ErrorMessage(
-              error: 'Failed to load image',
-              stackTrace: stackTrace,
-            ),
-          ),
-        ),
+      final ImageEntryPreview image => _ImageView(image: image.base64),
+      final VideoEntryPreview video => _ImageView(image: video.base64),
       final UnknownEntryPreview _ => const InfoMessage(
           message: 'No preview available for this entry.',
         ),
     };
+  }
+}
+
+class _ImageView extends StatelessWidget {
+  const _ImageView({required this.image});
+
+  final Uint8List image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      shape: shape,
+      clipBehavior: Clip.antiAlias,
+      child: Image.memory(
+        image,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => ErrorMessage(
+          error: 'Failed to load image',
+          stackTrace: stackTrace,
+        ),
+      ),
+    );
   }
 }

@@ -12,8 +12,8 @@ import 'package:serverpod/serverpod.dart';
 
 class TransferEndpoint extends Endpoint {
   final _textPreviewGenerator = TextPreviewGenerator();
-
   final _imagePreviewGenerator = ImagePreviewGenerator();
+  final _videoPreviewGenerator = VideoPreviewGenerator();
 
   /// Peek at the content of a file to generate a preview.
   Future<EntryPreview> peekEntry(Session session, RelativePath path) async {
@@ -23,6 +23,7 @@ class TransferEndpoint extends Endpoint {
     final preview = switch (mimeFile) {
       final TextMimeFile file => await _textPreviewGenerator.generate(file),
       final ImageMimeFile file => await _imagePreviewGenerator.generate(file),
+      final VideoMimeFile file => await _videoPreviewGenerator.generate(file),
       _ => const EntryPreview.unknown(),
     };
 
