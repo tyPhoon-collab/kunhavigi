@@ -8,14 +8,14 @@ import 'package:path/path.dart' as p;
 
 extension type const ValidPath._(String value) {}
 
-final String dataDirectory =
-    p.normalize(Platform.environment['DATA_DIRECTORY'] ?? '../data');
+final dataDirectoryPath = ValidPath._(
+    p.normalize(Platform.environment['DATA_DIRECTORY'] ?? '../data'));
 
 ValidPath validateAndNormalizePath(RelativePath path) {
   final normalizedPath = _normalizePath(path);
 
   // Ensure the resolved path is within the data directory
-  if (!normalizedPath.startsWith(p.normalize(dataDirectory))) {
+  if (!normalizedPath.startsWith(p.normalize(dataDirectoryPath.value))) {
     throw PathOutsideException(path: normalizedPath);
   }
 
@@ -23,7 +23,11 @@ ValidPath validateAndNormalizePath(RelativePath path) {
 }
 
 String _normalizePath(RelativePath path) {
-  return p.normalize(p.join(dataDirectory, path.value));
+  return p.normalize(p.join(dataDirectoryPath.value, path.value));
+}
+
+bool isRootDirectory(RelativePath? path) {
+  return path?.value == dataDirectoryPath.value;
 }
 
 FileSystemEntity exactEntity(ValidPath path) {

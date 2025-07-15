@@ -28,6 +28,20 @@ class EndpointBrowse extends _i1.EndpointRef {
   @override
   String get name => 'browse';
 
+  /// Search entries (files and directories) by name under a given path, or globally if path is null.
+  _i2.Future<_i3.EntriesResponse> searchEntries(
+    String query, {
+    _i4.RelativePath? path,
+  }) =>
+      caller.callServerEndpoint<_i3.EntriesResponse>(
+        'browse',
+        'searchEntries',
+        {
+          'query': query,
+          'path': path,
+        },
+      );
+
   /// Get the list of entries (files and directories) in a given path.
   _i2.Future<_i3.EntriesResponse> getEntries(_i4.RelativePath path) =>
       caller.callServerEndpoint<_i3.EntriesResponse>(

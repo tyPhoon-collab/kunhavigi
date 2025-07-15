@@ -142,6 +142,39 @@ class _BrowseEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
+  _i3.Future<_i4.EntriesResponse> searchEntries(
+    _i1.TestSessionBuilder sessionBuilder,
+    String query, {
+    _i5.RelativePath? path,
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'browse',
+        method: 'searchEntries',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'browse',
+          methodName: 'searchEntries',
+          parameters: _i1.testObjectToJson({
+            'query': query,
+            'path': path,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue = await (_localCallContext.method.call(
+          _localUniqueSession,
+          _localCallContext.arguments,
+        ) as _i3.Future<_i4.EntriesResponse>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _i3.Future<_i4.EntriesResponse> getEntries(
     _i1.TestSessionBuilder sessionBuilder,
     _i5.RelativePath path,

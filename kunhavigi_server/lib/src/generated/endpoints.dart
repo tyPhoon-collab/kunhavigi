@@ -36,6 +36,30 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'browse',
       endpoint: endpoints['browse']!,
       methodConnectors: {
+        'searchEntries': _i1.MethodConnector(
+          name: 'searchEntries',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+            'path': _i1.ParameterDescription(
+              name: 'path',
+              type: _i1.getType<_i4.RelativePath?>(),
+              nullable: true,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['browse'] as _i2.BrowseEndpoint).searchEntries(
+            session,
+            params['query'],
+            path: params['path'],
+          ),
+        ),
         'getEntries': _i1.MethodConnector(
           name: 'getEntries',
           params: {

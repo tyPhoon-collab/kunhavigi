@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 
 Entry buildEntry(FileSystemEntity file) {
   final absolutePath = p.normalize(file.path);
-  final relativePath = p.relative(absolutePath, from: dataDirectory);
+  final relativePath = p.relative(absolutePath, from: dataDirectoryPath.value);
   final stat = file.statSync();
   final mimeType = lookupMimeType(absolutePath) ?? 'application/octet-stream';
 

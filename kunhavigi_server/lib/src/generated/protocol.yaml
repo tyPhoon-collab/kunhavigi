@@ -1,4 +1,5 @@
 browse:
+  - searchEntries:
   - getEntries:
   - peekEntry:
   - delete:

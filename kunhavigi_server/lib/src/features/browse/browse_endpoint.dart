@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/mime_file.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
@@ -9,7 +11,34 @@ import 'package:serverpod/serverpod.dart';
 
 class BrowseEndpoint extends Endpoint {
   final _textPreviewGenerator = TextPreviewGenerator();
+
   final _imagePreviewGenerator = ImagePreviewGenerator();
+
+  /// Search entries (files and directories) by name under a given path, or globally if path is null.
+  Future<EntriesResponse> searchEntries(
+    Session session,
+    String query, {
+    RelativePath? path,
+  }) async {
+    final dir = path != null
+        ? exactDirectory(validateAndNormalizePath(path))
+        : Directory(dataDirectoryPath.value);
+    final entries = dir
+        .listSync(recursive: true)
+        .where((entity) => p.basename(entity.path).contains(query))
+        .map(buildEntry)
+        .toList();
+
+    final place = path?.value ?? 'root';
+    session.log(
+        'Searched ${entries.length} entries in $place with query "$query"');
+
+    return EntriesResponse(
+      entries: entries,
+      totalCount: entries.length,
+      isRootDirectory: isRootDirectory(path),
+    );
+  }
 
   /// Get the list of entries (files and directories) in a given path.
   Future<EntriesResponse> getEntries(
@@ -27,7 +56,7 @@ class BrowseEndpoint extends Endpoint {
     return EntriesResponse(
       entries: entries,
       totalCount: entries.length,
-      isRootDirectory: normalizedPath.value == dataDirectory,
+      isRootDirectory: isRootDirectory(path),
     );
   }
 
@@ -42,8 +71,8 @@ class BrowseEndpoint extends Endpoint {
       _ => const EntryPreview.unknown(),
     };
 
-    session.log(
-        'Generated ${preview.runtimeType}(${mimeFile.mimeType}) preview for ${path.value}');
+    final title = '${preview.runtimeType}(${mimeFile.mimeType})';
+    session.log('Generated $title preview for ${path.value}');
 
     return preview;
   }
