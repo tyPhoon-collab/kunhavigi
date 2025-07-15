@@ -51,13 +51,13 @@ class SearchSuggestion extends HookConsumerWidget {
   }
 }
 
-class _SearchedEntryListTile extends StatelessWidget {
+class _SearchedEntryListTile extends ConsumerWidget {
   const _SearchedEntryListTile(this.entry);
 
   final Entry entry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (:backgroundColor, :iconColor, :icon) = entry.presentation(context);
 
     return ListTile(
@@ -66,7 +66,11 @@ class _SearchedEntryListTile extends StatelessWidget {
       leading: Icon(icon, color: iconColor),
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       onTap: () {
-        // TODO: Navigate to entry detail page
+        final path = switch (entry) {
+          DirectoryEntry() => entry.path,
+          FileEntry() || UnknownEntry() => entry.parent,
+        };
+        ref.read(currentPathProvider.notifier).setPath(path);
       },
       shape: shape,
       tileColor: backgroundColor,
