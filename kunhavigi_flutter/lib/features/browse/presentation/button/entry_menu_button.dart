@@ -5,15 +5,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/dialog.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
 import 'package:kunhavigi_flutter/main.dart';
 
-List<_EntryMenuItem> _commonMenuItems(Entry entry) {
-  return [
-    _DownloadEntryMenuItem(entry),
-    _RenameEntryMenuItem(entry),
-    _DeleteEntryMenuItem(entry),
-  ];
-}
-
-class EntryMenuButton extends StatelessWidget {
+class EntryMenuButton extends ConsumerWidget {
   const EntryMenuButton({
     required this.entry,
     super.key,
@@ -22,118 +14,11 @@ class EntryMenuButton extends StatelessWidget {
   final Entry entry;
 
   @override
-  Widget build(BuildContext context) {
-    return switch (entry) {
-      final FileEntry fileEntry => FileEntryMenuButton(fileEntry: fileEntry),
-      final DirectoryEntry directoryEntry =>
-        DirectoryEntryMenuButton(directoryEntry: directoryEntry),
-      final UnknownEntry _ => const SizedBox.shrink(),
-    };
-  }
-}
-
-class FileEntryMenuButton extends StatelessWidget {
-  const FileEntryMenuButton({
-    required this.fileEntry,
-    super.key,
-  });
-
-  final FileEntry fileEntry;
-
-  @override
-  Widget build(BuildContext context) {
-    return _EntryMenuButton(
-      menuItems: [
-        ..._commonMenuItems(fileEntry),
-      ],
-    );
-  }
-}
-
-class DirectoryEntryMenuButton extends StatelessWidget {
-  const DirectoryEntryMenuButton({
-    required this.directoryEntry,
-    super.key,
-  });
-
-  final DirectoryEntry directoryEntry;
-
-  @override
-  Widget build(BuildContext context) {
-    return _EntryMenuButton(
-      menuItems: [
-        ..._commonMenuItems(directoryEntry),
-      ],
-    );
-  }
-}
-
-class _EntryMenuButton extends ConsumerWidget {
-  const _EntryMenuButton({
-    required this.menuItems,
-  });
-
-  final List<_EntryMenuItem> menuItems;
-
-  @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return MenuAnchor(
-      builder: (context, controller, child) {
-        return IconButton(
-          icon: Icon(
-            Icons.more_vert,
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-        );
-      },
-      menuChildren: menuItems.map((item) => item.build(ref)).toList(),
-    );
-  }
-}
-
-abstract interface class _EntryMenuItem {
-  MenuItemButton build(WidgetRef ref);
-}
-
-class _DownloadEntryMenuItem implements _EntryMenuItem {
-  const _DownloadEntryMenuItem(this.entry);
-
-  final Entry entry;
-
-  @override
-  MenuItemButton build(WidgetRef ref) {
-    Future<void> downloadFile() async {
-      try {
-        await ref.read(downloadUseCaseProvider).download(entry);
-      } on Exception catch (e) {
-        teller?.errorOf(e);
-      }
+    Future<void> download() async {
+      await ref.read(downloadUseCaseProvider).download(entry);
     }
 
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.file_download),
-      onPressed: () async => downloadFile(),
-      child: const Text('Download'),
-    );
-  }
-}
-
-class _RenameEntryMenuItem implements _EntryMenuItem {
-  const _RenameEntryMenuItem(this.entry);
-
-  final Entry entry;
-
-  @override
-  MenuItemButton build(WidgetRef ref) {
     Future<void> showRenameDialog() async {
       final result = await showDialog<String>(
         context: ref.context,
@@ -150,23 +35,6 @@ class _RenameEntryMenuItem implements _EntryMenuItem {
       }
     }
 
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.edit),
-      onPressed: () async => showRenameDialog(),
-      child: const Text('Rename'),
-    );
-  }
-}
-
-class _DeleteEntryMenuItem implements _EntryMenuItem {
-  const _DeleteEntryMenuItem(this.entry);
-
-  final Entry entry;
-
-  @override
-  MenuItemButton build(WidgetRef ref) {
-    final colorScheme = Theme.of(ref.context).colorScheme;
-
     Future<void> showDeleteDialog() async {
       final result = await showDialog<bool>(
         context: ref.context,
@@ -182,16 +50,56 @@ class _DeleteEntryMenuItem implements _EntryMenuItem {
       }
     }
 
+    return MenuAnchor(
+      builder: (context, controller, child) {
+        return GestureDetector(
+          onTap: controller.isOpen ? controller.close : controller.open,
+          child: const Icon(Icons.more_vert),
+        );
+      },
+      menuChildren: [
+        _EntryMenuItemButton(
+          icon: Icons.file_download,
+          onPressed: download,
+          label: 'Download',
+        ),
+        _EntryMenuItemButton(
+          icon: Icons.edit,
+          onPressed: showRenameDialog,
+          label: 'Rename',
+        ),
+        _EntryMenuItemButton(
+          icon: Icons.delete,
+          onPressed: showDeleteDialog,
+          label: 'Delete',
+          color: Theme.of(context).colorScheme.error,
+        ),
+      ],
+    );
+  }
+}
+
+class _EntryMenuItemButton extends StatelessWidget {
+  const _EntryMenuItemButton({
+    required this.icon,
+    required this.onPressed,
+    required this.label,
+    this.color,
+  });
+
+  final IconData icon;
+  final VoidCallback onPressed;
+  final String label;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
     return MenuItemButton(
-      leadingIcon: Icon(
-        Icons.delete,
-        color: colorScheme.error,
-      ),
-      onPressed: () async => showDeleteDialog(),
-      child: Text(
-        'Delete',
-        style: TextStyle(color: colorScheme.error),
-      ),
+      // [flutter - Hovering over menu items on a ListTile highlights the list item that contains it and does not go away - Stack Overflow](https://stackoverflow.com/questions/78078512/hovering-over-menu-items-on-a-listtile-highlights-the-list-item-that-contains-it)
+      requestFocusOnHover: false,
+      leadingIcon: Icon(icon, color: color),
+      onPressed: onPressed,
+      child: Text(label, style: TextStyle(color: color)),
     );
   }
 }

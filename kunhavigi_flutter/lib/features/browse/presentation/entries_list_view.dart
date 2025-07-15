@@ -170,11 +170,7 @@ class _EntryListTile extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: 20,
-            ),
+            child: Icon(icon, color: iconColor, size: 20),
           ),
           trailing: EntryMenuButton(entry: entry),
           onTap: switch (entry) {
