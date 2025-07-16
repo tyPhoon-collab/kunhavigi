@@ -54,6 +54,7 @@ class EntriesSearchAnchor extends HookConsumerWidget {
           const _PaginationButtons(),
         ];
       },
+      viewBackgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
       viewHintText: 'Search...',
       viewShape: shape,
       shrinkWrap: true,
@@ -74,7 +75,8 @@ class _SearchSuggestion extends HookConsumerWidget {
 
     if (debouncedText.isEmpty) {
       ref.invalidate(_searchQueryProvider);
-      return const Center(
+      return const Padding(
+          padding: EdgeInsets.all(8),
           child: InfoMessage(message: 'Name query is afforded'));
     }
     useEffect(() {
@@ -85,7 +87,7 @@ class _SearchSuggestion extends HookConsumerWidget {
     }, [debouncedText]);
     final response = ref.watch(_currentSearchedEntriesProvider);
 
-    if (response.isLoading || !response.hasValue) {
+    if (response.isLoading && !response.hasValue) {
       return const SizedBox(
         height: 120,
         child: Center(child: CircularProgressIndicator()),
@@ -95,11 +97,12 @@ class _SearchSuggestion extends HookConsumerWidget {
     if (response.hasError) {
       final error = response.error;
       return Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: ErrorMessage(error: error!, stackTrace: response.stackTrace),
       );
     }
 
+    final totalCount = response.requireValue.totalCount;
     final entries = response.requireValue.entries;
 
     return ListView.builder(
@@ -108,7 +111,7 @@ class _SearchSuggestion extends HookConsumerWidget {
       itemCount: entries.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return const _Summary();
+          return InfoMessage(message: '$totalCount entries found');
         }
         final entry = entries[index - 1];
         return _SearchedEntryListTile(entry);
@@ -144,26 +147,6 @@ class _SearchedEntryListTile extends ConsumerWidget {
         ref.read(currentPathProvider.notifier).setPath(path);
       },
       shape: shape,
-    );
-  }
-}
-
-class _Summary extends ConsumerWidget {
-  const _Summary();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final response = ref.watch(_currentSearchedEntriesProvider);
-
-    if (!response.hasValue) {
-      return const SizedBox.shrink();
-    }
-
-    final totalCount = response.requireValue.totalCount;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      child: Text('$totalCount entries found'),
     );
   }
 }
