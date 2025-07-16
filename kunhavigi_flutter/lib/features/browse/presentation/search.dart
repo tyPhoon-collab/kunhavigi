@@ -47,6 +47,8 @@ class EntriesSearchAnchor extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SearchAnchor(
       suggestionsBuilder: (context, controller) async {
         return [
@@ -54,9 +56,10 @@ class EntriesSearchAnchor extends HookConsumerWidget {
           const _PaginationButtons(),
         ];
       },
-      viewBackgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
-      viewHintText: 'Search...',
+      viewBackgroundColor: colorScheme.surfaceContainerLow,
+      viewHintText: 'Search files or folders',
       viewShape: shape,
+      dividerColor: colorScheme.onSurface.withValues(alpha: 0.2),
       shrinkWrap: true,
       builder: builder,
     );
@@ -79,12 +82,14 @@ class _SearchSuggestion extends HookConsumerWidget {
           padding: EdgeInsets.all(8),
           child: InfoMessage(message: 'Name query is afforded'));
     }
+
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(_searchQueryProvider.notifier).setQuery(debouncedText);
       });
       return null;
     }, [debouncedText]);
+
     final response = ref.watch(_currentSearchedEntriesProvider);
 
     if (response.isLoading && !response.hasValue) {
@@ -130,14 +135,22 @@ class _SearchedEntryListTile extends ConsumerWidget {
     final (:backgroundColor, :iconColor, :icon) = entry.presentation(context);
 
     return ListTile(
-      title: Text(entry.name, overflow: TextOverflow.ellipsis),
+      dense: true,
+      title: Text(
+        entry.name,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       subtitle: Text(
         '${entry.parent.value}/',
-        style: TextStyle(
-            color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
+            ),
       ),
-      leading: Icon(icon, color: iconColor),
+      leading: Icon(icon, color: iconColor, size: 20),
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       onTap: () {
         final path = switch (entry) {

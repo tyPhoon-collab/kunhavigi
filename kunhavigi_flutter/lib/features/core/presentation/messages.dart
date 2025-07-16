@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:kunhavigi_flutter/logger.dart';
+import 'package:kunhavigi_flutter/theme.dart';
 
 class ErrorMessage extends HookWidget {
   const ErrorMessage({
@@ -24,9 +25,9 @@ class ErrorMessage extends HookWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(8),
+        shape: shape,
       ),
       child: Row(
         children: [
@@ -64,9 +65,9 @@ class InfoMessage extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colorScheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(8),
+        shape: shape,
       ),
       child: Row(
         children: [
