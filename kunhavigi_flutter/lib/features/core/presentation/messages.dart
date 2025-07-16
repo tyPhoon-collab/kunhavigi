@@ -16,36 +16,18 @@ class ErrorMessage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
     useEffect(() {
       logger.e('ErrorMessage displayed', error: error, stackTrace: stackTrace);
       return null;
     }, [error, stackTrace]);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ShapeDecoration(
-        color: colorScheme.errorContainer,
-        shape: shape,
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.error_outline,
-            color: colorScheme.onErrorContainer,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Error: $error',
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onErrorContainer,
-              ),
-            ),
-          ),
-        ],
-      ),
+    return _MessageContainer(
+      icon: Icons.error_outline,
+      iconColor: colorScheme.onErrorContainer,
+      backgroundColor: colorScheme.errorContainer,
+      text: 'Error: $error',
+      textColor: colorScheme.onErrorContainer,
     );
   }
 }
@@ -61,27 +43,68 @@ class InfoMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
 
+    return _MessageContainer(
+      icon: Icons.info_outline,
+      iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
+      backgroundColor: colorScheme.surfaceContainerHigh,
+      text: message,
+      textColor: colorScheme.onSurface.withValues(alpha: 0.8),
+    );
+  }
+}
+
+class WarningMessage extends StatelessWidget {
+  const WarningMessage({
+    required this.message,
+    super.key,
+  });
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return _MessageContainer(
+      icon: Icons.warning_amber_rounded,
+      iconColor: colorScheme.onSecondaryContainer,
+      backgroundColor: colorScheme.secondaryContainer,
+      text: message,
+      textColor: colorScheme.onSecondaryContainer.withValues(alpha: 0.9),
+    );
+  }
+}
+
+class _MessageContainer extends StatelessWidget {
+  const _MessageContainer({
+    required this.icon,
+    required this.iconColor,
+    required this.backgroundColor,
+    required this.text,
+    required this.textColor,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final Color backgroundColor;
+  final String text;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: ShapeDecoration(
-        color: colorScheme.surfaceContainerHigh,
-        shape: shape,
-      ),
+      decoration: ShapeDecoration(color: backgroundColor, shape: shape),
       child: Row(
         children: [
-          Icon(
-            Icons.info_outline,
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
+          Icon(icon, color: iconColor),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              message,
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurface.withValues(alpha: 0.8),
-              ),
+              text,
+              style: textTheme.bodyMedium?.copyWith(color: textColor),
             ),
           ),
         ],
