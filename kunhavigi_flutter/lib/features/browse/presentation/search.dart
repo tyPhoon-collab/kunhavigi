@@ -21,8 +21,8 @@ class _SearchQuery extends _$SearchQuery {
 
   bool hasPreviousPage() => state.page > 1;
 
-  void setQuery(String query) {
-    state = state.copyWith(query: query);
+  void setQuery(String query, {RelativePath? path}) {
+    state = state.copyWith(query: query, path: path);
   }
 
   void nextPage() {
@@ -79,13 +79,23 @@ class _SearchSuggestion extends HookConsumerWidget {
     if (debouncedText.isEmpty) {
       ref.invalidate(_searchQueryProvider);
       return const Padding(
-          padding: EdgeInsets.all(8),
-          child: InfoMessage(message: 'Name query is afforded'));
+        padding: EdgeInsets.all(8),
+        child: InfoMessage(
+            message: 'You can search by name. '
+                'To search within the current path, start your query with "@"'),
+      );
     }
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(_searchQueryProvider.notifier).setQuery(debouncedText);
+        final set = ref.read(_searchQueryProvider.notifier).setQuery;
+        // If the query starts with '@', treat it as a path
+        if (debouncedText[0] == '@') {
+          final path = ref.read(currentPathProvider);
+          set(debouncedText.substring(1), path: path);
+        } else {
+          set(debouncedText);
+        }
       });
       return null;
     }, [debouncedText]);
