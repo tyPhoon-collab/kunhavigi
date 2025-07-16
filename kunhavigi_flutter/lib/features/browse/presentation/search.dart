@@ -22,7 +22,7 @@ class _SearchQuery extends _$SearchQuery {
   bool hasPreviousPage() => state.page > 1;
 
   void setQuery(String query) {
-    state = SearchQuery(query: query);
+    state = state.copyWith(query: query);
   }
 
   void nextPage() {
@@ -105,9 +105,12 @@ class _SearchSuggestion extends HookConsumerWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       shrinkWrap: true,
-      itemCount: entries.length,
+      itemCount: entries.length + 1,
       itemBuilder: (context, index) {
-        final entry = entries[index];
+        if (index == 0) {
+          return const _Summary();
+        }
+        final entry = entries[index - 1];
         return _SearchedEntryListTile(entry);
       },
     );
@@ -126,7 +129,7 @@ class _SearchedEntryListTile extends ConsumerWidget {
     return ListTile(
       title: Text(entry.name, overflow: TextOverflow.ellipsis),
       subtitle: Text(
-        entry.path.value,
+        '${entry.parent.value}/',
         style: TextStyle(
             color:
                 Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -145,6 +148,26 @@ class _SearchedEntryListTile extends ConsumerWidget {
   }
 }
 
+class _Summary extends ConsumerWidget {
+  const _Summary();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final response = ref.watch(_currentSearchedEntriesProvider);
+
+    if (!response.hasValue) {
+      return const SizedBox.shrink();
+    }
+
+    final totalCount = response.requireValue.totalCount;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Text('$totalCount entries found'),
+    );
+  }
+}
+
 class _PaginationButtons extends ConsumerWidget {
   const _PaginationButtons();
 
@@ -153,7 +176,7 @@ class _PaginationButtons extends ConsumerWidget {
     final response = ref.watch(_currentSearchedEntriesProvider);
     final query = ref.watch(_searchQueryProvider);
 
-    if (query.query.isEmpty || response.value?.totalCount == 0) {
+    if (!response.hasValue) {
       return const SizedBox.shrink();
     }
 
@@ -162,6 +185,10 @@ class _PaginationButtons extends ConsumerWidget {
     final totalCount = value.totalCount;
     final currentPage = query.page;
     final totalPages = (totalCount / query.limit).ceil();
+
+    if (totalPages <= 1) {
+      return const SizedBox.shrink();
+    }
 
     final notifier = ref.watch(_searchQueryProvider.notifier);
 

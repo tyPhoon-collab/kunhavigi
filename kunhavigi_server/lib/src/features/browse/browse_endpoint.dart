@@ -1,5 +1,6 @@
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
+import 'package:kunhavigi_server/src/features/common/domain/process.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:path/path.dart' as p;
@@ -20,21 +21,22 @@ class BrowseEndpoint extends Endpoint {
         ? exactDirectory(validateAndNormalizePath(query.path!))
         : exactDataDirectory();
 
-    final allEntries = await dir
+    final totalCount = await countEntries(path: dir.path, query: query.query);
+
+    final pagedEntries = await dir
         .list(recursive: true)
         .where((entity) => p.basename(entity.path).contains(query.query))
+        .skip(query.offset)
+        .take(query.limit)
         .map(buildEntry)
         .toList();
 
-    final pagedEntries =
-        allEntries.skip(query.offset).take(query.limit).toList();
-
     session.log(
-        'Searched ${allEntries.length} entries in ${dir.path} with query "$query"');
+        'Searched ${pagedEntries.length} entries in ${dir.path} with query "$query"');
 
     return EntriesResponse(
       entries: pagedEntries,
-      totalCount: allEntries.length,
+      totalCount: totalCount,
     );
   }
 
