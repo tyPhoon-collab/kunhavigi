@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SearchQuery {
 
- String get query;@RelativePathConverter() RelativePath? get path; int get limit; int get offset;
+ String get query;@RelativePathConverter() RelativePath? get path;
 /// Create a copy of SearchQuery
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SearchQueryCopyWith<SearchQuery> get copyWith => _$SearchQueryCopyWithImpl<Sear
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchQuery&&(identical(other.query, query) || other.query == query)&&(identical(other.path, path) || other.path == path)&&(identical(other.limit, limit) || other.limit == limit)&&(identical(other.offset, offset) || other.offset == offset));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SearchQuery&&(identical(other.query, query) || other.query == query)&&(identical(other.path, path) || other.path == path));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,query,path,limit,offset);
+int get hashCode => Object.hash(runtimeType,query,path);
 
 @override
 String toString() {
-  return 'SearchQuery(query: $query, path: $path, limit: $limit, offset: $offset)';
+  return 'SearchQuery(query: $query, path: $path)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SearchQueryCopyWith<$Res>  {
   factory $SearchQueryCopyWith(SearchQuery value, $Res Function(SearchQuery) _then) = _$SearchQueryCopyWithImpl;
 @useResult
 $Res call({
- String query,@RelativePathConverter() RelativePath? path, int limit, int offset
+ String query,@RelativePathConverter() RelativePath? path
 });
 
 
@@ -65,13 +65,11 @@ class _$SearchQueryCopyWithImpl<$Res>
 
 /// Create a copy of SearchQuery
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? query = null,Object? path = freezed,Object? limit = null,Object? offset = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? query = null,Object? path = freezed,}) {
   return _then(_self.copyWith(
 query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,path: freezed == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
-as RelativePath?,limit: null == limit ? _self.limit : limit // ignore: cast_nullable_to_non_nullable
-as int,offset: null == offset ? _self.offset : offset // ignore: cast_nullable_to_non_nullable
-as int,
+as RelativePath?,
   ));
 }
 
@@ -153,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String query, @RelativePathConverter()  RelativePath? path,  int limit,  int offset)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String query, @RelativePathConverter()  RelativePath? path)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SearchQuery() when $default != null:
-return $default(_that.query,_that.path,_that.limit,_that.offset);case _:
+return $default(_that.query,_that.path);case _:
   return orElse();
 
 }
@@ -174,10 +172,10 @@ return $default(_that.query,_that.path,_that.limit,_that.offset);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String query, @RelativePathConverter()  RelativePath? path,  int limit,  int offset)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String query, @RelativePathConverter()  RelativePath? path)  $default,) {final _that = this;
 switch (_that) {
 case _SearchQuery():
-return $default(_that.query,_that.path,_that.limit,_that.offset);}
+return $default(_that.query,_that.path);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +189,10 @@ return $default(_that.query,_that.path,_that.limit,_that.offset);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String query, @RelativePathConverter()  RelativePath? path,  int limit,  int offset)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String query, @RelativePathConverter()  RelativePath? path)?  $default,) {final _that = this;
 switch (_that) {
 case _SearchQuery() when $default != null:
-return $default(_that.query,_that.path,_that.limit,_that.offset);case _:
+return $default(_that.query,_that.path);case _:
   return null;
 
 }
@@ -205,14 +203,12 @@ return $default(_that.query,_that.path,_that.limit,_that.offset);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _SearchQuery extends SearchQuery {
-  const _SearchQuery({required this.query, @RelativePathConverter() this.path, this.limit = 10, this.offset = 0}): super._();
+class _SearchQuery implements SearchQuery {
+  const _SearchQuery({required this.query, @RelativePathConverter() this.path});
   factory _SearchQuery.fromJson(Map<String, dynamic> json) => _$SearchQueryFromJson(json);
 
 @override final  String query;
 @override@RelativePathConverter() final  RelativePath? path;
-@override@JsonKey() final  int limit;
-@override@JsonKey() final  int offset;
 
 /// Create a copy of SearchQuery
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +223,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchQuery&&(identical(other.query, query) || other.query == query)&&(identical(other.path, path) || other.path == path)&&(identical(other.limit, limit) || other.limit == limit)&&(identical(other.offset, offset) || other.offset == offset));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SearchQuery&&(identical(other.query, query) || other.query == query)&&(identical(other.path, path) || other.path == path));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,query,path,limit,offset);
+int get hashCode => Object.hash(runtimeType,query,path);
 
 @override
 String toString() {
-  return 'SearchQuery(query: $query, path: $path, limit: $limit, offset: $offset)';
+  return 'SearchQuery(query: $query, path: $path)';
 }
 
 
@@ -247,7 +243,7 @@ abstract mixin class _$SearchQueryCopyWith<$Res> implements $SearchQueryCopyWith
   factory _$SearchQueryCopyWith(_SearchQuery value, $Res Function(_SearchQuery) _then) = __$SearchQueryCopyWithImpl;
 @override @useResult
 $Res call({
- String query,@RelativePathConverter() RelativePath? path, int limit, int offset
+ String query,@RelativePathConverter() RelativePath? path
 });
 
 
@@ -264,13 +260,11 @@ class __$SearchQueryCopyWithImpl<$Res>
 
 /// Create a copy of SearchQuery
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? query = null,Object? path = freezed,Object? limit = null,Object? offset = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? query = null,Object? path = freezed,}) {
   return _then(_SearchQuery(
 query: null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
 as String,path: freezed == path ? _self.path : path // ignore: cast_nullable_to_non_nullable
-as RelativePath?,limit: null == limit ? _self.limit : limit // ignore: cast_nullable_to_non_nullable
-as int,offset: null == offset ? _self.offset : offset // ignore: cast_nullable_to_non_nullable
-as int,
+as RelativePath?,
   ));
 }
 

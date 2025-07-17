@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/domain/sort_settings.dart';
@@ -81,24 +83,6 @@ Future<EntriesResponse> filteredEntries(
   } catch (error, stackTrace) {
     logger.e('Failed to fetch entries for path: $path',
         error: error, stackTrace: stackTrace);
-    rethrow;
-  }
-}
-
-@Riverpod(keepAlive: true)
-Future<EntriesResponse> searchedEntries(Ref ref, SearchQuery query) async {
-  final client = ref.watch(clientProvider);
-  try {
-    final result = await client.browse.searchEntries(query);
-    logger.i(
-        'Successfully searched ${result.entries.length} entries (${result.totalCount} total)');
-    return result;
-  } catch (error, stackTrace) {
-    logger.e(
-      'Failed to search entries: $query',
-      error: error,
-      stackTrace: stackTrace,
-    );
     rethrow;
   }
 }

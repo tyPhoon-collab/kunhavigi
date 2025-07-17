@@ -18,6 +18,7 @@ ThemeData buildTheme(Brightness brightness) {
     colorScheme: colorScheme,
     useMaterial3: true,
     scaffoldBackgroundColor: colorScheme.surfaceContainer,
+    buttonTheme: ButtonThemeData(shape: shape),
     appBarTheme: AppBarTheme(
       backgroundColor: colorScheme.surfaceContainer,
       foregroundColor: colorScheme.onSurface,

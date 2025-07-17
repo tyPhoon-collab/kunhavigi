@@ -1,0 +1,4 @@
+class: SearchedResponse
+fields:
+  entries: List<Entry>
+  hasMore: bool

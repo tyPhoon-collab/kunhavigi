@@ -12,8 +12,6 @@ _SearchQuery _$SearchQueryFromJson(Map<String, dynamic> json) => _SearchQuery(
     json['path'],
     const RelativePathConverter().fromJson,
   ),
-  limit: (json['limit'] as num?)?.toInt() ?? 10,
-  offset: (json['offset'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$SearchQueryToJson(_SearchQuery instance) =>
@@ -23,8 +21,6 @@ Map<String, dynamic> _$SearchQueryToJson(_SearchQuery instance) =>
         instance.path,
         const RelativePathConverter().toJson,
       ),
-      'limit': instance.limit,
-      'offset': instance.offset,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

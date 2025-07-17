@@ -14,16 +14,18 @@
 import 'package:serverpod_test/serverpod_test.dart' as _i1;
 import 'package:serverpod/serverpod.dart' as _i2;
 import 'dart:async' as _i3;
-import 'package:kunhavigi_server/src/generated/features/browse/entries_response.dart'
+import 'package:kunhavigi_server/src/generated/features/browse/searched_response.dart'
     as _i4;
 import 'package:kunhavigi_shared/src/search_query.dart' as _i5;
-import 'package:kunhavigi_shared/src/entry.dart' as _i6;
-import 'package:kunhavigi_shared/src/entry_preview.dart' as _i7;
-import 'dart:typed_data' as _i8;
-import 'dart:convert' as _i9;
-import 'package:kunhavigi_shared/src/download_progress.dart' as _i10;
+import 'dart:convert' as _i6;
+import 'package:kunhavigi_server/src/generated/features/browse/entries_response.dart'
+    as _i7;
+import 'package:kunhavigi_shared/src/entry.dart' as _i8;
+import 'package:kunhavigi_shared/src/entry_preview.dart' as _i9;
+import 'dart:typed_data' as _i10;
+import 'package:kunhavigi_shared/src/download_progress.dart' as _i11;
 import 'package:kunhavigi_server/src/generated/features/transfer/upload_progress.dart'
-    as _i11;
+    as _i12;
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -143,38 +145,44 @@ class _BrowseEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i4.EntriesResponse> searchEntries(
+  _i3.Stream<_i4.SearchedResponse> searchEntries(
     _i1.TestSessionBuilder sessionBuilder,
     _i5.SearchQuery query,
-  ) async {
-    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
-      var _localUniqueSession =
-          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
-        endpoint: 'browse',
-        method: 'searchEntries',
-      );
-      try {
-        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+    _i3.Stream<int> takes,
+  ) {
+    var _localTestStreamManager = _i1.TestStreamManager<_i4.SearchedResponse>();
+    _i1.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+          endpoint: 'browse',
+          method: 'searchEntries',
+        );
+        var _localCallContext =
+            await _endpointDispatch.getMethodStreamCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'browse',
           methodName: 'searchEntries',
-          parameters: _i1.testObjectToJson({'query': query}),
+          arguments: {
+            'query': _i6.jsonDecode(_i2.SerializationManager.encode(query))
+          },
+          requestedInputStreams: ['takes'],
           serializationManager: _serializationManager,
         );
-        var _localReturnValue = await (_localCallContext.method.call(
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
           _localUniqueSession,
-          _localCallContext.arguments,
-        ) as _i3.Future<_i4.EntriesResponse>);
-        return _localReturnValue;
-      } finally {
-        await _localUniqueSession.close();
-      }
-    });
+          {'takes': takes},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
   }
 
-  _i3.Future<_i4.EntriesResponse> getEntries(
+  _i3.Future<_i7.EntriesResponse> getEntries(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.RelativePath path,
+    _i8.RelativePath path,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -193,7 +201,7 @@ class _BrowseEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i4.EntriesResponse>);
+        ) as _i3.Future<_i7.EntriesResponse>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -203,7 +211,7 @@ class _BrowseEndpoint {
 
   _i3.Future<bool> delete(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.RelativePath path,
+    _i8.RelativePath path,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -230,9 +238,9 @@ class _BrowseEndpoint {
     });
   }
 
-  _i3.Future<_i6.Entry> rename(
+  _i3.Future<_i8.Entry> rename(
     _i1.TestSessionBuilder sessionBuilder, {
-    required _i6.RelativePath path,
+    required _i8.RelativePath path,
     required String newName,
   }) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
@@ -255,7 +263,7 @@ class _BrowseEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i6.Entry>);
+        ) as _i3.Future<_i8.Entry>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -274,9 +282,9 @@ class _TransferEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i7.EntryPreview> peekEntry(
+  _i3.Future<_i9.EntryPreview> peekEntry(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.RelativePath path,
+    _i8.RelativePath path,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -295,7 +303,7 @@ class _TransferEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i7.EntryPreview>);
+        ) as _i3.Future<_i9.EntryPreview>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -303,11 +311,11 @@ class _TransferEndpoint {
     });
   }
 
-  _i3.Stream<_i8.ByteData> downloadFile(
+  _i3.Stream<_i10.ByteData> downloadFile(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.RelativePath path,
+    _i8.RelativePath path,
   ) {
-    var _localTestStreamManager = _i1.TestStreamManager<_i8.ByteData>();
+    var _localTestStreamManager = _i1.TestStreamManager<_i10.ByteData>();
     _i1.callStreamFunctionAndHandleExceptions(
       () async {
         var _localUniqueSession =
@@ -321,7 +329,7 @@ class _TransferEndpoint {
           endpointPath: 'transfer',
           methodName: 'downloadFile',
           arguments: {
-            'path': _i9.jsonDecode(_i2.SerializationManager.encode(path))
+            'path': _i6.jsonDecode(_i2.SerializationManager.encode(path))
           },
           requestedInputStreams: [],
           serializationManager: _serializationManager,
@@ -337,12 +345,12 @@ class _TransferEndpoint {
     return _localTestStreamManager.outputStreamController.stream;
   }
 
-  _i3.Stream<_i10.DownloadProgress> getDownloadUrl(
+  _i3.Stream<_i11.DownloadProgress> getDownloadUrl(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.RelativePath path,
+    _i8.RelativePath path,
   ) {
     var _localTestStreamManager =
-        _i1.TestStreamManager<_i10.DownloadProgress>();
+        _i1.TestStreamManager<_i11.DownloadProgress>();
     _i1.callStreamFunctionAndHandleExceptions(
       () async {
         var _localUniqueSession =
@@ -356,7 +364,7 @@ class _TransferEndpoint {
           endpointPath: 'transfer',
           methodName: 'getDownloadUrl',
           arguments: {
-            'path': _i9.jsonDecode(_i2.SerializationManager.encode(path))
+            'path': _i6.jsonDecode(_i2.SerializationManager.encode(path))
           },
           requestedInputStreams: [],
           serializationManager: _serializationManager,
@@ -372,12 +380,12 @@ class _TransferEndpoint {
     return _localTestStreamManager.outputStreamController.stream;
   }
 
-  _i3.Stream<_i11.UploadProgress> uploadFile(
+  _i3.Stream<_i12.UploadProgress> uploadFile(
     _i1.TestSessionBuilder sessionBuilder, {
-    required _i6.RelativePath path,
-    required _i3.Stream<_i8.ByteData> data,
+    required _i8.RelativePath path,
+    required _i3.Stream<_i10.ByteData> data,
   }) {
-    var _localTestStreamManager = _i1.TestStreamManager<_i11.UploadProgress>();
+    var _localTestStreamManager = _i1.TestStreamManager<_i12.UploadProgress>();
     _i1.callStreamFunctionAndHandleExceptions(
       () async {
         var _localUniqueSession =
@@ -391,7 +399,7 @@ class _TransferEndpoint {
           endpointPath: 'transfer',
           methodName: 'uploadFile',
           arguments: {
-            'path': _i9.jsonDecode(_i2.SerializationManager.encode(path))
+            'path': _i6.jsonDecode(_i2.SerializationManager.encode(path))
           },
           requestedInputStreams: ['data'],
           serializationManager: _serializationManager,

@@ -108,9 +108,7 @@ final class UploadUseCase extends ClientUseCase {
       },
       onSuccess: () {
         teller?.success('File uploaded successfully');
-        ref
-          ..invalidate(entriesProvider(path.parent))
-          ..invalidate(searchedEntriesProvider);
+        ref.invalidate(entriesProvider(path.parent));
       },
     );
   }

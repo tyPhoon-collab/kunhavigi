@@ -12,8 +12,8 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../features/browse/browse_endpoint.dart' as _i2;
 import '../features/transfer/transfer_endpoint.dart' as _i3;
-import 'package:kunhavigi_shared/src/search_query.dart' as _i4;
-import 'package:kunhavigi_shared/src/entry.dart' as _i5;
+import 'package:kunhavigi_shared/src/entry.dart' as _i4;
+import 'package:kunhavigi_shared/src/search_query.dart' as _i5;
 import 'dart:typed_data' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
@@ -37,30 +37,12 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'browse',
       endpoint: endpoints['browse']!,
       methodConnectors: {
-        'searchEntries': _i1.MethodConnector(
-          name: 'searchEntries',
-          params: {
-            'query': _i1.ParameterDescription(
-              name: 'query',
-              type: _i1.getType<_i4.SearchQuery>(),
-              nullable: false,
-            )
-          },
-          call: (
-            _i1.Session session,
-            Map<String, dynamic> params,
-          ) async =>
-              (endpoints['browse'] as _i2.BrowseEndpoint).searchEntries(
-            session,
-            params['query'],
-          ),
-        ),
         'getEntries': _i1.MethodConnector(
           name: 'getEntries',
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -78,7 +60,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -96,7 +78,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             ),
             'newName': _i1.ParameterDescription(
@@ -115,6 +97,33 @@ class Endpoints extends _i1.EndpointDispatch {
             newName: params['newName'],
           ),
         ),
+        'searchEntries': _i1.MethodStreamConnector(
+          name: 'searchEntries',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<_i5.SearchQuery>(),
+              nullable: false,
+            )
+          },
+          streamParams: {
+            'takes': _i1.StreamParameterDescription<int>(
+              name: 'takes',
+              nullable: false,
+            )
+          },
+          returnType: _i1.MethodStreamReturnType.streamType,
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+            Map<String, Stream> streamParams,
+          ) =>
+              (endpoints['browse'] as _i2.BrowseEndpoint).searchEntries(
+            session,
+            params['query'],
+            streamParams['takes']!.cast<int>(),
+          ),
+        ),
       },
     );
     connectors['transfer'] = _i1.EndpointConnector(
@@ -126,7 +135,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -144,7 +153,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -165,7 +174,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },
@@ -186,7 +195,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'path': _i1.ParameterDescription(
               name: 'path',
-              type: _i1.getType<_i5.RelativePath>(),
+              type: _i1.getType<_i4.RelativePath>(),
               nullable: false,
             )
           },

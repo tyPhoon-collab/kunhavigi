@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:kunhavigi_server/src/features/common/domain/entry.dart';
 import 'package:kunhavigi_server/src/features/common/domain/path.dart';
-import 'package:kunhavigi_server/src/features/common/domain/process.dart';
 import 'package:kunhavigi_server/src/generated/protocol.dart';
 import 'package:kunhavigi_shared/kunhavigi_shared.dart';
 import 'package:path/path.dart' as p;
@@ -8,36 +9,51 @@ import 'package:serverpod/serverpod.dart';
 
 class BrowseEndpoint extends Endpoint {
   /// Search entries (files and directories) by name under a given path, or globally if path is null.
-  Future<EntriesResponse> searchEntries(
+  Stream<SearchedResponse> searchEntries(
     Session session,
     SearchQuery query,
-  ) async {
+    Stream<int> takes,
+  ) async* {
     if (query.query.isEmpty) {
       session.log('Search query is empty, returning empty response');
-      return EntriesResponse(entries: [], totalCount: 0);
+      yield SearchedResponse(entries: [], hasMore: false);
+      return;
     }
 
     final dir = query.path != null
         ? exactDirectory(validateAndNormalizePath(query.path!))
         : exactDataDirectory();
 
-    final totalCount = await countEntries(path: dir.path, query: query.query);
-
-    final pagedEntries = await dir
+    final sourceStream = dir
         .list(recursive: true)
-        .where((entity) => p.basename(entity.path).contains(query.query))
-        .skip(query.offset)
-        .take(query.limit)
-        .map(buildEntry)
-        .toList();
+        .where((entity) => p.basename(entity.path).contains(query.query));
 
-    session.log(
-        'Searched ${pagedEntries.length} entries in ${dir.path} with query "$query"');
+    final iterator = StreamIterator(sourceStream);
 
-    return EntriesResponse(
-      entries: pagedEntries,
-      totalCount: totalCount,
-    );
+    if (!await iterator.moveNext()) {
+      yield SearchedResponse(entries: [], hasMore: false);
+      return;
+    }
+
+    await for (final take in takes) {
+      session.log('Taking $take entries from search stream');
+
+      final entries = [buildEntry(iterator.current)];
+
+      for (var i = 1; i < take; i++) {
+        if (await iterator.moveNext()) {
+          entries.add(buildEntry(iterator.current));
+        } else {
+          break;
+        }
+      }
+
+      final hasMore = await iterator.moveNext();
+      yield SearchedResponse(entries: entries, hasMore: hasMore);
+      if (!hasMore) break;
+    }
+
+    await iterator.cancel();
   }
 
   /// Get the list of entries (files and directories) in a given path.
