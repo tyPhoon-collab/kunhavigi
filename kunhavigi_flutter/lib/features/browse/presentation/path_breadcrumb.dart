@@ -15,25 +15,22 @@ class PathBreadcrumb extends ConsumerWidget {
     }
 
     final segments = currentPath.segments();
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _RootSegment(ref: ref),
-          for (var i = 0; i < segments.length; i++) ...[
-            const _PathSeparator(),
-            _PathSegment(
-              segment: segments[i],
-              isLast: i == segments.length - 1,
-              onTap: i == segments.length - 1
-                  ? null
-                  : () => ref
-                      .read(currentPathProvider.notifier)
-                      .setPath(RelativePath(segments.take(i + 1).join('/'))),
-            ),
-          ],
+    return Wrap(
+      children: [
+        _RootSegment(ref: ref),
+        for (var i = 0; i < segments.length; i++) ...[
+          const _PathSeparator(),
+          _PathSegment(
+            segment: segments[i],
+            isLast: i == segments.length - 1,
+            onTap: i == segments.length - 1
+                ? null
+                : () => ref
+                    .read(currentPathProvider.notifier)
+                    .setPath(RelativePath(segments.take(i + 1).join('/'))),
+          ),
         ],
-      ),
+      ],
     );
   }
 }
