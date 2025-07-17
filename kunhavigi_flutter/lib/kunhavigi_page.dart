@@ -7,6 +7,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/file_drop_zone.da
 import 'package:kunhavigi_flutter/features/browse/presentation/path_breadcrumb.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
+import 'package:kunhavigi_flutter/features/theme/presentation/theme_toggle_icon_button.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 
 class KunhavigiPage extends ConsumerWidget {
@@ -30,6 +31,10 @@ class KunhavigiPage extends ConsumerWidget {
             preferredSize: Size.fromHeight(48),
             child: _AppBarBottom(),
           ),
+          actions: const [
+            ThemeToggleIconButton(),
+          ],
+          actionsPadding: const EdgeInsets.only(right: 8),
         ),
         body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
         floatingActionButton: const UploadButton(),

@@ -8,7 +8,7 @@ import 'package:kunhavigi_flutter/features/browse/presentation/extension.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/messages.dart';
 import 'package:kunhavigi_flutter/features/core/provider/client_provider.dart';
-import 'package:kunhavigi_flutter/theme.dart';
+import 'package:kunhavigi_flutter/features/theme/theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search.g.dart';

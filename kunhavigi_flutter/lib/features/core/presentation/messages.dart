@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:kunhavigi_flutter/features/theme/theme.dart';
 import 'package:kunhavigi_flutter/logger.dart';
-import 'package:kunhavigi_flutter/theme.dart';
 
 class ErrorMessage extends HookWidget {
   const ErrorMessage({

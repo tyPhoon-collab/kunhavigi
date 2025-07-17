@@ -5,7 +5,7 @@ import 'package:kunhavigi_flutter/features/browse/domain/sort_settings.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/search.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
 import 'package:kunhavigi_flutter/features/browse_settings/presentation/browse_settings_modal.dart';
-import 'package:kunhavigi_flutter/theme.dart';
+import 'package:kunhavigi_flutter/features/theme/theme.dart';
 
 class SearchIconButton extends HookConsumerWidget {
   const SearchIconButton({super.key});

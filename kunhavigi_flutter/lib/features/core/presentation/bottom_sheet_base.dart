@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kunhavigi_flutter/theme.dart';
+import 'package:kunhavigi_flutter/features/theme/theme.dart';
 
 class BottomSheetBase extends StatelessWidget {
   const BottomSheetBase({
