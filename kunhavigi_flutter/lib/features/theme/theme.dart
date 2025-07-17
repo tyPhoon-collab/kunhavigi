@@ -25,6 +25,12 @@ ThemeData buildTheme(Brightness brightness) {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
     ),
+    menuTheme: MenuThemeData(
+      style: MenuStyle(shape: WidgetStateProperty.all(shape)),
+    ),
+    menuButtonTheme: MenuButtonThemeData(
+      style: ButtonStyle(shape: WidgetStateProperty.all(shape)),
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,

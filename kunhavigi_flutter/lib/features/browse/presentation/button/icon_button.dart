@@ -60,27 +60,30 @@ class _SortMenuItemButton extends ConsumerWidget {
     final isSelected = sortSettings.type == type;
     final isAscending = sortSettings.order == SortOrder.ascending;
 
-    return MenuItemButton(
-      leadingIcon: Icon(
-        type.icon,
-        size: 20,
-        color: isSelected ? colorScheme.primary : null,
-      ),
-      trailingIcon: isSelected
-          ? Icon(
-              isAscending ? Icons.arrow_upward : Icons.arrow_downward,
-              size: 18,
-              color: isSelected ? colorScheme.primary : colorScheme.onSurface,
-            )
-          : null,
-      closeOnActivate: false,
-      onPressed: () =>
-          ref.read(currentSortSettingsProvider.notifier).setSortType(type),
-      child: Text(
-        type.label,
-        style: TextStyle(
-          color: isSelected ? colorScheme.primary : colorScheme.onSurface,
-          fontWeight: isSelected ? FontWeight.bold : null,
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: MenuItemButton(
+        leadingIcon: Icon(
+          type.icon,
+          size: 20,
+          color: isSelected ? colorScheme.primary : null,
+        ),
+        trailingIcon: isSelected
+            ? Icon(
+                isAscending ? Icons.arrow_upward : Icons.arrow_downward,
+                size: 18,
+                color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+              )
+            : null,
+        closeOnActivate: false,
+        onPressed: () =>
+            ref.read(currentSortSettingsProvider.notifier).setSortType(type),
+        child: Text(
+          type.label,
+          style: TextStyle(
+            color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+            fontWeight: isSelected ? FontWeight.bold : null,
+          ),
         ),
       ),
     );

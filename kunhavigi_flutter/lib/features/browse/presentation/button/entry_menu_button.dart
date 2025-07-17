@@ -94,12 +94,15 @@ class _EntryMenuItemButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MenuItemButton(
-      // [flutter - Hovering over menu items on a ListTile highlights the list item that contains it and does not go away - Stack Overflow](https://stackoverflow.com/questions/78078512/hovering-over-menu-items-on-a-listtile-highlights-the-list-item-that-contains-it)
-      requestFocusOnHover: false,
-      leadingIcon: Icon(icon, color: color),
-      onPressed: onPressed,
-      child: Text(label, style: TextStyle(color: color)),
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: MenuItemButton(
+        // [flutter - Hovering over menu items on a ListTile highlights the list item that contains it and does not go away - Stack Overflow](https://stackoverflow.com/questions/78078512/hovering-over-menu-items-on-a-listtile-highlights-the-list-item-that-contains-it)
+        requestFocusOnHover: false,
+        leadingIcon: Icon(icon, color: color),
+        onPressed: onPressed,
+        child: Text(label, style: TextStyle(color: color)),
+      ),
     );
   }
 }
