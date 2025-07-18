@@ -10,14 +10,17 @@ class PathBreadcrumb extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPath = ref.watch(currentPathProvider);
 
-    if (currentPath.isRoot) {
-      return const Text('Root Directory');
-    }
-
     final segments = currentPath.segments();
     return Wrap(
+      runAlignment: WrapAlignment.center,
       children: [
-        _RootSegment(ref: ref),
+        const Icon(Icons.folder_open_rounded, size: 20),
+        const SizedBox(width: 4),
+        _PathSegment(
+          segment: 'Root',
+          isLast: currentPath.isRoot,
+          onTap: ref.read(currentPathProvider.notifier).setAsRoot,
+        ),
         for (var i = 0; i < segments.length; i++) ...[
           const _PathSeparator(),
           _PathSegment(
@@ -31,28 +34,6 @@ class PathBreadcrumb extends ConsumerWidget {
           ),
         ],
       ],
-    );
-  }
-}
-
-class _RootSegment extends StatelessWidget {
-  const _RootSegment({required this.ref});
-
-  final WidgetRef ref;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return GestureDetector(
-      onTap: () => ref.read(currentPathProvider.notifier).setAsRoot(),
-      child: Text(
-        'Root',
-        style: TextStyle(
-          color: colorScheme.primary,
-          decoration: TextDecoration.underline,
-        ),
-      ),
     );
   }
 }
@@ -82,7 +63,7 @@ class _PathSegment extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLast ? null : onTap,
       child: Text(
         segment,
         style: TextStyle(

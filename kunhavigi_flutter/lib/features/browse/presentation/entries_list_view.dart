@@ -208,6 +208,7 @@ class _NavigationTile extends StatelessWidget {
     return Padding(
       padding: _margin,
       child: ListTile(
+        dense: true,
         title: Text(
           title,
           style: textTheme.bodyMedium?.copyWith(

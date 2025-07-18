@@ -22,7 +22,7 @@ extension type const RelativePath(String value) {
     return RelativePath(p.join(value, segment));
   }
 
-  List<String> segments() => value.split('/');
+  List<String> segments() => isRoot ? [] : value.split('/');
 }
 
 @freezed

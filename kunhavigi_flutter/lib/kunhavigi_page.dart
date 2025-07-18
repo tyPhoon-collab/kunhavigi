@@ -10,6 +10,8 @@ import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dar
 import 'package:kunhavigi_flutter/features/theme/presentation/theme_toggle_icon_button.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 
+const _mobileWidthThreshold = 600;
+
 class KunhavigiPage extends ConsumerWidget {
   const KunhavigiPage({super.key});
 
@@ -27,50 +29,85 @@ class KunhavigiPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Kunhavigi'),
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(48),
-            child: _AppBarBottom(),
-          ),
-          actions: const [
-            ThemeToggleIconButton(),
-          ],
+          actions: const [ThemeToggleIconButton()],
           actionsPadding: const EdgeInsets.only(right: 8),
         ),
-        body: const EntriesListView(padding: EdgeInsets.only(bottom: 86)),
+        body: const Column(
+          children: [
+            _Header(),
+            Expanded(
+                child: EntriesListView(padding: EdgeInsets.only(bottom: 86))),
+          ],
+        ),
         floatingActionButton: const UploadButton(),
       ),
     );
   }
 }
 
-class _AppBarBottom extends StatelessWidget {
-  const _AppBarBottom();
+class _Header extends StatelessWidget {
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     final foregroundColor = colorScheme.onSurface.withValues(alpha: 0.8);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: IconTheme.merge(
         data: IconThemeData(color: foregroundColor),
         child: DefaultTextStyle.merge(
           style: TextStyle(color: foregroundColor),
-          child: const Row(
-            spacing: 4,
-            children: [
-              Expanded(child: PathBreadcrumb()),
-              SearchIconButton(),
-              SortIconButton(),
-              SortOrderIconButton(),
-              ReloadIconButton(),
-              SettingsIconButton(),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < _mobileWidthThreshold;
+
+              if (isMobile) {
+                return const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 4,
+                  children: [PathBreadcrumb(), _Tools(isExpanded: true)],
+                );
+              }
+              // 通常はRow
+              return const Row(
+                spacing: 4,
+                children: [
+                  Expanded(child: PathBreadcrumb()),
+                  _Tools(isExpanded: false)
+                ],
+              );
+            },
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Tools extends StatelessWidget {
+  const _Tools({required this.isExpanded});
+
+  final bool isExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    const children = [
+      SearchIconButton(),
+      SortIconButton(),
+      SortOrderIconButton(),
+      ReloadIconButton(),
+      SettingsIconButton(),
+    ];
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 4,
+      children: isExpanded
+          ? children.map((e) => Expanded(child: e)).toList()
+          : children,
     );
   }
 }
