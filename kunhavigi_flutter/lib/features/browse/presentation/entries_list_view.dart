@@ -126,7 +126,7 @@ class _EntryListTile extends ConsumerWidget {
 
     final (:backgroundColor, :iconColor, :icon) = entry.presentation(context);
 
-    void showPreviewModal() {
+    void showPreviewModal(FileEntry entry) {
       showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -135,7 +135,7 @@ class _EntryListTile extends ConsumerWidget {
       );
     }
 
-    void navigate() {
+    void navigate(DirectoryEntry entry) {
       ref.read(currentPathProvider.notifier).setPath(entry.path);
     }
 
@@ -174,8 +174,8 @@ class _EntryListTile extends ConsumerWidget {
           ),
           trailing: EntryMenuButton(entry: entry),
           onTap: switch (entry) {
-            FileEntry() => showPreviewModal,
-            DirectoryEntry() => navigate,
+            final FileEntry e => () => showPreviewModal(e),
+            final DirectoryEntry e => () => navigate(e),
             UnknownEntry() => () {},
           },
           shape: shape,

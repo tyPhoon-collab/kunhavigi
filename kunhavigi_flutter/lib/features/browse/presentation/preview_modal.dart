@@ -13,7 +13,7 @@ import 'package:kunhavigi_flutter/features/theme/theme.dart';
 class PreviewModal extends StatelessWidget {
   const PreviewModal({required this.entry, super.key});
 
-  final Entry entry;
+  final FileEntry entry;
 
   @override
   Widget build(BuildContext context) {
@@ -21,28 +21,25 @@ class PreviewModal extends StatelessWidget {
       header: BottomSheetHeader(
         title: entry.name,
         subtitle: entry.path.value,
-        icon: switch (entry) {
-          final FileEntry _ => Icons.insert_drive_file,
-          final DirectoryEntry _ => Icons.folder,
-          final UnknownEntry _ => Icons.question_mark,
-        },
+        icon: Icons.insert_drive_file,
       ),
-      child: _Preview(path: entry.path),
+      child: _Preview(path: entry.path, mimeType: entry.mimeType),
     );
   }
 }
 
 class _Preview extends ConsumerWidget {
-  const _Preview({required this.path});
+  const _Preview({required this.path, required this.mimeType});
 
   final RelativePath path;
+  final String mimeType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final preview = ref.watch(entryPreviewProvider(path));
 
     return preview.when(
-      data: (data) => _PreviewContent(data: data),
+      data: (data) => _PreviewContent(data: data, mimeType: mimeType),
       loading: () => const Center(
         child: Padding(
           padding: EdgeInsets.all(32),
@@ -58,14 +55,18 @@ class _Preview extends ConsumerWidget {
 }
 
 class _PreviewContent extends StatelessWidget {
-  const _PreviewContent({required this.data});
+  const _PreviewContent({required this.data, required this.mimeType});
 
   final EntryPreview data;
+  final String mimeType;
 
   @override
   Widget build(BuildContext context) {
     return switch (data) {
-      final TextEntryPreview text => _TextView(text: text.text),
+      final TextEntryPreview text => _TextView(
+          text: text.text,
+          initialIsRich: mimeType == 'text/markdown',
+        ),
       final ImageEntryPreview image => _ImageView(image: image.base64),
       final VideoEntryPreview video => _ImageView(image: video.base64),
       final UnknownEntryPreview _ => const InfoMessage(
@@ -76,13 +77,14 @@ class _PreviewContent extends StatelessWidget {
 }
 
 class _TextView extends HookWidget {
-  const _TextView({required this.text});
+  const _TextView({required this.text, required this.initialIsRich});
 
   final String text;
+  final bool initialIsRich;
 
   @override
   Widget build(BuildContext context) {
-    final isRich = useState(true);
+    final isRich = useState(initialIsRich);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
