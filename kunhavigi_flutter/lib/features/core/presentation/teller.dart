@@ -2,56 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:kunhavigi_flutter/logger.dart';
 import 'package:toastification/toastification.dart';
 
-const AlignmentDirectional _alignment = AlignmentDirectional.bottomStart;
-
 class Teller {
   const Teller(this._context);
-
   final BuildContext _context;
 
-  String error(String message) => toastification
-      .show(
-        context: _context,
-        title: Text('Error: $message'),
+  String error(String message) => _show(
+        message: 'Error: $message',
         type: ToastificationType.error,
-        autoCloseDuration: const Duration(seconds: 7),
-        alignment: _alignment,
-      )
-      .id;
+        autoCloseDurationSeconds: 7,
+      ).id;
 
   String errorOf(Object error) {
     logger.e('Error was displayed', error: error);
 
-    return toastification
-        .show(
-          context: _context,
-          title: Text('Error: $error'),
-          type: ToastificationType.error,
-          autoCloseDuration: const Duration(seconds: 7),
-          alignment: _alignment,
-        )
-        .id;
+    return _show(
+      message: 'Error: $error',
+      type: ToastificationType.error,
+      autoCloseDurationSeconds: 7,
+    ).id;
   }
 
-  String info(String message) => toastification
-      .show(
-        context: _context,
-        title: Text(message),
+  String info(String message) => _show(
+        message: message,
         type: ToastificationType.info,
-        autoCloseDuration: const Duration(seconds: 3),
-        alignment: _alignment,
-      )
-      .id;
+        autoCloseDurationSeconds: 3,
+      ).id;
 
-  String success(String message) => toastification
-      .show(
-        context: _context,
-        title: Text(message),
+  String success(String message) => _show(
+        message: message,
         type: ToastificationType.success,
-        autoCloseDuration: const Duration(seconds: 5),
-        alignment: _alignment,
-      )
-      .id;
+      ).id;
 
   void progress(
     String message,
@@ -60,9 +40,8 @@ class Teller {
     void Function(Object error)? onError,
   }) {
     late String itemId;
-    final item = toastification.show(
-      context: _context,
-      title: Text(message),
+    final item = _show(
+      message: message,
       description: _Tracker(
         progress: progress,
         onDismiss: () => dismiss(itemId),
@@ -70,10 +49,47 @@ class Teller {
         onError: onError,
       ),
       type: ToastificationType.info,
-      alignment: _alignment,
     );
 
     itemId = item.id;
+  }
+
+  ToastificationItem _show({
+    required String message,
+    required ToastificationType type,
+    Widget? description,
+    int? autoCloseDurationSeconds,
+  }) {
+    final colorScheme = Theme.of(_context).colorScheme;
+
+    final (foregroundColor, backgroundColor) = switch (type) {
+      ToastificationType.error => (
+          colorScheme.onErrorContainer,
+          colorScheme.errorContainer
+        ),
+      ToastificationType.info => (
+          colorScheme.onPrimaryContainer,
+          colorScheme.primaryContainer
+        ),
+      ToastificationType.success => (
+          colorScheme.onPrimaryContainer,
+          colorScheme.primaryContainer
+        ),
+      _ => (colorScheme.onSurface, colorScheme.surface),
+    };
+
+    return toastification.show(
+      context: _context,
+      title: Text(message),
+      description: description,
+      type: type,
+      autoCloseDuration: Duration(seconds: autoCloseDurationSeconds ?? 5),
+      alignment: AlignmentDirectional.bottomStart,
+      backgroundColor: foregroundColor.withValues(alpha: 0.9),
+      foregroundColor: backgroundColor.withValues(alpha: 0.9),
+      borderSide: const BorderSide(style: BorderStyle.none),
+      margin: const EdgeInsets.only(left: 16, bottom: 4),
+    );
   }
 
   void dismiss(String id) => toastification.dismissById(id);
