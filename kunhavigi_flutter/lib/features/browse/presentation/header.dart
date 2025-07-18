@@ -41,16 +41,18 @@ class _HeaderContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const spacing = 4.0;
+
     if (isMobile) {
       return const Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 4,
+        spacing: spacing,
         children: [PathBreadcrumb(), _Tools(isExpanded: true)],
       );
     }
     return const Row(
-      spacing: 4,
+      spacing: spacing,
       children: [Expanded(child: PathBreadcrumb()), _Tools(isExpanded: false)],
     );
   }

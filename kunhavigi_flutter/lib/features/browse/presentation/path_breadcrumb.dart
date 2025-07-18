@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
+import 'package:kunhavigi_flutter/main.dart';
 
 class PathBreadcrumb extends ConsumerWidget {
   const PathBreadcrumb({super.key});
@@ -12,7 +14,7 @@ class PathBreadcrumb extends ConsumerWidget {
 
     final segments = currentPath.segments();
     return Wrap(
-      runAlignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         const Icon(Icons.folder_open_rounded, size: 20),
         const SizedBox(width: 4),
@@ -33,6 +35,7 @@ class PathBreadcrumb extends ConsumerWidget {
                     .setPath(RelativePath(segments.take(i + 1).join('/'))),
           ),
         ],
+        const _CopyCurrentPathButton(),
       ],
     );
   }
@@ -71,6 +74,28 @@ class _PathSegment extends StatelessWidget {
           decoration: isLast ? null : TextDecoration.underline,
         ),
       ),
+    );
+  }
+}
+
+class _CopyCurrentPathButton extends ConsumerWidget {
+  const _CopyCurrentPathButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentPath = ref.watch(currentPathProvider);
+
+    return IconButton(
+      icon: const Icon(Icons.copy, size: 20),
+      visualDensity: VisualDensity.compact,
+      padding: EdgeInsets.zero,
+      onPressed: () {
+        Clipboard.setData(ClipboardData(text: currentPath.value));
+        teller?.success(
+          'Current path copied to clipboard: ${currentPath.value}',
+        );
+      },
+      tooltip: 'Copy Current Path',
     );
   }
 }
