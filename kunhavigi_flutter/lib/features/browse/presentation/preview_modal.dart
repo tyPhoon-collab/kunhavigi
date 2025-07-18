@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
@@ -64,13 +65,45 @@ class _PreviewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (data) {
-      final TextEntryPreview text => GptMarkdown(text.text),
+      final TextEntryPreview text => _TextView(text: text.text),
       final ImageEntryPreview image => _ImageView(image: image.base64),
       final VideoEntryPreview video => _ImageView(image: video.base64),
       final UnknownEntryPreview _ => const InfoMessage(
           message: 'No preview available for this entry.',
         ),
     };
+  }
+}
+
+class _TextView extends HookWidget {
+  const _TextView({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final isRich = useState(true);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 4,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          spacing: 8,
+          children: [
+            const Text('Rich view'),
+            Switch(
+              value: isRich.value,
+              onChanged: (v) => isRich.value = v,
+            ),
+          ],
+        ),
+        Flexible(
+          child: isRich.value ? GptMarkdown(text) : SelectableText(text),
+        ),
+      ],
+    );
   }
 }
 
