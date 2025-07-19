@@ -10,8 +10,8 @@ import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dar
 import 'package:kunhavigi_flutter/features/browse_settings/provider/settings_provider.dart';
 import 'package:kunhavigi_flutter/features/core/presentation/teller.dart';
 import 'package:kunhavigi_flutter/features/core/provider/client_provider.dart';
+import 'package:kunhavigi_flutter/features/core/provider/teller_provider.dart';
 import 'package:kunhavigi_flutter/features/platform/types.dart';
-import 'package:kunhavigi_flutter/main.dart';
 
 sealed class ClientUseCase {
   const ClientUseCase(this.ref);
@@ -55,11 +55,13 @@ final class DownloadUseCase extends ClientUseCase {
       await for (final progress in progressStream) {
         switch (progress) {
           case CopingDownloadProgress():
-            id = teller?.info(
-              'Preparing to download ${entry.name}',
-            );
+            id = ref.read(tellerProvider).info(
+                  'Preparing to download ${entry.name}',
+                );
           case ZippingDownloadProgress():
-            id = teller?.info('Zipping ${entry.name} for download');
+            id = ref
+                .read(tellerProvider)
+                .info('Zipping ${entry.name} for download');
           case CompletedDownloadProgress(:final downloadUrl):
             await ref.read(saverProvider).saveFromUrl(
                   downloadUrl,
@@ -70,13 +72,17 @@ final class DownloadUseCase extends ClientUseCase {
                     final UnknownEntry _ => 'application/octet-stream',
                   },
                 );
-            if (id != null) teller?.dismiss(id);
-            teller?.success('Download completed for ${entry.name}');
+            if (id != null) ref.read(tellerProvider).dismiss(id);
+            ref
+                .read(tellerProvider)
+                .success('Download completed for ${entry.name}');
         }
       }
     } on Exception catch (e) {
-      if (id != null) teller?.dismiss(id);
-      teller?.errorOf(e);
+      final teller = ref.read(tellerProvider);
+
+      if (id != null) teller.dismiss(id);
+      teller.errorOf(e);
     }
   }
 }
@@ -92,7 +98,7 @@ final class UploadUseCase extends ClientUseCase {
     final progressStream =
         _client.transfer.uploadFile(path: path, data: data).asBroadcastStream();
 
-    teller?.progress(
+    ref.read(tellerProvider).progress(
       'Uploading ${path.name}',
       progressStream.map((progress) {
         return Progress(
@@ -101,13 +107,18 @@ final class UploadUseCase extends ClientUseCase {
           isComplete: progress.isComplete,
         );
       }),
-      onError: (error) => switch (error) {
-        final FileAlreadyExistsException _ => teller?.error(
-            'Some files already exist in the current directory. Please rename them before uploading.'),
-        final genericError => teller?.errorOf(genericError),
+      onError: (error) {
+        final teller = ref.read(tellerProvider);
+        switch (error) {
+          case FileAlreadyExistsException _:
+            teller.error(
+                'Some files already exist in the current directory. Please rename them before uploading.');
+          case final genericError:
+            teller.errorOf(genericError);
+        }
       },
       onSuccess: () {
-        teller?.success('File uploaded successfully');
+        ref.read(tellerProvider).success('File uploaded successfully');
         ref.invalidate(entriesProvider(path.parent));
       },
     );

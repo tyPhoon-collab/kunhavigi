@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/presentation/dialog.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/use_case_provider.dart';
-import 'package:kunhavigi_flutter/main.dart';
+import 'package:kunhavigi_flutter/features/core/provider/teller_provider.dart';
 
 class EntryMenuButton extends ConsumerWidget {
   const EntryMenuButton({
@@ -28,9 +28,9 @@ class EntryMenuButton extends ConsumerWidget {
       if (result != null && result.isNotEmpty && result != entry.name) {
         try {
           await ref.read(renameUseCaseProvider).rename(entry.path, result);
-          teller?.success('Renamed successfully');
+          ref.read(tellerProvider).success('Renamed successfully');
         } on Exception catch (e) {
-          teller?.errorOf(e);
+          ref.read(tellerProvider).errorOf(e);
         }
       }
     }
@@ -43,9 +43,9 @@ class EntryMenuButton extends ConsumerWidget {
       if (result ?? false) {
         try {
           await ref.read(deleteUseCaseProvider).delete(entry.path);
-          teller?.success('Deleted successfully');
+          ref.read(tellerProvider).success('Deleted successfully');
         } on Exception catch (e) {
-          teller?.errorOf(e);
+          ref.read(tellerProvider).errorOf(e);
         }
       }
     }

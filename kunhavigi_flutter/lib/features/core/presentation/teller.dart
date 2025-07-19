@@ -67,15 +67,7 @@ class Teller {
           colorScheme.onErrorContainer,
           colorScheme.errorContainer
         ),
-      ToastificationType.info => (
-          colorScheme.onPrimaryContainer,
-          colorScheme.primaryContainer
-        ),
-      ToastificationType.success => (
-          colorScheme.onPrimaryContainer,
-          colorScheme.primaryContainer
-        ),
-      _ => (colorScheme.onSurface, colorScheme.surface),
+      _ => (colorScheme.onSurface, colorScheme.surfaceBright),
     };
 
     return toastification.show(
@@ -85,8 +77,9 @@ class Teller {
       type: type,
       autoCloseDuration: Duration(seconds: autoCloseDurationSeconds ?? 5),
       alignment: AlignmentDirectional.bottomStart,
-      backgroundColor: foregroundColor.withValues(alpha: 0.9),
-      foregroundColor: backgroundColor.withValues(alpha: 0.9),
+      showIcon: false,
+      backgroundColor: backgroundColor.withValues(alpha: 0.9),
+      foregroundColor: foregroundColor,
       borderSide: const BorderSide(style: BorderStyle.none),
       margin: const EdgeInsets.only(left: 16, bottom: 4),
     );

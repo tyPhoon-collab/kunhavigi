@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kunhavigi_client/kunhavigi_client.dart';
 import 'package:kunhavigi_flutter/features/browse/provider/entry_provider.dart';
-import 'package:kunhavigi_flutter/main.dart';
+import 'package:kunhavigi_flutter/features/core/provider/teller_provider.dart';
 
 class PathBreadcrumb extends ConsumerWidget {
   const PathBreadcrumb({super.key});
@@ -91,9 +91,9 @@ class _CopyCurrentPathButton extends ConsumerWidget {
       padding: EdgeInsets.zero,
       onPressed: () {
         Clipboard.setData(ClipboardData(text: currentPath.value));
-        teller?.success(
-          'Current path copied to clipboard: ${currentPath.value}',
-        );
+        ref.read(tellerProvider).success(
+              'Current path copied to clipboard: ${currentPath.value}',
+            );
       },
       tooltip: 'Copy Current Path',
     );
