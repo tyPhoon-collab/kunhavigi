@@ -54,7 +54,7 @@ final class DownloadUseCase extends ClientUseCase {
     try {
       await for (final progress in progressStream) {
         switch (progress) {
-          case CopingDownloadProgress():
+          case CopyingDownloadProgress():
             id = ref.read(tellerProvider).info(
                   'Preparing to download ${entry.name}',
                 );

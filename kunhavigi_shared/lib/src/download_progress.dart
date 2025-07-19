@@ -5,7 +5,7 @@ part 'download_progress.g.dart';
 
 @freezed
 sealed class DownloadProgress with _$DownloadProgress {
-  const factory DownloadProgress.coping() = CopingDownloadProgress;
+  const factory DownloadProgress.copying() = CopyingDownloadProgress;
 
   const factory DownloadProgress.zipping() = ZippingDownloadProgress;
 

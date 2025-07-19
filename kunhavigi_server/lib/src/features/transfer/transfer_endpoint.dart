@@ -60,7 +60,7 @@ class TransferEndpoint extends Endpoint {
 
     switch (entity) {
       case final File file:
-        yield const DownloadProgress.coping();
+        yield const DownloadProgress.copying();
         await file.copy(outPath);
         session.log('Generated download URL for file: ${path.value}');
 

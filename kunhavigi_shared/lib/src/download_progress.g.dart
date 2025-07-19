@@ -6,12 +6,12 @@ part of 'download_progress.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CopingDownloadProgress _$CopingDownloadProgressFromJson(
+CopyingDownloadProgress _$CopyingDownloadProgressFromJson(
   Map<String, dynamic> json,
-) => CopingDownloadProgress($type: json['runtimeType'] as String?);
+) => CopyingDownloadProgress($type: json['runtimeType'] as String?);
 
-Map<String, dynamic> _$CopingDownloadProgressToJson(
-  CopingDownloadProgress instance,
+Map<String, dynamic> _$CopyingDownloadProgressToJson(
+  CopyingDownloadProgress instance,
 ) => <String, dynamic>{'runtimeType': instance.$type};
 
 ZippingDownloadProgress _$ZippingDownloadProgressFromJson(

@@ -15,8 +15,8 @@ DownloadProgress _$DownloadProgressFromJson(
   Map<String, dynamic> json
 ) {
         switch (json['runtimeType']) {
-                  case 'coping':
-          return CopingDownloadProgress.fromJson(
+                  case 'copying':
+          return CopyingDownloadProgress.fromJson(
             json
           );
                 case 'zipping':
@@ -85,11 +85,11 @@ extension DownloadProgressPatterns on DownloadProgress {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CopingDownloadProgress value)?  coping,TResult Function( ZippingDownloadProgress value)?  zipping,TResult Function( CompletedDownloadProgress value)?  completed,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CopyingDownloadProgress value)?  copying,TResult Function( ZippingDownloadProgress value)?  zipping,TResult Function( CompletedDownloadProgress value)?  completed,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case CopingDownloadProgress() when coping != null:
-return coping(_that);case ZippingDownloadProgress() when zipping != null:
+case CopyingDownloadProgress() when copying != null:
+return copying(_that);case ZippingDownloadProgress() when zipping != null:
 return zipping(_that);case CompletedDownloadProgress() when completed != null:
 return completed(_that);case _:
   return orElse();
@@ -109,11 +109,11 @@ return completed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CopingDownloadProgress value)  coping,required TResult Function( ZippingDownloadProgress value)  zipping,required TResult Function( CompletedDownloadProgress value)  completed,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CopyingDownloadProgress value)  copying,required TResult Function( ZippingDownloadProgress value)  zipping,required TResult Function( CompletedDownloadProgress value)  completed,}){
 final _that = this;
 switch (_that) {
-case CopingDownloadProgress():
-return coping(_that);case ZippingDownloadProgress():
+case CopyingDownloadProgress():
+return copying(_that);case ZippingDownloadProgress():
 return zipping(_that);case CompletedDownloadProgress():
 return completed(_that);}
 }
@@ -129,11 +129,11 @@ return completed(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CopingDownloadProgress value)?  coping,TResult? Function( ZippingDownloadProgress value)?  zipping,TResult? Function( CompletedDownloadProgress value)?  completed,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CopyingDownloadProgress value)?  copying,TResult? Function( ZippingDownloadProgress value)?  zipping,TResult? Function( CompletedDownloadProgress value)?  completed,}){
 final _that = this;
 switch (_that) {
-case CopingDownloadProgress() when coping != null:
-return coping(_that);case ZippingDownloadProgress() when zipping != null:
+case CopyingDownloadProgress() when copying != null:
+return copying(_that);case ZippingDownloadProgress() when zipping != null:
 return zipping(_that);case CompletedDownloadProgress() when completed != null:
 return completed(_that);case _:
   return null;
@@ -152,10 +152,10 @@ return completed(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  coping,TResult Function()?  zipping,TResult Function( String downloadUrl)?  completed,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  copying,TResult Function()?  zipping,TResult Function( String downloadUrl)?  completed,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case CopingDownloadProgress() when coping != null:
-return coping();case ZippingDownloadProgress() when zipping != null:
+case CopyingDownloadProgress() when copying != null:
+return copying();case ZippingDownloadProgress() when zipping != null:
 return zipping();case CompletedDownloadProgress() when completed != null:
 return completed(_that.downloadUrl);case _:
   return orElse();
@@ -175,10 +175,10 @@ return completed(_that.downloadUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  coping,required TResult Function()  zipping,required TResult Function( String downloadUrl)  completed,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  copying,required TResult Function()  zipping,required TResult Function( String downloadUrl)  completed,}) {final _that = this;
 switch (_that) {
-case CopingDownloadProgress():
-return coping();case ZippingDownloadProgress():
+case CopyingDownloadProgress():
+return copying();case ZippingDownloadProgress():
 return zipping();case CompletedDownloadProgress():
 return completed(_that.downloadUrl);}
 }
@@ -194,10 +194,10 @@ return completed(_that.downloadUrl);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  coping,TResult? Function()?  zipping,TResult? Function( String downloadUrl)?  completed,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  copying,TResult? Function()?  zipping,TResult? Function( String downloadUrl)?  completed,}) {final _that = this;
 switch (_that) {
-case CopingDownloadProgress() when coping != null:
-return coping();case ZippingDownloadProgress() when zipping != null:
+case CopyingDownloadProgress() when copying != null:
+return copying();case ZippingDownloadProgress() when zipping != null:
 return zipping();case CompletedDownloadProgress() when completed != null:
 return completed(_that.downloadUrl);case _:
   return null;
@@ -210,9 +210,9 @@ return completed(_that.downloadUrl);case _:
 /// @nodoc
 @JsonSerializable()
 
-class CopingDownloadProgress implements DownloadProgress {
-  const CopingDownloadProgress({final  String? $type}): $type = $type ?? 'coping';
-  factory CopingDownloadProgress.fromJson(Map<String, dynamic> json) => _$CopingDownloadProgressFromJson(json);
+class CopyingDownloadProgress implements DownloadProgress {
+  const CopyingDownloadProgress({final  String? $type}): $type = $type ?? 'copying';
+  factory CopyingDownloadProgress.fromJson(Map<String, dynamic> json) => _$CopyingDownloadProgressFromJson(json);
 
 
 
@@ -223,12 +223,12 @@ final String $type;
 
 @override
 Map<String, dynamic> toJson() {
-  return _$CopingDownloadProgressToJson(this, );
+  return _$CopyingDownloadProgressToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CopingDownloadProgress);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CopyingDownloadProgress);
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -237,7 +237,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'DownloadProgress.coping()';
+  return 'DownloadProgress.copying()';
 }
 
 
