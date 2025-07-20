@@ -31113,8 +31113,8 @@ Ym:function Ym(a,b){this.e=a
 this.a=b},
 avc:function avc(a){this.a=a},
 b5M(a){var s,r,q="runtimeType"
-switch(a.i(0,q)){case"coping":s=A.cc(a.i(0,q))
-return new A.zd(s==null?"coping":s)
+switch(a.i(0,q)){case"copying":s=A.cc(a.i(0,q))
+return new A.zd(s==null?"copying":s)
 case"zipping":s=A.cc(a.i(0,q))
 return new A.D_(s==null?"zipping":s)
 case"completed":s=A.bc(a.i(0,"downloadUrl"))
@@ -106257,7 +106257,7 @@ if(this!==b)s=J.a1(b)===A.r(this)&&b instanceof A.zd
 else s=!0
 return s},
 gv(a){return A.dG(A.r(this))},
-j(a){return"DownloadProgress.coping()"},
+j(a){return"DownloadProgress.copying()"},
 $ioE:1}
 A.D_.prototype={
 aO(){return A.ah(["runtimeType",this.a],t.N,t.z)},
