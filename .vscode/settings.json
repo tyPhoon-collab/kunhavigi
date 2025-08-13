@@ -1,5 +1,5 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.32.5",
+  "dart.flutterSdkPath": ".fvm/versions/3.32.8",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
@@ -30,5 +30,5 @@
     "Serverpod",
     "Superellipse",
     "toastification"
-  ],
+  ]
 }
